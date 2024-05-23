@@ -1,0 +1,53 @@
+{
+    "A_Name": "Demande_H1_lowT",
+    "B_File_Monthly_Loads": "Loads\\monthly_load_H1_2050.json",
+    "C_Neq_housing": 50000,
+    "Heat_Loss": {
+        "fixed_perc": 0.06,
+        "included": "False"
+    },
+    "Part_DHW": {
+        "C_BS": 0.3,
+        "S": 0.2,
+        "Tprod": 60,
+        "file_profile_day": "DHW//Day//ADEME_jours_V1b.json",
+        "file_profile_months": "DHW//Month//ADEME_mois_V1b.json"
+    },
+    "Part_Indu": {
+        "file_profile": "Indus//Week//I_plat.json",
+        "fixed_perc": 0.1,
+        "included": "False"
+    },
+    "Part_SH": {
+        "Part_profile1": 1.0,
+        "T_NC": 18.0,
+        "Text_ponderation": 24,
+        "file_profile_1": "SH//Week//Chg_SGST_logement.json",
+        "file_profile_2": "SH//Week//Chg_SGST_tertiaire.json"
+    },
+    "Seasons": {
+        "SC_end": "31-05",
+        "SC_start": "01-10"
+    },
+    "Temp_DHN": {
+        "Tdep": {
+            "Tdep_max_SC": 90,
+            "Tdep_max_SNC": 75,
+            "Tdep_min_SC": 70,
+            "Tdep_min_SNC": 68,
+            "Text_min": -15,
+            "Text_p": 15
+        },
+        "Tret": {
+            "Tret_SC": 50,
+            "Tret_SNC": 55,
+			"dT_var": 7
+        }
+    },
+    "Temp_ground": {
+        "cond_ground": 2.42,
+        "cp_ground": 840,
+        "dens_ground": 3200,
+        "depth": 1
+    }
+}

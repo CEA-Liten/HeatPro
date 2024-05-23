@@ -1,0 +1,55 @@
+image: python:3.10
+
+stages:
+  - build
+  - test
+  - docs
+  - deploy
+
+cache:
+  paths:
+    - .cache/pip
+    - venv/
+
+variables:
+  PIP_CACHE_DIR: $CI_PROJECT_DIR/.cache/pip
+
+before_script:
+  - python --version ; pip --version  # For debugging
+  - pip install poetry
+  - poetry config virtualenvs.in-project true
+  - poetry lock
+
+build:
+  stage: build
+  tags: 
+      - ubuntu
+  script:
+    - poetry build
+
+test:
+  stage: test
+  tags: 
+      - ubuntu
+  script:
+    - poetry install --with dev
+    - poetry run pytest
+
+docs:
+  stage: docs
+  tags:
+    - ubuntu
+  script:
+    - poetry install --with doc
+    - cd docs
+    - poetry run sphinx-build -M html . _build
+    - mv _build/html/ ../public/
+  artifacts:
+    paths:
+      - public
+
+deploy:
+  stage: deploy
+  script: echo "Define your deployment script!"
+  tags:
+    - ubuntu
