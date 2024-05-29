@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "heatpro"
-version = "0.1.0"
+version = "0.1.1"
 description = "Generate heat demand load profile for distict heating"
 authors = ["Robinson Beaucour <robinson.beaucour@cea.fr>",
             "Nicolas Lamaison <nicolas.lamaison@cea.fr>",
@@ -9,9 +9,8 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.10"
-pandas = "^2.2.2"
+pandas = "^2.1.0"
 matplotlib = "^3.8.4"
-nbconvert = "^7.16.4"
 
 [tool.poetry.group.dev]
 optional = true
@@ -35,7 +34,7 @@ optional = true
 ipykernel = "^6.29.4"
 plotly = "^5.20.0"
 nbformat = "^5.10.4"
-jupyter = "^1.0.0"
+nbconvert = "^7.16.4"
 
 [build-system]
 requires = ["poetry-core"]

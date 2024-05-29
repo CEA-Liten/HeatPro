@@ -51,7 +51,7 @@ def basic_building_heating_profile(felt_temperature: pd.DataFrame, non_heating_t
     _delta_felt_temperature_profile = (non_heating_temperature - felt_temperature[BUILDING_FELT_TEMPERATURE_NAME]).clip(0)
     
     hourly_heating_profile[WEIGHT_NAME_REQUIRED] = _delta_felt_temperature_profile *hourly_weight[WEIGHT_NAME_REQUIRED] /\
-                                                (_delta_felt_temperature_profile * hourly_weight[WEIGHT_NAME_REQUIRED]).groupby([hourly_weight.index.month,hourly_weight.index.month]).transform('sum')
+                                                (_delta_felt_temperature_profile * hourly_weight[WEIGHT_NAME_REQUIRED]).groupby([hourly_weight.index.year,hourly_weight.index.month]).transform('sum')
                                                 
     hourly_heating_profile[WEIGHT_NAME_REQUIRED] = hourly_heating_profile[WEIGHT_NAME_REQUIRED].fillna(0)
                                                 
