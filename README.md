@@ -3,8 +3,8 @@
 </div>
 
 [![PyPI Version](https://img.shields.io/pypi/v/heatpro.svg)](https://pypi.python.org/pypi/heatpro)
-[![Build Status](https://img.shields.io/travis/NicolasLamaison/heatpro.svg)](https://travis-ci.com/NicolasLamaison/heatpro)
-[![Documentation Status](https://readthedocs.org/projects/heat-load-profile-generator/badge/?version=latest)](https://heat-load-profile-generator.readthedocs.io/en/latest/?version=latest)
+[![pages-build-deployment](https://github.com/CEA-Liten/HeatPro/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/CEA-Liten/HeatPro/actions/workflows/pages/pages-build-deployment)
+[![License](https://img.shields.io/badge/License%20-%20CeCILL_B-red)](http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html)
 
 The present package finds its roots in the need of using representative heating load curve for the simulation and optimization of various District Heating Network (DHN) production plant. The main principle is to disagreggate monthly or yearly heat load into an hourly heat load using an hourly based external temperature profile. The resulting load curve also includes DHN supply and return temperatures.
 

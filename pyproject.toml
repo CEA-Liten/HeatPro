@@ -6,6 +6,7 @@ authors = ["Robinson Beaucour <robinson.beaucour@cea.fr>",
             "Nicolas Lamaison <nicolas.lamaison@cea.fr>",
             "Thibaut Wissocq <thibaut.wissocq@cea.fr>"]
 readme = "README.md"
+license = "CeCILL-B"
 
 [tool.poetry.dependencies]
 python = "^3.10"
