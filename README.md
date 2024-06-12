@@ -47,7 +47,7 @@ More recently, it was used in a collaboration between RTE and CEA with the aim o
 pip install heatpro
 ```
 
-- Documentation: [https://heat-load-profile-generator.readthedocs.io](https://heat-load-profile-generator.readthedocs.io)
+- Documentation: [https://cea-liten.github.io/HeatPro/](https://cea-liten.github.io/HeatPro/)
 
 
 
