@@ -21,8 +21,9 @@ Welcome to HeatPro's documentation!
    :maxdepth: 1
    :caption: Guide:
    
+   modules/simple_usage/simple_usage
    modules/usage/advanced_usage
-
+   
 .. toctree::
    :maxdepth: 1
    :caption: Documentation:
