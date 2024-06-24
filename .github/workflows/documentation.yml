@@ -1,6 +1,13 @@
 name: documentations
 
-on: [push, pull_request, workflow_dispatch]
+on:
+  push:
+    branches:
+      - public
+  pull_request:
+    branches:
+      - public
+  workflow_dispatch:
 
 permissions:
   contents: write
