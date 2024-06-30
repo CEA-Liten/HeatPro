@@ -1,5 +1,5 @@
 <div style="text-align:center">
-<img style="height: 5cm;" alt="HeatPro App logo" src=docs/logo/heatpro_logo.png>
+<img style="height: 5cm;" alt="HeatPro App logo" src="https://raw.githubusercontent.com/CEA-Liten/HeatPro/public/docs/logo/heatpro_logo.png" onerror="this.onerror=null;this.src='docs/logo/heatpro_logo.png';">
 </div>
 
 [![PyPI Version](https://img.shields.io/pypi/v/heatpro.svg)](https://pypi.python.org/pypi/heatpro)
