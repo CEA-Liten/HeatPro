@@ -49,5 +49,9 @@ pip install heatpro
 
 - Documentation: [https://cea-liten.github.io/HeatPro/](https://cea-liten.github.io/HeatPro/)
 
+- HeatPro App: [https://cea-liten-heatpro-app.streamlit.app/](https://cea-liten-heatpro-app.streamlit.app/)
+
+    HeatPro App demonstrates the use of various heatpro features.
+
 
 
