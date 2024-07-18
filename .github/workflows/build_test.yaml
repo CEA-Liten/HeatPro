@@ -24,6 +24,8 @@ jobs:
       - name: Build package
         run: poetry build
       - name: Install dependencies
-        run: poetry install --with dev
+        run: poetry install --with dev,notebook
       - name: Run tests
         run: poetry run pytest
+      - name: Testing Notebooks
+        run: poetry run pytest --nbmake ./notebooks/
