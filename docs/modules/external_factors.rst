@@ -12,6 +12,14 @@ External Factors
    :undoc-members:
    :show-inheritance:
 
+Heating Season
+--------------
+
+.. automodule:: heatpro.external_factors.process.heating_season
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Cold Water Temperature
 ----------------------
 

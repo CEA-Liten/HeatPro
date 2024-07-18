@@ -22,6 +22,7 @@ Welcome to HeatPro's documentation!
    :caption: Guide:
    
    modules/simple_usage/simple_usage
+   modules/detecting_heating_season/detecting_heating_season
    modules/usage/advanced_usage
    
 .. toctree::
