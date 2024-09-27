@@ -69,6 +69,6 @@ def apply_weekly_hourly_pattern(hourly_index: pd.DatetimeIndex, hourly_mapping: 
         pd.DataFrame: DataFrame weight correct format
     """
     return pd.DataFrame(
-                            pd.Series(hourly_index,index = hourly_index,).apply(lambda x: hourly_mapping.get((x.dayofweek, x.hour), 1)),
-                            columns = [WEIGHT_NAME_REQUIRED],
+                            pd.Series(hourly_index,index = hourly_index,).apply(lambda x: hourly_mapping.get((x.dayofweek, x.hour), 1))\
+                                .rename(WEIGHT_NAME_REQUIRED)
                         )
