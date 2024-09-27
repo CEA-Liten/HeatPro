@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>External Factors &mdash; HeatPro 0.1.5 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=59fadc99"></script>
+        <script src="../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Temporal Demand" href="temporal_demand.html" />
+    <link rel="prev" title="Disaggregation" href="disaggregation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            HeatPro
+          </a>
+              <div class="version">
+                0.1.5
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">About HeatPro:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../README.html">Make documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../authors.html">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../history.html">History</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Guiude:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="simple_usage/simple_usage.html">Simple usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="detecting_heating_season/detecting_heating_season.html">Detecting Heating Season</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage/advanced_usage.html">Advanced usage</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Documentation:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="check.html">Check</a></li>
+<li class="toctree-l1"><a class="reference internal" href="demand_profile.html">Demand Profile</a></li>
+<li class="toctree-l1"><a class="reference internal" href="disaggregation.html">Disaggregation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">External Factors</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#heatpro.external_factors.external_factors.ExternalFactors"><code class="docutils literal notranslate"><span class="pre">ExternalFactors</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#heatpro.external_factors.external_factors.ExternalFactors.check_required_features"><code class="docutils literal notranslate"><span class="pre">ExternalFactors.check_required_features()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#heatpro.external_factors.external_factors.ExternalFactors.data"><code class="docutils literal notranslate"><span class="pre">ExternalFactors.data</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#heatpro.external_factors.external_factors.ExternalFactors.plot"><code class="docutils literal notranslate"><span class="pre">ExternalFactors.plot()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-heatpro.external_factors.process.heating_season">Heating Season</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#heatpro.external_factors.process.heating_season.non_heating_season_basic"><code class="docutils literal notranslate"><span class="pre">non_heating_season_basic()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-heatpro.external_factors.process.temperature_cold_water">Cold Water Temperature</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#heatpro.external_factors.process.temperature_cold_water.burch_cold_water"><code class="docutils literal notranslate"><span class="pre">burch_cold_water()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-heatpro.external_factors.process.temperature_departure">Departure Temperature</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#heatpro.external_factors.process.temperature_departure.basic_temperature_departure"><code class="docutils literal notranslate"><span class="pre">basic_temperature_departure()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-heatpro.external_factors.process.temperature_return">Return Temperature</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#heatpro.external_factors.process.temperature_return.basic_temperature_return"><code class="docutils literal notranslate"><span class="pre">basic_temperature_return()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-heatpro.external_factors.process.temperature_soil">Soil Temperature</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#heatpro.external_factors.process.temperature_soil.kasuda_soil_temperature"><code class="docutils literal notranslate"><span class="pre">kasuda_soil_temperature()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="temporal_demand.html">Temporal Demand</a></li>
+<li class="toctree-l1"><a class="reference internal" href="special_hot_water/special_hot_water.html">Special Hot Water</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">HeatPro</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">External Factors</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/modules/external_factors.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="external-factors">
+<span id="id1"></span><h1><a class="toc-backref" href="#id2" role="doc-backlink">External Factors</a><a class="headerlink" href="#external-factors" title="Link to this heading"></a></h1>
+<nav class="contents" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#external-factors" id="id2">External Factors</a></p>
+<ul>
+<li><p><a class="reference internal" href="#module-heatpro.external_factors.process.heating_season" id="id3">Heating Season</a></p></li>
+<li><p><a class="reference internal" href="#module-heatpro.external_factors.process.temperature_cold_water" id="id4">Cold Water Temperature</a></p></li>
+<li><p><a class="reference internal" href="#module-heatpro.external_factors.process.temperature_departure" id="id5">Departure Temperature</a></p></li>
+<li><p><a class="reference internal" href="#module-heatpro.external_factors.process.temperature_return" id="id6">Return Temperature</a></p></li>
+<li><p><a class="reference internal" href="#module-heatpro.external_factors.process.temperature_soil" id="id7">Soil Temperature</a></p></li>
+</ul>
+</li>
+</ul>
+</nav>
+<dl class="py class" id="module-heatpro.external_factors.external_factors">
+<dt class="sig sig-object py" id="heatpro.external_factors.external_factors.ExternalFactors">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">heatpro.external_factors.external_factors.</span></span><span class="sig-name descname"><span class="pre">ExternalFactors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_external_factors</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/heatpro/external_factors/external_factors.html#ExternalFactors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#heatpro.external_factors.external_factors.ExternalFactors" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="heatpro.external_factors.external_factors.ExternalFactors.check_required_features">
+<span class="sig-name descname"><span class="pre">check_required_features</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../_modules/heatpro/external_factors/external_factors.html#ExternalFactors.check_required_features"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#heatpro.external_factors.external_factors.ExternalFactors.check_required_features" title="Link to this definition"></a></dt>
+<dd><p>Check if a DataFrame contains all the required features specified in REQUIRED_FEATURES.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dataframe</strong> (<em>pd.DataFrame</em>) – External factors data.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if all required features are present, False otherwise.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="heatpro.external_factors.external_factors.ExternalFactors.data">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">DataFrame</span></em><a class="headerlink" href="#heatpro.external_factors.external_factors.ExternalFactors.data" title="Link to this definition"></a></dt>
+<dd><p>Get the external factors data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>External factors data.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="heatpro.external_factors.external_factors.ExternalFactors.plot">
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Axes</span></span></span><a class="reference internal" href="../_modules/heatpro/external_factors/external_factors.html#ExternalFactors.plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#heatpro.external_factors.external_factors.ExternalFactors.plot" title="Link to this definition"></a></dt>
+<dd><p>Plots the external factors profile data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The matplotlib Axes object for the plot.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Axes</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<section id="module-heatpro.external_factors.process.heating_season">
+<span id="heating-season"></span><h2><a class="toc-backref" href="#id3" role="doc-backlink">Heating Season</a><a class="headerlink" href="#module-heatpro.external_factors.process.heating_season" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="heatpro.external_factors.process.heating_season.non_heating_season_basic">
+<span class="sig-prename descclassname"><span class="pre">heatpro.external_factors.process.heating_season.</span></span><span class="sig-name descname"><span class="pre">non_heating_season_basic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">external_temperature</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature_threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hot_day_min_share</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Timestamp</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Timestamp</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/heatpro/external_factors/process/heating_season.html#non_heating_season_basic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#heatpro.external_factors.process.heating_season.non_heating_season_basic" title="Link to this definition"></a></dt>
+<dd><p>Determines the beginning and end dates of the non-heating season for a district heating network.</p>
+<p>The non-heating season is defined as the longest period during which the average hourly temperature remains above a certain threshold,
+with a minimum share of hot days (days with average temperature above the threshold) within that period.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>external_temperature</strong> (<em>pd.Series</em>) – A pandas Series containing the hourly average external temperature.</p></li>
+<li><p><strong>temperature_threshold</strong> (<em>float</em>) – The temperature threshold above which a day is considered a hot day.</p></li>
+<li><p><strong>hot_day_min_share</strong> (<em>float</em>) – The minimum share of hot days required for a period to be considered part of the non-heating season.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A tuple containing the beginning and end dates of the non-heating season as pandas Timestamps.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple[pd.Timestamp,pd.Timestamp]</p>
+</dd>
+</dl>
+<p><strong>Overview</strong></p>
+<p>We define :</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\((\bar{T}_{n})_{n\in\{1,\dots,365\}}\)</span> : the daily average outside temperature series (input is hourly time serie)</p></li>
+<li><p><span class="math notranslate nohighlight">\(T_{threshold}\)</span> : the hot day temperature threshold, for <span class="math notranslate nohighlight">\(n\in\{1,\dots,365\}\)</span> if <span class="math notranslate nohighlight">\(\bar{T}_{n} &gt; T_{threshold}\)</span> then day <span class="math notranslate nohighlight">\(n\)</span> is a hot day, else it is a cold day</p></li>
+<li><p><span class="math notranslate nohighlight">\(\sigma\)</span> : the minimal share of hot days the non-heating season must contain</p></li>
+</ul>
+<p>The function return <span class="math notranslate nohighlight">\(n_{start},n_{end}\in\{1,\dots,365\}\)</span> defined as follow:</p>
+<div class="math notranslate nohighlight">
+\[n_{end} - n_{start}\]</div>
+<p>subject to :</p>
+<div class="math notranslate nohighlight">
+\[n_{end} &gt; n_{start}\]</div>
+<div class="math notranslate nohighlight">
+\[\sum_{n\in\{n_{start},\dots,n_{end}\}} \mathbb{1}_{\bar{T}_{n}&gt;T_{threshold}} \geq \sigma \cdot ( n_{end} - n_{start})\]</div>
+<p><span class="math notranslate nohighlight">\(n_{start},n_{end}\)</span> are found by testing all the combinations given that days <span class="math notranslate nohighlight">\(n_{start} and  :math:`n_{end}\)</span> are hot days next to cold days.</p>
+</dd></dl>
+
+</section>
+<section id="module-heatpro.external_factors.process.temperature_cold_water">
+<span id="cold-water-temperature"></span><h2><a class="toc-backref" href="#id4" role="doc-backlink">Cold Water Temperature</a><a class="headerlink" href="#module-heatpro.external_factors.process.temperature_cold_water" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="heatpro.external_factors.process.temperature_cold_water.burch_cold_water">
+<span class="sig-prename descclassname"><span class="pre">heatpro.external_factors.process.temperature_cold_water.</span></span><span class="sig-name descname"><span class="pre">burch_cold_water</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">external_factors</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#heatpro.external_factors.external_factors.ExternalFactors" title="heatpro.external_factors.external_factors.ExternalFactors"><span class="pre">ExternalFactors</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="../_modules/heatpro/external_factors/process/temperature_cold_water.html#burch_cold_water"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#heatpro.external_factors.process.temperature_cold_water.burch_cold_water" title="Link to this definition"></a></dt>
+<dd><p>Calculate the cold water temperature based on external factors using (Burch et al., 2007) approach.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>external_factors</strong> (<a class="reference internal" href="#heatpro.external_factors.external_factors.ExternalFactors" title="heatpro.external_factors.external_factors.ExternalFactors"><em>ExternalFactors</em></a>) – External factors data containing temperatures.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>DataFrame containing the calculated cold water temperatures.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+<p><strong>Overview</strong></p>
+<div class="math notranslate nohighlight">
+\[\begin{split}T^{(\text{Cold water})}_t = (\bar{T}^{(\text{External})} + 3) + ( 0.4 + 0.01 \cdot (0.01 \cdot(\bar{T}^{(\text{External})}-44)))\cdot\\ \frac{\Delta_{day}T^{(\text{External})}}{2} \cdot \sin(0.01745 \cdot (0.986(t.day - t_{\text{coldest day of year}} + 79 - \bar{T}^{(\text{External})})))\end{split}\]</div>
+<p>where :</p>
+<p><span class="math notranslate nohighlight">\(\underset{day}{\max} (\underset{t \in day}{\max}T^{(\text{External})} - \underset{t \in day}{\min}T^{(\text{External})})\)</span> : Maximal amplitude in a day of the dataset.</p>
+<p><span class="math notranslate nohighlight">\(\bar{T}^{(\text{External})}\)</span> : Average external temperature over the dataset.</p>
+</dd></dl>
+
+</section>
+<section id="module-heatpro.external_factors.process.temperature_departure">
+<span id="departure-temperature"></span><h2><a class="toc-backref" href="#id5" role="doc-backlink">Departure Temperature</a><a class="headerlink" href="#module-heatpro.external_factors.process.temperature_departure" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="heatpro.external_factors.process.temperature_departure.basic_temperature_departure">
+<span class="sig-prename descclassname"><span class="pre">heatpro.external_factors.process.temperature_departure.</span></span><span class="sig-name descname"><span class="pre">basic_temperature_departure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">external_factor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#heatpro.external_factors.external_factors.ExternalFactors" title="heatpro.external_factors.external_factors.ExternalFactors"><span class="pre">ExternalFactors</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">T_max_HS</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T_max_NHS</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T_min_HS</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T_min_NHS</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T_ext_mid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T_ext_min</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="../_modules/heatpro/external_factors/process/temperature_departure.html#basic_temperature_departure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#heatpro.external_factors.process.temperature_departure.basic_temperature_departure" title="Link to this definition"></a></dt>
+<dd><p>Calculate basic temperature departure based on external factors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>external_factor</strong> (<a class="reference internal" href="#heatpro.external_factors.external_factors.ExternalFactors" title="heatpro.external_factors.external_factors.ExternalFactors"><em>ExternalFactors</em></a>) – External factors data.</p></li>
+<li><p><strong>T_max_HS</strong> (<em>float</em>) – Maximum temperature during the heating season.</p></li>
+<li><p><strong>T_max_NHS</strong> (<em>float</em>) – Maximum temperature during the non-heating season.</p></li>
+<li><p><strong>T_min_HS</strong> (<em>float</em>) – Minimum temperature during the heating season.</p></li>
+<li><p><strong>T_min_NHS</strong> (<em>float</em>) – Minimum temperature during the non-heating season.</p></li>
+<li><p><strong>T_ext_mid</strong> (<em>float</em>) – Intermediate external temperature threshold.</p></li>
+<li><p><strong>T_ext_min</strong> (<em>float</em>) – Minimum external temperature threshold.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>DataFrame containing the calculated basic temperature departure.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+<p><strong>Overview</strong></p>
+<div class="math notranslate nohighlight">
+\[\begin{split}T^{(departure)}_t = \mathbb{1}_{T^{(ext)}_t&lt;T^{(ext)}_{mid}} \frac{T^{(ext)}_t - T^{(ext)}_{mid}}{T^{(ext)}_{min} - T^{(ext)}_{mid}} \cdot (\mathbb{1}_{t \in HS}\cdot (T^{(departure)}_{HS,max} - T^{(departure)}_{HS,min}) + \\ \mathbb{1}_{t \in NHS}\cdot (T^{(departure)}_{NHS,max} - T^{(departure)}_{NHS,min})) + \mathbb{1}_{t \in HS}\cdot T^{(departure)}_{HS,min} + \mathbb{1}_{t \in NHS}\cdot T^{(departure)}_{NHS,min}\end{split}\]</div>
+</dd></dl>
+
+</section>
+<section id="module-heatpro.external_factors.process.temperature_return">
+<span id="return-temperature"></span><h2><a class="toc-backref" href="#id6" role="doc-backlink">Return Temperature</a><a class="headerlink" href="#module-heatpro.external_factors.process.temperature_return" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="heatpro.external_factors.process.temperature_return.basic_temperature_return">
+<span class="sig-prename descclassname"><span class="pre">heatpro.external_factors.process.temperature_return.</span></span><span class="sig-name descname"><span class="pre">basic_temperature_return</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">external_factor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#heatpro.external_factors.external_factors.ExternalFactors" title="heatpro.external_factors.external_factors.ExternalFactors"><span class="pre">ExternalFactors</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">T_HS</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T_NHS</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="../_modules/heatpro/external_factors/process/temperature_return.html#basic_temperature_return"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#heatpro.external_factors.process.temperature_return.basic_temperature_return" title="Link to this definition"></a></dt>
+<dd><p>Calculate basic return temperature based on external factors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>external_factor</strong> (<a class="reference internal" href="#heatpro.external_factors.external_factors.ExternalFactors" title="heatpro.external_factors.external_factors.ExternalFactors"><em>ExternalFactors</em></a>) – External factors data.</p></li>
+<li><p><strong>T_HS</strong> (<em>float</em>) – Return temperature during the heating season.</p></li>
+<li><p><strong>T_NHS</strong> (<em>float</em>) – Return temperature during the non-heating season.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>DataFrame containing the calculated basic return temperature.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+<p><strong>Overview</strong></p>
+<div class="math notranslate nohighlight">
+\[T^{(return)}_t = \mathbb{1}_{t \in HS}\cdot T^{(return)}_{HS} + \mathbb{1}_{t \in NHS}\cdot T^{(return)}_{NHS}\]</div>
+</dd></dl>
+
+</section>
+<section id="module-heatpro.external_factors.process.temperature_soil">
+<span id="soil-temperature"></span><h2><a class="toc-backref" href="#id7" role="doc-backlink">Soil Temperature</a><a class="headerlink" href="#module-heatpro.external_factors.process.temperature_soil" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="heatpro.external_factors.process.temperature_soil.kasuda_soil_temperature">
+<span class="sig-prename descclassname"><span class="pre">heatpro.external_factors.process.temperature_soil.</span></span><span class="sig-name descname"><span class="pre">kasuda_soil_temperature</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">external_factor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#heatpro.external_factors.external_factors.ExternalFactors" title="heatpro.external_factors.external_factors.ExternalFactors"><span class="pre">ExternalFactors</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">d</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="../_modules/heatpro/external_factors/process/temperature_soil.html#kasuda_soil_temperature"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#heatpro.external_factors.process.temperature_soil.kasuda_soil_temperature" title="Link to this definition"></a></dt>
+<dd><p>Calculate Kasuda soil temperature based on external factors using (Kusada et al., 1965) approach.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>external_factor</strong> (<a class="reference internal" href="#heatpro.external_factors.external_factors.ExternalFactors" title="heatpro.external_factors.external_factors.ExternalFactors"><em>ExternalFactors</em></a>) – External factors data.</p></li>
+<li><p><strong>d</strong> (<em>float</em>) – Depth of pipes (meter).</p></li>
+<li><p><strong>alpha</strong> (<em>float</em>) – thermal diffusivity of the soil (meter²/day)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>DataFrame containing the calculated Kasuda soil temperature.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+<p><strong>Overview</strong></p>
+<div class="math notranslate nohighlight">
+\[\begin{split}T^{(\text{soil})}_t = \bar{T}^{(\text{External})} - \Delta_{month}T^{(\text{External})} \cdot \exp (-d\cdot \sqrt{\frac{\pi}{365 \cdot \alpha}}) \cdot \\ \cos(\frac{2\pi}{365}\cdot (t.day - t_{\text{coldest day of year}} - \frac{d}{2}\cdot \sqrt{\frac{\pi}{365 \cdot \alpha}}))\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\Delta_{month}T^{(\text{External})}\)</span> is the average monthly amplitude over the years.</p>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="disaggregation.html" class="btn btn-neutral float-left" title="Disaggregation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="temporal_demand.html" class="btn btn-neutral float-right" title="Temporal Demand" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, HeatPro.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

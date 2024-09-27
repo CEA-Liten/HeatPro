@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>heatpro.disaggregation.weighted_disaggregation &mdash; HeatPro 0.1.5 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=59fadc99"></script>
+        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            HeatPro
+          </a>
+              <div class="version">
+                0.1.5
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">About HeatPro:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../README.html">Make documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../authors.html">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../history.html">History</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Guiude:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/simple_usage/simple_usage.html">Simple usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/detecting_heating_season/detecting_heating_season.html">Detecting Heating Season</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/usage/advanced_usage.html">Advanced usage</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/check.html">Check</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/demand_profile.html">Demand Profile</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/disaggregation.html">Disaggregation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/external_factors.html">External Factors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/temporal_demand.html">Temporal Demand</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/special_hot_water/special_hot_water.html">Special Hot Water</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">HeatPro</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">heatpro.disaggregation.weighted_disaggregation</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for heatpro.disaggregation.weighted_disaggregation</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">from</span> <span class="nn">..check</span> <span class="kn">import</span> <span class="n">find_duplicate_months</span><span class="p">,</span> <span class="n">find_xor_months</span><span class="p">,</span> <span class="n">ENERGY_FEATURE_NAME</span>
+<span class="kn">from</span> <span class="nn">..check</span> <span class="kn">import</span> <span class="n">check_weight_format</span><span class="p">,</span> <span class="n">WEIGHT_NAME_REQUIRED</span>
+
+<span class="kn">from</span> <span class="nn">..temporal_demand</span> <span class="kn">import</span> <span class="n">YearlyHeatDemand</span><span class="p">,</span> <span class="n">MonthlyHeatDemand</span><span class="p">,</span> <span class="n">DailyHeatDemand</span><span class="p">,</span> <span class="n">HourlyHeatDemand</span>
+
+<div class="viewcode-block" id="monthly_weighted_disaggregate">
+<a class="viewcode-back" href="../../../modules/disaggregation.html#heatpro.disaggregation.weighted_disaggregation.monthly_weighted_disaggregate">[docs]</a>
+<span class="k">def</span> <span class="nf">monthly_weighted_disaggregate</span><span class="p">(</span><span class="n">yearly_demand</span><span class="p">:</span> <span class="n">YearlyHeatDemand</span><span class="p">,</span> <span class="n">weights</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+                                  <span class="n">keep_year_data</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MonthlyHeatDemand</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Disaggregate yearly heat demand into monthly values using weights.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        yearly_demand (YearlyHeatDemand): The input yearly heat demand to be disaggregated.</span>
+<span class="sd">        weights (pd.DataFrame): DataFrame containing weights for each month.</span>
+<span class="sd">        keep_year_data (bool, optional): If True, include yearly data in the output.</span>
+<span class="sd">            Defaults to True.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If yearly_demand is not an instance of YearlyHeatDemand.</span>
+<span class="sd">        ValueError: If the weight format is not valid.</span>
+<span class="sd">        ValueError: If there are duplicate months in the weights index.</span>
+<span class="sd">        ValueError: If yearly_demand and weights do not overlap on the same year.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        MonthlyHeatDemand: The disaggregated monthly heat demand.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Check if yearly_demand is an instance of YearlyHeatDemand</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">yearly_demand</span><span class="p">,</span> <span class="n">YearlyHeatDemand</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;yearly_demand should be an instance of YearlyHeatDemand&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Check the format of the weights DataFrame</span>
+    <span class="n">check_weight_format</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span>
+
+    <span class="c1"># Check for duplicate months in the weights index</span>
+    <span class="n">duplicate_months</span> <span class="o">=</span> <span class="n">find_duplicate_months</span><span class="p">(</span><span class="n">weights</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">duplicate_months</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+        <span class="n">duplicate_month_str</span> <span class="o">=</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">month</span><span class="o">.</span><span class="n">Month</span><span class="si">}</span><span class="s1">-</span><span class="si">{</span><span class="n">month</span><span class="o">.</span><span class="n">Year</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">month</span> <span class="ow">in</span> <span class="n">duplicate_months</span><span class="o">.</span><span class="n">iterrows</span><span class="p">()])</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Months </span><span class="si">{</span><span class="n">duplicate_month_str</span><span class="si">}</span><span class="s2"> have multiple occurrences in weights&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Check if yearly_demand and weights overlap on the same year</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">yearly_demand</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">year</span><span class="o">.</span><span class="n">equals</span><span class="p">(</span><span class="n">weights</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">year</span><span class="o">.</span><span class="n">unique</span><span class="p">()):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;yearly_demand and weights do not overlap on the same year&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Initialize the DataFrame for monthly demand</span>
+    <span class="n">monthly_demand_df</span> <span class="o">=</span> <span class="n">weights</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="c1"># Include yearly data in the output if keep_year_data is True</span>
+    <span class="k">if</span> <span class="n">keep_year_data</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">feature</span> <span class="ow">in</span> <span class="n">yearly_demand</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">monthly_demand_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;yearly_</span><span class="si">{</span><span class="n">feature</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span>
+                <span class="p">(</span><span class="n">weights</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">year</span> <span class="o">==</span> <span class="n">index</span><span class="o">.</span><span class="n">year</span><span class="p">)</span> <span class="o">*</span> <span class="n">row</span><span class="p">[</span><span class="n">feature</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">yearly_demand</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">iterrows</span><span class="p">()</span>
+            <span class="p">)</span>
+
+    <span class="c1"># Disaggregate the yearly heat demand into monthly values</span>
+    <span class="n">monthly_demand_df</span><span class="p">[</span><span class="n">ENERGY_FEATURE_NAME</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span>
+        <span class="p">(</span><span class="n">weights</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">year</span> <span class="o">==</span> <span class="n">index</span><span class="o">.</span><span class="n">year</span><span class="p">)</span> <span class="o">*</span> <span class="n">row</span><span class="p">[</span><span class="n">ENERGY_FEATURE_NAME</span><span class="p">]</span> <span class="o">*</span>
+        <span class="n">weights</span><span class="p">[</span><span class="n">WEIGHT_NAME_REQUIRED</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">yearly_demand</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">iterrows</span><span class="p">()</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Create a MonthlyHeatDemand object with the disaggregated data</span>
+    <span class="k">return</span> <span class="n">MonthlyHeatDemand</span><span class="p">(</span><span class="n">yearly_demand</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">monthly_demand_df</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="weekly_weighted_disaggregate">
+<a class="viewcode-back" href="../../../modules/disaggregation.html#heatpro.disaggregation.weighted_disaggregation.weekly_weighted_disaggregate">[docs]</a>
+<span class="k">def</span> <span class="nf">weekly_weighted_disaggregate</span><span class="p">(</span><span class="n">monthly_demand</span><span class="p">:</span> <span class="n">MonthlyHeatDemand</span><span class="p">,</span> <span class="n">weights</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+                                 <span class="n">keep_year_data</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">HourlyHeatDemand</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Disaggregate monthly heat demand into hourly values using weights.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        monthly_demand (MonthlyHeatDemand): The input monthly heat demand to be disaggregated.</span>
+<span class="sd">        weights (pd.DataFrame): DataFrame containing weights for each week.</span>
+<span class="sd">        keep_year_data (bool, optional): If True, include yearly data in the output.</span>
+<span class="sd">            Defaults to True.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If monthly_demand is not an instance of MonthlyHeatDemand.</span>
+<span class="sd">        ValueError: If the weight format is not valid.</span>
+<span class="sd">        ValueError: If weights and monthly_demand do not match the same months.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        HourlyHeatDemand: The disaggregated hourly heat demand.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Check if monthly_demand is an instance of MonthlyHeatDemand</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">monthly_demand</span><span class="p">,</span> <span class="n">MonthlyHeatDemand</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;monthly_demand should be an instance of MonthlyHeatDemand&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Check the format of the weights DataFrame</span>
+    <span class="n">check_weight_format</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span>
+
+    <span class="c1"># Check if weights and monthly_demand match the same months</span>
+    <span class="n">xor_months</span> <span class="o">=</span> <span class="n">find_xor_months</span><span class="p">(</span><span class="n">monthly_demand</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">weights</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">xor_months</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+        <span class="n">diff_str</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;weights and monthly_demand are not matching the same month</span><span class="se">\n</span><span class="s2"> Difference :</span><span class="se">\n</span><span class="s2"> </span><span class="si">{</span><span class="n">xor_months</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">diff_str</span><span class="p">)</span>
+
+    <span class="c1"># Initialize the DataFrame for hourly demand</span>
+    <span class="n">hourly_demand_df</span> <span class="o">=</span> <span class="n">weights</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="c1"># Include yearly data in the output if keep_year_data is True</span>
+    <span class="k">if</span> <span class="n">keep_year_data</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">feature</span> <span class="ow">in</span> <span class="n">monthly_demand</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">feature</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;yearly_&#39;</span><span class="p">):</span>
+                <span class="n">hourly_demand_df</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;monthly_</span><span class="si">{</span><span class="n">feature</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span>
+                    <span class="p">(</span><span class="n">weights</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">year</span> <span class="o">==</span> <span class="n">index</span><span class="o">.</span><span class="n">year</span><span class="p">)</span> <span class="o">*</span>
+                    <span class="p">(</span><span class="n">weights</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">month</span> <span class="o">==</span> <span class="n">index</span><span class="o">.</span><span class="n">month</span><span class="p">)</span> <span class="o">*</span>
+                    <span class="n">row</span><span class="p">[</span><span class="n">feature</span><span class="p">]</span>
+                    <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">monthly_demand</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">iterrows</span><span class="p">()</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">hourly_demand_df</span><span class="p">[</span><span class="n">feature</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span>
+                    <span class="p">(</span><span class="n">weights</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">year</span> <span class="o">==</span> <span class="n">index</span><span class="o">.</span><span class="n">year</span><span class="p">)</span> <span class="o">*</span>
+                    <span class="p">(</span><span class="n">weights</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">month</span> <span class="o">==</span> <span class="n">index</span><span class="o">.</span><span class="n">month</span><span class="p">)</span> <span class="o">*</span>
+                    <span class="n">row</span><span class="p">[</span><span class="n">feature</span><span class="p">]</span>
+                    <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">monthly_demand</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">iterrows</span><span class="p">()</span>
+                <span class="p">)</span>
+
+    <span class="c1"># Disaggregate the monthly heat demand into hourly values</span>
+    <span class="n">hourly_demand_df</span><span class="p">[</span><span class="n">ENERGY_FEATURE_NAME</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span>
+        <span class="p">(</span><span class="n">weights</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">year</span> <span class="o">==</span> <span class="n">index</span><span class="o">.</span><span class="n">year</span><span class="p">)</span> <span class="o">*</span>
+        <span class="p">(</span><span class="n">weights</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">month</span> <span class="o">==</span> <span class="n">index</span><span class="o">.</span><span class="n">month</span><span class="p">)</span> <span class="o">*</span>
+        <span class="n">row</span><span class="p">[</span><span class="n">ENERGY_FEATURE_NAME</span><span class="p">]</span> <span class="o">*</span>
+        <span class="n">weights</span><span class="p">[</span><span class="n">WEIGHT_NAME_REQUIRED</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">monthly_demand</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">iterrows</span><span class="p">()</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Create an HourlyHeatDemand object with the disaggregated data</span>
+    <span class="k">return</span> <span class="n">HourlyHeatDemand</span><span class="p">(</span><span class="n">monthly_demand</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">hourly_demand_df</span><span class="p">)</span></div>
+
+ 
+<div class="viewcode-block" id="daily_weighted_dissagregate">
+<a class="viewcode-back" href="../../../modules/disaggregation.html#heatpro.disaggregation.weighted_disaggregation.daily_weighted_dissagregate">[docs]</a>
+<span class="k">def</span> <span class="nf">daily_weighted_dissagregate</span><span class="p">(</span><span class="n">monthly_demand</span><span class="p">:</span> <span class="n">MonthlyHeatDemand</span><span class="p">,</span> <span class="n">weights</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+                                <span class="n">keep_month_data</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DailyHeatDemand</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Disaggregate monthly heat demand into daily values using weights.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        monthly_demand (MonthlyHeatDemand): The input monthly heat demand to be disaggregated.</span>
+<span class="sd">        weights (pd.DataFrame): DataFrame containing weights for each day.</span>
+<span class="sd">        keep_month_data (bool, optional): If True, include monthly data in the output.</span>
+<span class="sd">            Defaults to True.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If monthly_demand is not an instance of MonthlyHeatDemand.</span>
+<span class="sd">        ValueError: If the weight format is not valid.</span>
+<span class="sd">        ValueError: If weights and monthly_demand do not match the same months.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        DailyHeatDemand: The disaggregated daily heat demand.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Check if monthly_demand is an instance of MonthlyHeatDemand</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">monthly_demand</span><span class="p">,</span> <span class="n">MonthlyHeatDemand</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;monthly_demand should be an instance of MonthlyHeatDemand&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Check the format of the weights DataFrame</span>
+    <span class="n">check_weight_format</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span>
+
+    <span class="c1"># Check if weights and monthly_demand match the same months</span>
+    <span class="n">xor_months</span> <span class="o">=</span> <span class="n">find_xor_months</span><span class="p">(</span><span class="n">monthly_demand</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">weights</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">xor_months</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+        <span class="n">diff_str</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;weights and monthly_demand are not matching the same month</span><span class="se">\n</span><span class="s2"> Difference :</span><span class="se">\n</span><span class="s2"> </span><span class="si">{</span><span class="n">xor_months</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">diff_str</span><span class="p">)</span>
+
+    <span class="c1"># Initialize the DataFrame for daily demand</span>
+    <span class="n">daily_demand_df</span> <span class="o">=</span> <span class="n">weights</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="c1"># Include monthly data in the output if keep_month_data is True</span>
+    <span class="k">if</span> <span class="n">keep_month_data</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">feature</span> <span class="ow">in</span> <span class="n">monthly_demand</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">feature</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;yearly_&#39;</span><span class="p">):</span>
+                <span class="n">daily_demand_df</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;monthly_</span><span class="si">{</span><span class="n">feature</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span>
+                    <span class="p">(</span><span class="n">weights</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">year</span> <span class="o">==</span> <span class="n">index</span><span class="o">.</span><span class="n">year</span><span class="p">)</span> <span class="o">*</span>
+                    <span class="p">(</span><span class="n">weights</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">month</span> <span class="o">==</span> <span class="n">index</span><span class="o">.</span><span class="n">month</span><span class="p">)</span> <span class="o">*</span>
+                    <span class="n">row</span><span class="p">[</span><span class="n">feature</span><span class="p">]</span>
+                    <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">monthly_demand</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">iterrows</span><span class="p">()</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">daily_demand_df</span><span class="p">[</span><span class="n">feature</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span>
+                    <span class="p">(</span><span class="n">weights</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">year</span> <span class="o">==</span> <span class="n">index</span><span class="o">.</span><span class="n">year</span><span class="p">)</span> <span class="o">*</span>
+                    <span class="p">(</span><span class="n">weights</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">month</span> <span class="o">==</span> <span class="n">index</span><span class="o">.</span><span class="n">month</span><span class="p">)</span> <span class="o">*</span>
+                    <span class="n">row</span><span class="p">[</span><span class="n">feature</span><span class="p">]</span>
+                    <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">monthly_demand</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">iterrows</span><span class="p">()</span>
+                <span class="p">)</span>
+
+    <span class="c1"># Disaggregate the monthly heat demand into daily values</span>
+    <span class="n">daily_demand_df</span><span class="p">[</span><span class="n">ENERGY_FEATURE_NAME</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span>
+        <span class="p">(</span><span class="n">weights</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">year</span> <span class="o">==</span> <span class="n">index</span><span class="o">.</span><span class="n">year</span><span class="p">)</span> <span class="o">*</span>
+        <span class="p">(</span><span class="n">weights</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">month</span> <span class="o">==</span> <span class="n">index</span><span class="o">.</span><span class="n">month</span><span class="p">)</span> <span class="o">*</span>
+        <span class="n">row</span><span class="p">[</span><span class="n">ENERGY_FEATURE_NAME</span><span class="p">]</span> <span class="o">*</span>
+        <span class="n">weights</span><span class="p">[</span><span class="n">WEIGHT_NAME_REQUIRED</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">monthly_demand</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">iterrows</span><span class="p">()</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Create a DailyHeatDemand object with the disaggregated data</span>
+    <span class="k">return</span> <span class="n">DailyHeatDemand</span><span class="p">(</span><span class="n">monthly_demand</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">daily_demand_df</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="hourly_weighted_dissagregate">
+<a class="viewcode-back" href="../../../modules/disaggregation.html#heatpro.disaggregation.weighted_disaggregation.hourly_weighted_dissagregate">[docs]</a>
+<span class="k">def</span> <span class="nf">hourly_weighted_dissagregate</span><span class="p">(</span><span class="n">daily_demand</span><span class="p">:</span> <span class="n">DailyHeatDemand</span><span class="p">,</span> <span class="n">weights</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+                                <span class="n">keep_month_data</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">HourlyHeatDemand</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Disaggregate daily heat demand into hourly values using weights.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        daily_demand (DailyHeatDemand): The input daily heat demand to be disaggregated.</span>
+<span class="sd">        weights (pd.DataFrame): DataFrame containing weights for each hour.</span>
+<span class="sd">        keep_month_data (bool, optional): If True, include monthly data in the output.</span>
+<span class="sd">            Defaults to True.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If daily_demand is not an instance of DailyHeatDemand.</span>
+<span class="sd">        ValueError: If the weight format is not valid.</span>
+<span class="sd">        ValueError: If weights and daily_demand do not match the same months.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        HourlyHeatDemand: The disaggregated hourly heat demand.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Check if daily_demand is an instance of DailyHeatDemand</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">daily_demand</span><span class="p">,</span> <span class="n">DailyHeatDemand</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;daily_demand should be an instance of DailyHeatDemand&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Check the format of the weights DataFrame</span>
+    <span class="n">check_weight_format</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span>
+
+    <span class="c1"># Check if weights and daily_demand match the same months</span>
+    <span class="n">xor_months</span> <span class="o">=</span> <span class="n">find_xor_months</span><span class="p">(</span><span class="n">daily_demand</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">weights</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">xor_months</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+        <span class="n">diff_str</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;weights and daily_demand are not matching the same month</span><span class="se">\n</span><span class="s2"> Difference :</span><span class="se">\n</span><span class="s2"> </span><span class="si">{</span><span class="n">xor_months</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">diff_str</span><span class="p">)</span>
+
+    <span class="c1"># Initialize the DataFrame for hourly demand</span>
+    <span class="n">hourly_demand_df</span> <span class="o">=</span> <span class="n">weights</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="c1"># Include monthly data in the output if keep_month_data is True</span>
+    <span class="k">if</span> <span class="n">keep_month_data</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">feature</span> <span class="ow">in</span> <span class="n">daily_demand</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">feature</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;yearly_&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">feature</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;monthly_&#39;</span><span class="p">)):</span>
+                <span class="n">hourly_demand_df</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;daily_</span><span class="si">{</span><span class="n">feature</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span>
+                    <span class="p">(</span><span class="n">weights</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">year</span> <span class="o">==</span> <span class="n">index</span><span class="o">.</span><span class="n">year</span><span class="p">)</span> <span class="o">*</span>
+                    <span class="p">(</span><span class="n">weights</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">month</span> <span class="o">==</span> <span class="n">index</span><span class="o">.</span><span class="n">month</span><span class="p">)</span> <span class="o">*</span>
+                    <span class="n">row</span><span class="p">[</span><span class="n">feature</span><span class="p">]</span>
+                    <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">daily_demand</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">iterrows</span><span class="p">()</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">hourly_demand_df</span><span class="p">[</span><span class="n">feature</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span>
+                    <span class="p">(</span><span class="n">weights</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">year</span> <span class="o">==</span> <span class="n">index</span><span class="o">.</span><span class="n">year</span><span class="p">)</span> <span class="o">*</span>
+                    <span class="p">(</span><span class="n">weights</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">month</span> <span class="o">==</span> <span class="n">index</span><span class="o">.</span><span class="n">month</span><span class="p">)</span> <span class="o">*</span>
+                    <span class="n">row</span><span class="p">[</span><span class="n">feature</span><span class="p">]</span>
+                    <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">daily_demand</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">iterrows</span><span class="p">()</span>
+                <span class="p">)</span>
+
+    <span class="c1"># Disaggregate the daily heat demand into hourly values</span>
+    <span class="n">hourly_demand_df</span><span class="p">[</span><span class="n">ENERGY_FEATURE_NAME</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span>
+        <span class="p">(</span><span class="n">weights</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">year</span> <span class="o">==</span> <span class="n">index</span><span class="o">.</span><span class="n">year</span><span class="p">)</span> <span class="o">*</span>
+        <span class="p">(</span><span class="n">weights</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">month</span> <span class="o">==</span> <span class="n">index</span><span class="o">.</span><span class="n">month</span><span class="p">)</span> <span class="o">*</span>
+        <span class="n">row</span><span class="p">[</span><span class="n">ENERGY_FEATURE_NAME</span><span class="p">]</span> <span class="o">*</span>
+        <span class="n">weights</span><span class="p">[</span><span class="n">WEIGHT_NAME_REQUIRED</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">daily_demand</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">iterrows</span><span class="p">()</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Create an HourlyHeatDemand object with the disaggregated data</span>
+    <span class="k">return</span> <span class="n">HourlyHeatDemand</span><span class="p">(</span><span class="n">daily_demand</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">hourly_demand_df</span><span class="p">)</span></div>
+
+
+    
+    
+    
+    
+    
+
+
+
+
+ 
+    
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, HeatPro.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
