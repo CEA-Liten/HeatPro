@@ -15,11 +15,11 @@ How to cite
 .. code-block:: bibtex
 
     @misc{HeatPro,
-        title = {HeatPro Python Package: Generate Heat Demand Load Profile for District Heating},
-        author = {Beaucour Robinson, Wissocq Thibaut, Lamaison Nicolas},
-        year = {2024},
-        url = {https://github.com/CEA-Liten/heatpro},
-        note = {[Access Date]}
+            title = {HeatPro Python Package: Generate Heat Demand Load Profile for District Heating},
+            author = {Beaucour, Robinson and Wissocq, Thibaut and Lamaison, Nicolas},
+            year = {2024},
+            url = {https://github.com/CEA-Liten/heatpro},
+            note = {[Access Date]}
         }
 
 Contributors
