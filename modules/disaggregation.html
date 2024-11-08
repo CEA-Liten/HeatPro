@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Disaggregation &mdash; HeatPro 0.1.5 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=59fadc99"></script>
+        <script src="../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="External Factors" href="external_factors.html" />
+    <link rel="prev" title="Demand Profile" href="demand_profile.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            HeatPro
+          </a>
+              <div class="version">
+                0.1.5
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">About HeatPro:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../README.html">Make documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../authors.html">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../history.html">History</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Guiude:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="simple_usage/simple_usage.html">Simple usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="detecting_heating_season/detecting_heating_season.html">Detecting Heating Season</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage/advanced_usage.html">Advanced usage</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Documentation:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="check.html">Check</a></li>
+<li class="toctree-l1"><a class="reference internal" href="demand_profile.html">Demand Profile</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Disaggregation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-heatpro.disaggregation.pipeline">Pipeline</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#heatpro.disaggregation.pipeline.compose"><code class="docutils literal notranslate"><span class="pre">compose()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#heatpro.disaggregation.pipeline.disaggregate_temporal_demand"><code class="docutils literal notranslate"><span class="pre">disaggregate_temporal_demand()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-heatpro.disaggregation.weighted_disaggregation">Weighted Disaggregation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#heatpro.disaggregation.weighted_disaggregation.daily_weighted_dissagregate"><code class="docutils literal notranslate"><span class="pre">daily_weighted_dissagregate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#heatpro.disaggregation.weighted_disaggregation.hourly_weighted_dissagregate"><code class="docutils literal notranslate"><span class="pre">hourly_weighted_dissagregate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#heatpro.disaggregation.weighted_disaggregation.monthly_weighted_disaggregate"><code class="docutils literal notranslate"><span class="pre">monthly_weighted_disaggregate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#heatpro.disaggregation.weighted_disaggregation.weekly_weighted_disaggregate"><code class="docutils literal notranslate"><span class="pre">weekly_weighted_disaggregate()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="external_factors.html">External Factors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="temporal_demand.html">Temporal Demand</a></li>
+<li class="toctree-l1"><a class="reference internal" href="special_hot_water/special_hot_water.html">Special Hot Water</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">HeatPro</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Disaggregation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/modules/disaggregation.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="disaggregation">
+<span id="id1"></span><h1><a class="toc-backref" href="#id2" role="doc-backlink">Disaggregation</a><a class="headerlink" href="#disaggregation" title="Link to this heading"></a></h1>
+<nav class="contents" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#disaggregation" id="id2">Disaggregation</a></p>
+<ul>
+<li><p><a class="reference internal" href="#module-heatpro.disaggregation.pipeline" id="id3">Pipeline</a></p></li>
+<li><p><a class="reference internal" href="#module-heatpro.disaggregation.weighted_disaggregation" id="id4">Weighted Disaggregation</a></p></li>
+</ul>
+</li>
+</ul>
+</nav>
+<section id="module-heatpro.disaggregation.pipeline">
+<span id="pipeline"></span><span id="module-heatpro.disaggregation"></span><h2><a class="toc-backref" href="#id3" role="doc-backlink">Pipeline</a><a class="headerlink" href="#module-heatpro.disaggregation.pipeline" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="heatpro.disaggregation.pipeline.compose">
+<span class="sig-prename descclassname"><span class="pre">heatpro.disaggregation.pipeline.</span></span><span class="sig-name descname"><span class="pre">compose</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">functions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span></span></span><a class="reference internal" href="../_modules/heatpro/disaggregation/pipeline.html#compose"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#heatpro.disaggregation.pipeline.compose" title="Link to this definition"></a></dt>
+<dd><p>Compose a list of functions into a single function.</p>
+<p>This function takes a list of functions and returns a new function that
+applies each function in the list sequentially.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>functions</strong> (<em>list</em><em>[</em><em>Callable</em><em>]</em>) – A list of functions to be composed.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A composed function that applies each function in the list.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Callable</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="heatpro.disaggregation.pipeline.disaggregate_temporal_demand">
+<span class="sig-prename descclassname"><span class="pre">heatpro.disaggregation.pipeline.</span></span><span class="sig-name descname"><span class="pre">disaggregate_temporal_demand</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_aggregate_demand</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="temporal_demand.html#heatpro.temporal_demand.temporal_heat_demand.TemporalHeatDemand" title="heatpro.temporal_demand.temporal_heat_demand.TemporalHeatDemand"><span class="pre">TemporalHeatDemand</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">functions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="temporal_demand.html#heatpro.temporal_demand.temporal_heat_demand.TemporalHeatDemand" title="heatpro.temporal_demand.temporal_heat_demand.TemporalHeatDemand"><span class="pre">TemporalHeatDemand</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="temporal_demand.html#heatpro.temporal_demand.temporal_heat_demand.TemporalHeatDemand" title="heatpro.temporal_demand.temporal_heat_demand.TemporalHeatDemand"><span class="pre">TemporalHeatDemand</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="temporal_demand.html#heatpro.temporal_demand.temporal_heat_demand.TemporalHeatDemand" title="heatpro.temporal_demand.temporal_heat_demand.TemporalHeatDemand"><span class="pre">TemporalHeatDemand</span></a></span></span><a class="reference internal" href="../_modules/heatpro/disaggregation/pipeline.html#disaggregate_temporal_demand"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#heatpro.disaggregation.pipeline.disaggregate_temporal_demand" title="Link to this definition"></a></dt>
+<dd><p>Disaggregate temporal heat demand using a list of functions.</p>
+<p>This function applies a list of functions to disaggregate a given
+temporal heat demand. If the list of functions is empty, the original
+demand is returned unchanged.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_aggregate_demand</strong> (<a class="reference internal" href="temporal_demand.html#heatpro.temporal_demand.temporal_heat_demand.TemporalHeatDemand" title="heatpro.temporal_demand.temporal_heat_demand.TemporalHeatDemand"><em>TemporalHeatDemand</em></a>) – The input aggregate demand
+to be disaggregated.</p></li>
+<li><p><strong>functions</strong> (<em>list</em><em>[</em><em>Callable</em><em>[</em><em>[</em><a class="reference internal" href="temporal_demand.html#heatpro.temporal_demand.temporal_heat_demand.TemporalHeatDemand" title="heatpro.temporal_demand.temporal_heat_demand.TemporalHeatDemand"><em>TemporalHeatDemand</em></a><em>]</em><em>,</em><a class="reference internal" href="temporal_demand.html#heatpro.temporal_demand.temporal_heat_demand.TemporalHeatDemand" title="heatpro.temporal_demand.temporal_heat_demand.TemporalHeatDemand"><em>TemporalHeatDemand</em></a><em>]</em><em>]</em>) – A list of functions to be applied for disaggregation.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The disaggregated temporal heat demand.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="temporal_demand.html#heatpro.temporal_demand.temporal_heat_demand.TemporalHeatDemand" title="heatpro.temporal_demand.temporal_heat_demand.TemporalHeatDemand">TemporalHeatDemand</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-heatpro.disaggregation.weighted_disaggregation">
+<span id="weighted-disaggregation"></span><h2><a class="toc-backref" href="#id4" role="doc-backlink">Weighted Disaggregation</a><a class="headerlink" href="#module-heatpro.disaggregation.weighted_disaggregation" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="heatpro.disaggregation.weighted_disaggregation.daily_weighted_dissagregate">
+<span class="sig-prename descclassname"><span class="pre">heatpro.disaggregation.weighted_disaggregation.</span></span><span class="sig-name descname"><span class="pre">daily_weighted_dissagregate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">monthly_demand</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="temporal_demand.html#heatpro.temporal_demand.monthly_heat_demand.MonthlyHeatDemand" title="heatpro.temporal_demand.monthly_heat_demand.MonthlyHeatDemand"><span class="pre">MonthlyHeatDemand</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_month_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="temporal_demand.html#heatpro.temporal_demand.daily_heat_demand.DailyHeatDemand" title="heatpro.temporal_demand.daily_heat_demand.DailyHeatDemand"><span class="pre">DailyHeatDemand</span></a></span></span><a class="reference internal" href="../_modules/heatpro/disaggregation/weighted_disaggregation.html#daily_weighted_dissagregate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#heatpro.disaggregation.weighted_disaggregation.daily_weighted_dissagregate" title="Link to this definition"></a></dt>
+<dd><p>Disaggregate monthly heat demand into daily values using weights.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>monthly_demand</strong> (<a class="reference internal" href="temporal_demand.html#heatpro.temporal_demand.monthly_heat_demand.MonthlyHeatDemand" title="heatpro.temporal_demand.monthly_heat_demand.MonthlyHeatDemand"><em>MonthlyHeatDemand</em></a>) – The input monthly heat demand to be disaggregated.</p></li>
+<li><p><strong>weights</strong> (<em>pd.DataFrame</em>) – DataFrame containing weights for each day.</p></li>
+<li><p><strong>keep_month_data</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, include monthly data in the output.
+Defaults to True.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – If monthly_demand is not an instance of MonthlyHeatDemand.</p></li>
+<li><p><strong>ValueError</strong> – If the weight format is not valid.</p></li>
+<li><p><strong>ValueError</strong> – If weights and monthly_demand do not match the same months.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The disaggregated daily heat demand.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="temporal_demand.html#heatpro.temporal_demand.daily_heat_demand.DailyHeatDemand" title="heatpro.temporal_demand.daily_heat_demand.DailyHeatDemand">DailyHeatDemand</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="heatpro.disaggregation.weighted_disaggregation.hourly_weighted_dissagregate">
+<span class="sig-prename descclassname"><span class="pre">heatpro.disaggregation.weighted_disaggregation.</span></span><span class="sig-name descname"><span class="pre">hourly_weighted_dissagregate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">daily_demand</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="temporal_demand.html#heatpro.temporal_demand.daily_heat_demand.DailyHeatDemand" title="heatpro.temporal_demand.daily_heat_demand.DailyHeatDemand"><span class="pre">DailyHeatDemand</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_month_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="temporal_demand.html#heatpro.temporal_demand.hourly_heat_demand.HourlyHeatDemand" title="heatpro.temporal_demand.hourly_heat_demand.HourlyHeatDemand"><span class="pre">HourlyHeatDemand</span></a></span></span><a class="reference internal" href="../_modules/heatpro/disaggregation/weighted_disaggregation.html#hourly_weighted_dissagregate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#heatpro.disaggregation.weighted_disaggregation.hourly_weighted_dissagregate" title="Link to this definition"></a></dt>
+<dd><p>Disaggregate daily heat demand into hourly values using weights.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>daily_demand</strong> (<a class="reference internal" href="temporal_demand.html#heatpro.temporal_demand.daily_heat_demand.DailyHeatDemand" title="heatpro.temporal_demand.daily_heat_demand.DailyHeatDemand"><em>DailyHeatDemand</em></a>) – The input daily heat demand to be disaggregated.</p></li>
+<li><p><strong>weights</strong> (<em>pd.DataFrame</em>) – DataFrame containing weights for each hour.</p></li>
+<li><p><strong>keep_month_data</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, include monthly data in the output.
+Defaults to True.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – If daily_demand is not an instance of DailyHeatDemand.</p></li>
+<li><p><strong>ValueError</strong> – If the weight format is not valid.</p></li>
+<li><p><strong>ValueError</strong> – If weights and daily_demand do not match the same months.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The disaggregated hourly heat demand.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="temporal_demand.html#heatpro.temporal_demand.hourly_heat_demand.HourlyHeatDemand" title="heatpro.temporal_demand.hourly_heat_demand.HourlyHeatDemand">HourlyHeatDemand</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="heatpro.disaggregation.weighted_disaggregation.monthly_weighted_disaggregate">
+<span class="sig-prename descclassname"><span class="pre">heatpro.disaggregation.weighted_disaggregation.</span></span><span class="sig-name descname"><span class="pre">monthly_weighted_disaggregate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">yearly_demand</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="temporal_demand.html#heatpro.temporal_demand.yearly_heat_demand.YearlyHeatDemand" title="heatpro.temporal_demand.yearly_heat_demand.YearlyHeatDemand"><span class="pre">YearlyHeatDemand</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_year_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="temporal_demand.html#heatpro.temporal_demand.monthly_heat_demand.MonthlyHeatDemand" title="heatpro.temporal_demand.monthly_heat_demand.MonthlyHeatDemand"><span class="pre">MonthlyHeatDemand</span></a></span></span><a class="reference internal" href="../_modules/heatpro/disaggregation/weighted_disaggregation.html#monthly_weighted_disaggregate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#heatpro.disaggregation.weighted_disaggregation.monthly_weighted_disaggregate" title="Link to this definition"></a></dt>
+<dd><p>Disaggregate yearly heat demand into monthly values using weights.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>yearly_demand</strong> (<a class="reference internal" href="temporal_demand.html#heatpro.temporal_demand.yearly_heat_demand.YearlyHeatDemand" title="heatpro.temporal_demand.yearly_heat_demand.YearlyHeatDemand"><em>YearlyHeatDemand</em></a>) – The input yearly heat demand to be disaggregated.</p></li>
+<li><p><strong>weights</strong> (<em>pd.DataFrame</em>) – DataFrame containing weights for each month.</p></li>
+<li><p><strong>keep_year_data</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, include yearly data in the output.
+Defaults to True.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – If yearly_demand is not an instance of YearlyHeatDemand.</p></li>
+<li><p><strong>ValueError</strong> – If the weight format is not valid.</p></li>
+<li><p><strong>ValueError</strong> – If there are duplicate months in the weights index.</p></li>
+<li><p><strong>ValueError</strong> – If yearly_demand and weights do not overlap on the same year.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The disaggregated monthly heat demand.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="temporal_demand.html#heatpro.temporal_demand.monthly_heat_demand.MonthlyHeatDemand" title="heatpro.temporal_demand.monthly_heat_demand.MonthlyHeatDemand">MonthlyHeatDemand</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="heatpro.disaggregation.weighted_disaggregation.weekly_weighted_disaggregate">
+<span class="sig-prename descclassname"><span class="pre">heatpro.disaggregation.weighted_disaggregation.</span></span><span class="sig-name descname"><span class="pre">weekly_weighted_disaggregate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">monthly_demand</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="temporal_demand.html#heatpro.temporal_demand.monthly_heat_demand.MonthlyHeatDemand" title="heatpro.temporal_demand.monthly_heat_demand.MonthlyHeatDemand"><span class="pre">MonthlyHeatDemand</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_year_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="temporal_demand.html#heatpro.temporal_demand.hourly_heat_demand.HourlyHeatDemand" title="heatpro.temporal_demand.hourly_heat_demand.HourlyHeatDemand"><span class="pre">HourlyHeatDemand</span></a></span></span><a class="reference internal" href="../_modules/heatpro/disaggregation/weighted_disaggregation.html#weekly_weighted_disaggregate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#heatpro.disaggregation.weighted_disaggregation.weekly_weighted_disaggregate" title="Link to this definition"></a></dt>
+<dd><p>Disaggregate monthly heat demand into hourly values using weights.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>monthly_demand</strong> (<a class="reference internal" href="temporal_demand.html#heatpro.temporal_demand.monthly_heat_demand.MonthlyHeatDemand" title="heatpro.temporal_demand.monthly_heat_demand.MonthlyHeatDemand"><em>MonthlyHeatDemand</em></a>) – The input monthly heat demand to be disaggregated.</p></li>
+<li><p><strong>weights</strong> (<em>pd.DataFrame</em>) – DataFrame containing weights for each week.</p></li>
+<li><p><strong>keep_year_data</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, include yearly data in the output.
+Defaults to True.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – If monthly_demand is not an instance of MonthlyHeatDemand.</p></li>
+<li><p><strong>ValueError</strong> – If the weight format is not valid.</p></li>
+<li><p><strong>ValueError</strong> – If weights and monthly_demand do not match the same months.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The disaggregated hourly heat demand.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="temporal_demand.html#heatpro.temporal_demand.hourly_heat_demand.HourlyHeatDemand" title="heatpro.temporal_demand.hourly_heat_demand.HourlyHeatDemand">HourlyHeatDemand</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="demand_profile.html" class="btn btn-neutral float-left" title="Demand Profile" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="external_factors.html" class="btn btn-neutral float-right" title="External Factors" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, HeatPro.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
