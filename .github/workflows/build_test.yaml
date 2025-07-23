@@ -33,7 +33,7 @@ jobs:
         run: uv sync --extra dev --extra notebook
 
       - name: Run tests
-        run: pytest
+        run: uv run pytest
 
       - name: Test notebooks
-        run: pytest --nbmake ./notebooks/
+        run: uv run pytest --nbmake ./notebooks/
