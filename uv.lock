@@ -517,6 +517,24 @@ dependencies = [
     { name = "pandas" },
 ]
 
+[package.optional-dependencies]
+dev = [
+    { name = "nbmake" },
+    { name = "pytest" },
+    { name = "pytest-cov" },
+]
+doc = [
+    { name = "recommonmark" },
+    { name = "sphinx" },
+    { name = "sphinx-rtd-theme" },
+]
+notebook = [
+    { name = "ipykernel" },
+    { name = "nbconvert" },
+    { name = "nbformat" },
+    { name = "plotly" },
+]
+
 [package.dev-dependencies]
 dev = [
     { name = "nbmake" },
@@ -537,9 +555,20 @@ notebook = [
 
 [package.metadata]
 requires-dist = [
+    { name = "ipykernel", marker = "extra == 'notebook'", specifier = ">=6.29.4,<7" },
     { name = "matplotlib", specifier = "==3.9.0" },
+    { name = "nbconvert", marker = "extra == 'notebook'", specifier = ">=7.16.4,<8" },
+    { name = "nbformat", marker = "extra == 'notebook'", specifier = ">=5.10.4,<6" },
+    { name = "nbmake", marker = "extra == 'dev'", specifier = ">=1.5.4,<2" },
     { name = "pandas", specifier = ">=2.1.0,<3" },
+    { name = "plotly", marker = "extra == 'notebook'", specifier = ">=5.20.0,<6" },
+    { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.1.1,<9" },
+    { name = "pytest-cov", marker = "extra == 'dev'", specifier = ">=5.0.0,<6" },
+    { name = "recommonmark", marker = "extra == 'doc'", specifier = ">=0.7.1,<0.8" },
+    { name = "sphinx", marker = "extra == 'doc'", specifier = ">=7.2.6,<8" },
+    { name = "sphinx-rtd-theme", marker = "extra == 'doc'", specifier = ">=2.0.0,<3" },
 ]
+provides-extras = ["doc", "dev", "notebook"]
 
 [package.metadata.requires-dev]
 dev = [

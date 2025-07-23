@@ -18,14 +18,25 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v3
-      - name: Install dependencies
+
+      - name: Install uv
         run: |
-          pip install poetry
-          poetry lock
-          poetry install --with doc
+          curl -Ls https://astral.sh/uv/install.sh | bash
+          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+
+      - name: Cache uv cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/uv
+          key: ${{ runner.os }}-uv-${{ hashFiles('uv.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-uv-
+
+      - name: Sync dependencies
+        run: uv sync --extra doc
       - name: Sphinx build
         run: |
-          poetry run sphinx-build -M html ./docs ./docs/_build
+          uv run sphinx-build -M html ./docs ./docs/_build
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
