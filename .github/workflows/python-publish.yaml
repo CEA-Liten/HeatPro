@@ -14,18 +14,18 @@ jobs:
       with:
         python-version: "3.10"
         
-      - name: Install uv
-        run: |
-          curl -Ls https://astral.sh/uv/install.sh | bash
-          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+    - name: Install uv
+      run: |
+        curl -Ls https://astral.sh/uv/install.sh | bash
+        echo "$HOME/.cargo/bin" >> $GITHUB_PATH
 
-      - name: Cache uv cache
-        uses: actions/cache@v3
-        with:
-          path: ~/.cache/uv
-          key: ${{ runner.os }}-uv-${{ hashFiles('uv.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-uv-
+    - name: Cache uv cache
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/uv
+        key: ${{ runner.os }}-uv-${{ hashFiles('uv.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-uv-
     - name: Build package
       run: uv build
     - name: Store the distribution packages
