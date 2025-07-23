@@ -1,43 +1,45 @@
-[tool.poetry]
+[project]
 name = "heatpro"
 version = "0.1.5"
 description = "Generate heat demand load profile for distict heating"
-authors = ["Robinson Beaucour <robinson.beaucour@cea.fr>",
-            "Nicolas Lamaison <nicolas.lamaison@cea.fr>",
-            "Thibaut Wissocq <thibaut.wissocq@cea.fr>"]
+authors = [
+    { name = "Robinson Beaucour", email = "robinson.beaucour@cea.fr" },
+    { name = "Nicolas Lamaison", email = "nicolas.lamaison@cea.fr" },
+    { name = "Thibaut Wissocq", email = "thibaut.wissocq@cea.fr" },
+]
+requires-python = "~=3.9"
 readme = "README.md"
 license = "CeCILL-B"
+dependencies = [
+    "pandas>=2.1.0,<3",
+    "matplotlib==3.9.0",
+]
 
-[tool.poetry.dependencies]
-python = "^3.9"
-pandas = "^2.1.0"
-matplotlib = "^3.8.4"
+[dependency-groups]
+dev = [
+    "pytest>=8.1.1,<9",
+    "pytest-cov>=5.0.0,<6",
+    "nbmake>=1.5.4,<2",
+]
+doc = [
+    "sphinx>=7.2.6,<8",
+    "sphinx-rtd-theme>=2.0.0,<3",
+    "recommonmark>=0.7.1,<0.8",
+]
+notebook = [
+    "ipykernel>=6.29.4,<7",
+    "plotly>=5.20.0,<6",
+    "nbformat>=5.10.4,<6",
+    "nbconvert>=7.16.4,<8",
+]
 
-[tool.poetry.group.dev]
-optional = true
-
-[tool.poetry.group.dev.dependencies]
-pytest = "^8.1.1"
-pytest-cov = "^5.0.0"
-nbmake = "^1.5.4"
-
-[tool.poetry.group.doc]
-optional = true
-
-[tool.poetry.group.doc.dependencies]
-sphinx = "^7.2.6"
-sphinx-rtd-theme = "^2.0.0"
-recommonmark = "^0.7.1"
-
-[tool.poetry.group.notebook]
-optional = true
-
-[tool.poetry.group.notebook.dependencies]
-ipykernel = "^6.29.4"
-plotly = "^5.20.0"
-nbformat = "^5.10.4"
-nbconvert = "^7.16.4"
+[tool.uv]
+default-groups = [
+    "dev",
+    "doc",
+    "notebook",
+]
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
