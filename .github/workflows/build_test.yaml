@@ -9,31 +9,12 @@ jobs:
       matrix:
         python-version: ['3.9', '3.10']
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: ${{ matrix.python-version }}
-
+      - uses: actions/checkout@v6
       - name: Install uv
-        run: |
-          curl -Ls https://astral.sh/uv/install.sh | bash
-          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
-
-      - name: Cache uv cache
-        uses: actions/cache@v3
-        with:
-          path: ~/.cache/uv
-          key: ${{ runner.os }}-uv-${{ hashFiles('uv.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-uv-
-
-      - name: Sync dependencies
-        run: uv sync --extra dev --extra notebook
+        uses: astral-sh/setup-uv@v7
 
       - name: Run tests
-        run: uv run pytest
+        run: uv run  --extra devpytest
 
       - name: Test notebooks
-        run: uv run pytest --nbmake ./notebooks/
+        run: uv run --extra dev --extra notebook pytest --nbmake ./notebooks/

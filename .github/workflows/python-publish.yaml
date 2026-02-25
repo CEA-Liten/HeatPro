@@ -8,24 +8,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: "3.10"
-        
+    - uses: actions/checkout@v6
     - name: Install uv
-      run: |
-        curl -Ls https://astral.sh/uv/install.sh | bash
-        echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+      uses: astral-sh/setup-uv@v7
 
-    - name: Cache uv cache
-      uses: actions/cache@v3
-      with:
-        path: ~/.cache/uv
-        key: ${{ runner.os }}-uv-${{ hashFiles('uv.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-uv-
     - name: Build package
       run: uv build
     - name: Store the distribution packages
