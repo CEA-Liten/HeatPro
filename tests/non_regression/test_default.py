@@ -8,11 +8,13 @@ from heatpro.temporal_demand import MonthlyHeatDemand
 from heatpro.check import ENERGY_FEATURE_NAME
 from heatpro.external_factors import (
     ExternalFactors,
+    TemperatureThreshold,
+    Threshold,
     closed_heating_season,
     burch_cold_water,
-    basic_temperature_departure,
+    basic_temperature_supply,
     basic_temperature_return,
-    kasuda_soil_temperature
+    kasuda_soil_temperature,
 )
 EPSILON = 1e-2
 
@@ -38,13 +40,19 @@ def induced_factors(setup_data: tuple[dict,ExternalFactors]):
     return pd.concat((
                             closed_heating_season(external_factors),
                             burch_cold_water(external_factors),
-                            basic_temperature_departure(external_factors,
-                                                        T_max_HS=parameters["Temp_DHN"]["Tdep"]["Tdep_max_SC"],
-                                                        T_max_NHS=parameters["Temp_DHN"]["Tdep"]["Tdep_max_SNC"],
-                                                        T_min_HS=parameters["Temp_DHN"]["Tdep"]["Tdep_min_SC"],
-                                                        T_min_NHS=parameters["Temp_DHN"]["Tdep"]["Tdep_min_SNC"],
-                                                        T_ext_mid=parameters["Temp_DHN"]["Tdep"]["Text_p"],
-                                                        T_ext_min=parameters["Temp_DHN"]["Tdep"]["Text_min"]
+                            basic_temperature_supply(external_factors,
+                                temperature_threshold = TemperatureThreshold(
+                                    heating_season = Threshold(
+                                        parameters["Temp_DHN"]["Tdep"]["Tdep_min_SC"],
+                                        parameters["Temp_DHN"]["Tdep"]["Tdep_max_SC"],
+                                    ),
+                                    non_heating_season = Threshold(
+                                        parameters["Temp_DHN"]["Tdep"]["Tdep_min_SNC"],
+                                        parameters["Temp_DHN"]["Tdep"]["Tdep_max_SNC"],
+                                    ),
+                                    outside_mid = parameters["Temp_DHN"]["Tdep"]["Text_p"],
+                                    outside_min = parameters["Temp_DHN"]["Tdep"]["Text_min"],
+                                )
                                                         ),
                             basic_temperature_return(external_factors,
                                                      T_HS=parameters["Temp_DHN"]["Tret"]["Tret_SC"],

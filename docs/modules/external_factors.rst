@@ -12,6 +12,14 @@ External Factors
    :undoc-members:
    :show-inheritance:
 
+.. contents::
+    :backlinks: entry
+
+.. automodule:: heatpro.external_factors.temperature_threshold
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Heating Season
 --------------
 

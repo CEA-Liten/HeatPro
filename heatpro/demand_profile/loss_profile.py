@@ -3,7 +3,7 @@ import pandas as pd
 from ..check import WEIGHT_NAME_REQUIRED
 
 from ..external_factors.process.temperature_return import RETURN_TEMPERATURE_NAME
-from ..external_factors.process.temperature_departure import DEPARTURE_TEMPERATURE_NAME
+from ..external_factors.process.temperature_supply import SUPPLY_TEMPERATURE_NAME
 from ..external_factors.process.temperature_soil import SOIL_TEMPERATURE_NAME
 
 DELTA_TEMPERATURE_NAME = 'delta_temperature'
@@ -32,7 +32,7 @@ def Y_to_H_thermal_loss_profile(temperatures: pd.DataFrame) -> pd.DataFrame:
     :math:`T^{(return)}_t` : District heating network return temperature
     
     """
-    temperature_delta = pd.DataFrame((temperatures[DEPARTURE_TEMPERATURE_NAME]+temperatures[RETURN_TEMPERATURE_NAME])/2 - temperatures[SOIL_TEMPERATURE_NAME],
+    temperature_delta = pd.DataFrame((temperatures[SUPPLY_TEMPERATURE_NAME]+temperatures[RETURN_TEMPERATURE_NAME])/2 - temperatures[SOIL_TEMPERATURE_NAME],
                                      columns = [DELTA_TEMPERATURE_NAME])
     
     temperature_delta = temperature_delta.resample('h').sum()

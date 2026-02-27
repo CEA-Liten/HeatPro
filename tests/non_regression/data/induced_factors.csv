@@ -1,4 +1,4 @@
-,closed_heating_season,cold_water_temperature,departure_temperature,return_temperature,soil_temperature
+,closed_heating_season,cold_water_temperature,supply_temperature,return_temperature,soil_temperature
 2021-01-01 00:00:00,True,8.75830059689172,76.4,50,4.818064956524807
 2021-01-01 01:00:00,True,8.75830059689172,76.38333333333333,50,4.818064956524807
 2021-01-01 02:00:00,True,8.75830059689172,76.4,50,4.818064956524807

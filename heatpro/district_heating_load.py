@@ -4,7 +4,7 @@ import pandas as pd
 
 from .check import ENERGY_FEATURE_NAME
 from .temporal_demand import HourlyHeatDemand
-from .external_factors import ExternalFactors, DEPARTURE_TEMPERATURE_NAME, RETURN_TEMPERATURE_NAME
+from .external_factors import ExternalFactors, SUPPLY_TEMPERATURE_NAME, RETURN_TEMPERATURE_NAME
 
 class DistrictHeatingLoad:
     def __init__(self, demands: list[HourlyHeatDemand], external_factors: ExternalFactors,
@@ -30,8 +30,8 @@ class DistrictHeatingLoad:
         self.cp = cp
 
         # Check required columns in district_network_temperature
-        if not {DEPARTURE_TEMPERATURE_NAME, RETURN_TEMPERATURE_NAME}.issubset(set(district_network_temperature.columns)):
-            raise ValueError(f"district_network_temperature should have columns : {' ,'.join({DEPARTURE_TEMPERATURE_NAME, RETURN_TEMPERATURE_NAME})}")
+        if not {SUPPLY_TEMPERATURE_NAME, RETURN_TEMPERATURE_NAME}.issubset(set(district_network_temperature.columns)):
+            raise ValueError(f"district_network_temperature should have columns : {' ,'.join({SUPPLY_TEMPERATURE_NAME, RETURN_TEMPERATURE_NAME})}")
         self.district_network_temperature = district_network_temperature
 
         # Check matching indices between external_factors and district_network_temperature
@@ -52,14 +52,14 @@ class DistrictHeatingLoad:
             None
         """
         total_demand = pd.concat([demand[ENERGY_FEATURE_NAME] for demand in self.demands.values()], axis=1).sum(axis=1)
-        flow_rate = total_demand / (self.cp * (self.district_network_temperature[DEPARTURE_TEMPERATURE_NAME] - self.district_network_temperature[RETURN_TEMPERATURE_NAME]))
+        flow_rate = total_demand / (self.cp * (self.district_network_temperature[SUPPLY_TEMPERATURE_NAME] - self.district_network_temperature[RETURN_TEMPERATURE_NAME]))
 
-        min_flow_rate = (total_demand / (self.cp * (self.district_network_temperature[DEPARTURE_TEMPERATURE_NAME] - (self.district_network_temperature[RETURN_TEMPERATURE_NAME] + self.delta_temperature)))).min()
-        max_flow_rate = (total_demand / (self.cp * (self.district_network_temperature[DEPARTURE_TEMPERATURE_NAME] - (self.district_network_temperature[RETURN_TEMPERATURE_NAME] - self.delta_temperature)))).max()
+        min_flow_rate = (total_demand / (self.cp * (self.district_network_temperature[SUPPLY_TEMPERATURE_NAME] - (self.district_network_temperature[RETURN_TEMPERATURE_NAME] + self.delta_temperature)))).min()
+        max_flow_rate = (total_demand / (self.cp * (self.district_network_temperature[SUPPLY_TEMPERATURE_NAME] - (self.district_network_temperature[RETURN_TEMPERATURE_NAME] - self.delta_temperature)))).max()
 
         corrected_flow_rate = flow_rate.clip(min_flow_rate, max_flow_rate)
 
-        self.district_network_temperature[RETURN_TEMPERATURE_NAME] = self.district_network_temperature[DEPARTURE_TEMPERATURE_NAME] - \
+        self.district_network_temperature[RETURN_TEMPERATURE_NAME] = self.district_network_temperature[SUPPLY_TEMPERATURE_NAME] - \
                                                                      total_demand / self.cp / corrected_flow_rate
 
         self.data = pd.concat(

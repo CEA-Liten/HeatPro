@@ -43,3 +43,6 @@ where = ["."]
 
 [tool.uv]
 package = true
+
+[tool.ruff]
+line-length = 100

@@ -1,14 +1,14 @@
 import numpy as np
 import pandas as pd
 import pytest
-from heatpro.demand_profile.loss_profile import Y_to_H_thermal_loss_profile, WEIGHT_NAME_REQUIRED, DEPARTURE_TEMPERATURE_NAME, RETURN_TEMPERATURE_NAME, SOIL_TEMPERATURE_NAME
+from heatpro.demand_profile.loss_profile import Y_to_H_thermal_loss_profile, WEIGHT_NAME_REQUIRED, SUPPLY_TEMPERATURE_NAME, RETURN_TEMPERATURE_NAME, SOIL_TEMPERATURE_NAME
 
 # Fixture for a sample temperatures DataFrame
 @pytest.fixture
 def sample_temperatures():
     dates = pd.date_range('2022-01-01', periods=365, freq='D')
     data = {
-        DEPARTURE_TEMPERATURE_NAME: np.random.uniform(10, 20, 365),
+        SUPPLY_TEMPERATURE_NAME: np.random.uniform(10, 20, 365),
         RETURN_TEMPERATURE_NAME: np.random.uniform(5, 15, 365),
         SOIL_TEMPERATURE_NAME: np.random.uniform(0, 10, 365)
     }

@@ -2,7 +2,7 @@ import pandas as pd
 import pytest
 from heatpro.district_heating_load import DistrictHeatingLoad, ENERGY_FEATURE_NAME
 from heatpro.temporal_demand import HourlyHeatDemand
-from heatpro.external_factors import ExternalFactors, DEPARTURE_TEMPERATURE_NAME, RETURN_TEMPERATURE_NAME
+from heatpro.external_factors import ExternalFactors, SUPPLY_TEMPERATURE_NAME, RETURN_TEMPERATURE_NAME
 
 # Sample data for testing
 sample_demand_data = pd.DataFrame({
@@ -15,7 +15,7 @@ sample_external_factors_data = pd.DataFrame({
 },index=pd.date_range('2022-01-01', periods=5, freq='h'))
 
 sample_district_network_temperature_data = pd.DataFrame({
-    'departure_temperature': [20, 18, 15, 16, 22],
+    'supply_temperature': [20, 18, 15, 16, 22],
     'return_temperature': [15, 14, 12, 11, 20],
 },index=pd.date_range('2022-01-01', periods=5, freq='h'))
 
@@ -49,7 +49,7 @@ def test_district_heating_load_index_mismatch():
     demand = HourlyHeatDemand('SampleDemand', sample_demand_data)
     external_factors = ExternalFactors(sample_external_factors_data["external_temperature"],sample_external_factors_data["heating_season"])
     mismatched_district_network_temperature = pd.DataFrame({
-        'departure_temperature': [20, 18, 15, 16, 22],
+        'supply_temperature': [20, 18, 15, 16, 22],
         'return_temperature': [15, 14, 12, 11, 20],
     },index=pd.date_range('2022-01-01', periods=5, freq='h'))
 

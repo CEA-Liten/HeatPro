@@ -5,7 +5,7 @@ __version__ = importlib.metadata.version("heatpro")
 from .check import ENERGY_FEATURE_NAME, WEIGHT_NAME_REQUIRED
 from .demand_profile.building_heating_profile import BUILDING_FELT_TEMPERATURE_NAME
 from .external_factors import (COLD_WATER_TEMPERATURE_NAME, 
-                               DEPARTURE_TEMPERATURE_NAME,
+                               SUPPLY_TEMPERATURE_NAME,
                                RETURN_TEMPERATURE_NAME,
                                SOIL_TEMPERATURE_NAME,
                                )
@@ -19,7 +19,7 @@ def help_with_feature_name():
     {WEIGHT_NAME_REQUIRED = } , used to have a common name for profile weights, import with from heatpro.check\n
     {BUILDING_FELT_TEMPERATURE_NAME = } , used to generate heating building profile, import with heatpro.demand_profile.building_heating_profile\n
     {COLD_WATER_TEMPERATURE_NAME = } , import with heatpro.external_factors \n
-    {DEPARTURE_TEMPERATURE_NAME = } , import with heatpro.external_factors \n
+    {SUPPLY_TEMPERATURE_NAME = } , import with heatpro.external_factors \n
     {RETURN_TEMPERATURE_NAME = } , import with heatpro.external_factors \n
     {SOIL_TEMPERATURE_NAME = } , import with heatpro.external_factors \n
                 """
