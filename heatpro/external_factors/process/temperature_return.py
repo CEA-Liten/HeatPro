@@ -2,9 +2,12 @@ import pandas as pd
 
 from ..external_factors import ExternalFactors
 
-RETURN_TEMPERATURE_NAME = 'return_temperature'
+RETURN_TEMPERATURE_NAME = "return_temperature"
 
-def basic_temperature_return(external_factor: ExternalFactors, T_HS: float, T_NHS: float) -> pd.DataFrame:
+
+def basic_temperature_return(
+    external_factor: ExternalFactors, T_HS: float, T_NHS: float
+) -> pd.Series:
     r"""
     Calculate basic return temperature based on external factors.
 
@@ -14,19 +17,14 @@ def basic_temperature_return(external_factor: ExternalFactors, T_HS: float, T_NH
         T_NHS (float): Return temperature during the non-heating season.
 
     Returns:
-        pd.DataFrame: DataFrame containing the calculated basic return temperature.
-        
+        pd.Series: Series containing the calculated basic return temperature.
+
     **Overview**
-    
+
     .. math::
         T^{(return)}_t = \mathbb{1}_{t \in HS}\cdot T^{(return)}_{HS} + \mathbb{1}_{t \in NHS}\cdot T^{(return)}_{NHS}
-        
+
     """
-    # Create an empty DataFrame with the same index as external_factor
-    df = pd.DataFrame(index=external_factor.heating_season.index, columns=[RETURN_TEMPERATURE_NAME])
-
-    # Calculate basic return temperature using the specified formula
-    df[RETURN_TEMPERATURE_NAME] = external_factor.heating_season * T_HS +\
-                                (1 - external_factor.heating_season) * T_NHS
-
-    return df
+    return (
+        external_factor.heating_season * T_HS + (1 - external_factor.heating_season) * T_NHS
+    ).rename(RETURN_TEMPERATURE_NAME)
