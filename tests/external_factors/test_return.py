@@ -9,7 +9,10 @@ sample_data = pd.DataFrame({
 }, index=pd.date_range('2022-01-01', periods=5, freq='D'))
 
 def test_basic_temperature_return():
-    external_factors = ExternalFactors(sample_data)
+    external_factors = ExternalFactors(
+        temperature=sample_data["external_temperature"],
+        heating_season=sample_data["heating_season"],
+    )
     T_HS, T_NHS = 30, 20
     result = basic_temperature_return(external_factors, T_HS, T_NHS)
 
@@ -18,10 +21,3 @@ def test_basic_temperature_return():
     assert result.index.equals(sample_data.index)
 
     # Add more specific assertions based on your expectations
-
-# Additional test for handling invalid input
-def test_basic_temperature_return_invalid_input():
-    invalid_factors = pd.DataFrame({'temperature': [10.0, 15.0, 20.0]}, index=pd.date_range('2022-01-01', periods=3, freq='D'))
-    
-    with pytest.raises(ValueError, match="Missing required features"):
-        basic_temperature_return(ExternalFactors(invalid_factors), 30, 20)

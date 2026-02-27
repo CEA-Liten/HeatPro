@@ -21,7 +21,7 @@ sample_district_network_temperature_data = pd.DataFrame({
 
 def test_district_heating_load_creation():
     demand = HourlyHeatDemand('SampleDemand', sample_demand_data)
-    external_factors = ExternalFactors(sample_external_factors_data)
+    external_factors = ExternalFactors(sample_external_factors_data["external_temperature"],sample_external_factors_data["heating_season"])
     district_network_temperature = sample_district_network_temperature_data
     delta_temperature = 5
     cp = 1.5
@@ -29,14 +29,15 @@ def test_district_heating_load_creation():
     district_heating_load = DistrictHeatingLoad([demand], external_factors, district_network_temperature, delta_temperature, cp)
 
     assert district_heating_load.demands == {'SampleDemand': sample_demand_data}
-    assert district_heating_load.external_factors.data.equals(sample_external_factors_data)
+    assert district_heating_load.external_factors.temperature.equals(sample_external_factors_data["external_temperature"])
+    assert district_heating_load.external_factors.heating_season.equals(sample_external_factors_data["heating_season"])
     assert district_heating_load.district_network_temperature.equals(sample_district_network_temperature_data)
     assert district_heating_load.delta_temperature == 5
     assert district_heating_load.cp == 1.5
 
 def test_district_heating_load_invalid_columns():
     demand = HourlyHeatDemand('SampleDemand', sample_demand_data)
-    external_factors = ExternalFactors(sample_external_factors_data)
+    external_factors = ExternalFactors(sample_external_factors_data["external_temperature"],sample_external_factors_data["heating_season"])
     invalid_district_network_temperature = pd.DataFrame({
         'invalid_column': [1, 2, 3, 4, 5],
     },index=pd.date_range('2022-01-01', periods=5, freq='h'))
@@ -46,7 +47,7 @@ def test_district_heating_load_invalid_columns():
 
 def test_district_heating_load_index_mismatch():
     demand = HourlyHeatDemand('SampleDemand', sample_demand_data)
-    external_factors = ExternalFactors(sample_external_factors_data)
+    external_factors = ExternalFactors(sample_external_factors_data["external_temperature"],sample_external_factors_data["heating_season"])
     mismatched_district_network_temperature = pd.DataFrame({
         'departure_temperature': [20, 18, 15, 16, 22],
         'return_temperature': [15, 14, 12, 11, 20],
@@ -59,7 +60,7 @@ def test_district_heating_load_index_mismatch():
 
 def test_district_heating_load_fit():
     demand = HourlyHeatDemand('SampleDemand', sample_demand_data)
-    external_factors = ExternalFactors(sample_external_factors_data)
+    external_factors = ExternalFactors(sample_external_factors_data["external_temperature"],sample_external_factors_data["heating_season"])
     district_network_temperature = sample_district_network_temperature_data
     delta_temperature = 5
     cp = 1.5

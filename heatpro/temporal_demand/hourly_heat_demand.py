@@ -1,4 +1,3 @@
-from matplotlib.axes import Axes
 import pandas as pd
 
 from . import TemporalHeatDemand

@@ -1,6 +1,6 @@
 import pandas as pd
 
-from ..external_factors import ExternalFactors, EXTERNAL_TEMPERATURE_NAME, HEATING_SEASON_NAME
+from ..external_factors import ExternalFactors
 
 DEPARTURE_TEMPERATURE_NAME = 'departure_temperature'
 
@@ -30,16 +30,16 @@ def basic_temperature_departure(external_factor: ExternalFactors, T_max_HS: floa
         
     """
     # Create an empty DataFrame with the same index as external_factor
-    df = pd.DataFrame(index=external_factor.data.index, columns=[DEPARTURE_TEMPERATURE_NAME])
+    df = pd.DataFrame(index=external_factor.temperature.index, columns=[DEPARTURE_TEMPERATURE_NAME])
 
     # Calculate basic temperature departure using the specified formula
-    df[DEPARTURE_TEMPERATURE_NAME] = (external_factor.data[EXTERNAL_TEMPERATURE_NAME] < T_ext_mid) *\
-        (external_factor.data[EXTERNAL_TEMPERATURE_NAME] - T_ext_mid) /\
+    df[DEPARTURE_TEMPERATURE_NAME] = (external_factor.temperature < T_ext_mid) *\
+        (external_factor.temperature - T_ext_mid) /\
         (T_ext_min - T_ext_mid) *\
-        (external_factor.data[HEATING_SEASON_NAME] * (T_max_HS - T_min_HS) +\
-        (1 - external_factor.data[HEATING_SEASON_NAME]) * (T_max_NHS - T_min_NHS)) +\
-        external_factor.data[HEATING_SEASON_NAME] * T_min_HS +\
-        (1 - external_factor.data[HEATING_SEASON_NAME]) * T_min_NHS
+        (external_factor.heating_season * (T_max_HS - T_min_HS) +\
+        (1 - external_factor.heating_season) * (T_max_NHS - T_min_NHS)) +\
+        external_factor.heating_season * T_min_HS +\
+        (1 - external_factor.heating_season) * T_min_NHS
 
     return df
                                 

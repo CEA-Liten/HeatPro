@@ -1,5 +1,4 @@
 import pandas as pd
-import numpy as np
 import pytest
 from heatpro.external_factors import burch_cold_water, ExternalFactors, COLD_WATER_TEMPERATURE_NAME
 
@@ -10,7 +9,10 @@ sample_data = pd.DataFrame({
 }, index=pd.date_range('2022-01-01', periods=5, freq='D'))
 
 def test_burch_cold_water():
-    external_factors = ExternalFactors(sample_data)
+    external_factors = ExternalFactors(
+        temperature=sample_data["external_temperature"],
+        heating_season=sample_data["heating_season"]
+    )
     result = burch_cold_water(external_factors)
 
     assert isinstance(result, pd.DataFrame)
@@ -20,7 +22,10 @@ def test_burch_cold_water():
 # Additional test for handling an empty DataFrame
 def test_burch_cold_water_empty_dataframe():
     empty_data = pd.DataFrame(columns=['external_temperature','heating_season'],index=pd.date_range('2022-01-01', periods=0, freq='D'))
-    external_factors = ExternalFactors(empty_data)
+    external_factors = ExternalFactors(
+        temperature=empty_data["external_temperature"],
+        heating_season=empty_data["heating_season"],
+    )
     with pytest.raises(ValueError, match="attempt to get argmin of an empty sequence"):
         burch_cold_water(external_factors)
 

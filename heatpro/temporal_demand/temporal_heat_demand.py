@@ -1,7 +1,8 @@
-from matplotlib.axes import Axes
 import pandas as pd
 
 from ..check import check_datetime_index, check_energy_feature, ENERGY_FEATURE_NAME
+
+pd.options.plotting.backend = 'plotly'
 
 class TemporalHeatDemand:
     def __init__(self, name: str, data: pd.DataFrame) -> None:
@@ -34,7 +35,7 @@ class TemporalHeatDemand:
         """
         return self._data
 
-    def plot(self) -> Axes:
+    def plot(self):
         """
         Plot the temporal heat demand data.
 

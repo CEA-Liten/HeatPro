@@ -1,21 +1,21 @@
 import json
 import numpy as np
 import pandas as pd
-from pandas._testing import assert_frame_equal
 import pytest
 
-EPSILON = 1e-2
 
+from heatpro.temporal_demand import MonthlyHeatDemand
+from heatpro.check import ENERGY_FEATURE_NAME
 from heatpro.external_factors import (
     ExternalFactors,
-    EXTERNAL_TEMPERATURE_NAME,
-    HEATING_SEASON_NAME,
     closed_heating_season,
     burch_cold_water,
     basic_temperature_departure,
     basic_temperature_return,
     kasuda_soil_temperature
 )
+EPSILON = 1e-2
+
 
 @pytest.fixture
 def setup_data() -> tuple[dict,ExternalFactors]:
@@ -24,12 +24,12 @@ def setup_data() -> tuple[dict,ExternalFactors]:
     df = pd.DataFrame(
         pd.read_csv("./tests/non_regression/data/weatherdata.csv", sep=',')["T_ext"].to_numpy(),
         index=pd.date_range('2021', end='2022', freq='h', inclusive='left'),
-        columns=[EXTERNAL_TEMPERATURE_NAME],
+        columns=["external_temperature"],
     )
     end_heating_season = pd.to_datetime(f'{parameters["Seasons"]["SC_end"]}-{year}', dayfirst=True)
     start_heating_season = pd.to_datetime(f'{parameters["Seasons"]["SC_start"]}-{year}', dayfirst=True)
-    df[HEATING_SEASON_NAME] = (df.index < end_heating_season) | (df.index >= start_heating_season)
-    external_factors = ExternalFactors(df)
+    df["heating_season"] = (df.index < end_heating_season) | (df.index >= start_heating_season)
+    external_factors = ExternalFactors(df["external_temperature"],df["heating_season"])
     return parameters, external_factors
 
 @pytest.fixture
@@ -63,9 +63,6 @@ def test_induced_factors_non_regression(induced_factors: pd.DataFrame):
         absolute_gap = (induced_factors[col].astype(float)-reference_induced_factors[col].astype(float)).abs()
         assert (absolute_gap <= EPSILON * reference_induced_factors[col].astype(float).abs()).all() , f"The relative gap of column '{col}' is over {EPSILON}"
 
-from heatpro.temporal_demand import MonthlyHeatDemand
-from heatpro.check import ENERGY_FEATURE_NAME
-
 @pytest.fixture
 def monthly_building_load(setup_data):
     parameters = setup_data[0]
@@ -95,7 +92,7 @@ def hourly_hot_water_load(monthly_building_load,setup_data):
                 temperature_hot_water=parameters["Part_DHW"]["Tprod"],
                 hourly_hot_water_day_profil = basic_hot_water_hourly_profile(
                                                             raw_hourly_hotwater_profile = apply_weekly_hourly_pattern(
-                                                                hourly_index=external_factors.data.index,
+                                                                hourly_index=external_factors.temperature.index,
                                                                 hourly_mapping={
                                                                 # jour 0
                                                                 (0, 0): 0.016999999999999998,(0, 1): 0.009,(0, 2): 0.005,(0, 3): 0.004,(0, 4): 0.007,(0, 5): 0.014,(0, 6): 0.028,(0, 7): 0.039,(0, 8): 0.043000000000000003,(0, 9): 0.049999999999999996,(0, 10): 0.052,(0, 11): 0.057,(0, 12): 0.06999999999999999,(0, 13): 0.064,(0, 14): 0.045000000000000005,(0, 15): 0.04,(0, 16): 0.04699999999999999,(0, 17): 0.059,(0, 18): 0.06899999999999999,(0, 19): 0.077,(0, 20): 0.076,(0, 21): 0.057,(0, 22): 0.041,(0, 23): 0.03,
@@ -117,7 +114,7 @@ def hourly_hot_water_load(monthly_building_load,setup_data):
                                                     )
                                 )
     
-from heatpro.demand_profile import apply_weekly_hourly_pattern, basic_building_heating_profile, BUILDING_FELT_TEMPERATURE_NAME
+from heatpro.demand_profile import basic_building_heating_profile, BUILDING_FELT_TEMPERATURE_NAME
 from heatpro.disaggregation import weekly_weighted_disaggregate
 
 @pytest.fixture
@@ -129,10 +126,10 @@ def hourly_residential_load(monthly_building_load,hourly_hot_water_load,setup_da
                                 )
 
     hourly_residential_profile = basic_building_heating_profile(
-        felt_temperature=pd.DataFrame(external_factors.data[EXTERNAL_TEMPERATURE_NAME].ewm(parameters["Part_SH"]["Text_ponderation"]).mean().rename(BUILDING_FELT_TEMPERATURE_NAME)),
+        felt_temperature=pd.DataFrame(external_factors.temperature.ewm(parameters["Part_SH"]["Text_ponderation"]).mean().rename(BUILDING_FELT_TEMPERATURE_NAME)),
         non_heating_temperature=parameters["Part_SH"]["T_NC"],
         hourly_weight=apply_weekly_hourly_pattern(
-            hourly_index=external_factors.data.index,
+            hourly_index=external_factors.temperature.index,
             hourly_mapping={
                 # jour 0
                 (0, 0): 0.005930381852781527,(0, 1): 0.005218474124594565,(0, 2): 0.0054559751141820215,(0, 3): 0.005870857795240811,(0, 4): 0.006345264533840317,(0, 5): 0.006701218397933798,(0, 6): 0.006938124146945847,(0, 7): 0.007116101078992588,(0, 8): 0.007116101078992588,(0, 9): 0.007116101078992588,(0, 10): 0.0069976482044865635,(0, 11): 0.006879195329980539,(0, 12): 0.0067601472148991065,(0, 13): 0.006641694340393082,(0, 14): 0.006463717408346343,(0, 15): 0.006345264533840317,(0, 16): 0.006167287601793576,(0, 17): 0.005930381852781527,(0, 18): 0.005574427988688046,(0, 19): 0.005158950067053849,(0, 20): 0.004684543328454343,(0, 21): 0.004151207772889528,(0, 22): 0.0036768010342900226, (0, 23): 0.003617276976749307,
@@ -176,10 +173,10 @@ def hourly_industry_load(monthly_building_load,setup_data):
     return weekly_weighted_disaggregate(
                                 monthly_demand=monthly_industry_load,
                                 weights=apply_weekly_hourly_pattern(
-                                    hourly_index=external_factors.data.index,
+                                    hourly_index=external_factors.temperature.index,
                                     hourly_mapping={(day,hour): 1/24 for day in range(7) for hour in range(24)}
                                     )*\
-                                    day_length_proportionnal_weight(dates=external_factors.data.index),
+                                    day_length_proportionnal_weight(dates=external_factors.temperature.index),
                             )
     
 from heatpro.demand_profile import Y_to_H_thermal_loss_profile

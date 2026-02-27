@@ -35,7 +35,7 @@ class DistrictHeatingLoad:
         self.district_network_temperature = district_network_temperature
 
         # Check matching indices between external_factors and district_network_temperature
-        if not external_factors.data.index.equals(district_network_temperature.index):
+        if not external_factors.temperature.index.equals(district_network_temperature.index):
             raise ValueError("Index between external_factors and district_network_temperature are not matching")
 
         # Check matching indices between HourlyHeatDemand instances and district_network_temperature
@@ -63,7 +63,7 @@ class DistrictHeatingLoad:
                                                                      total_demand / self.cp / corrected_flow_rate
 
         self.data = pd.concat(
-            [self.external_factors.data, self.district_network_temperature] +
+            [self.external_factors.temperature, self.external_factors.heating_season, self.district_network_temperature] +
             [demand.rename(lambda x: f"{name}_{x}", axis=1) for name, demand in self.demands.items()],
             axis=1
         )

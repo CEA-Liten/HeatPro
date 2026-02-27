@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 
 from .utils import convert_serie_C_to_F, convert_serie_F_to_C, get_coldest_dayofyear
-from ..external_factors import ExternalFactors, EXTERNAL_TEMPERATURE_NAME
+from ..external_factors import ExternalFactors
 
 COLD_WATER_TEMPERATURE_NAME = 'cold_water_temperature'
 
@@ -30,7 +30,7 @@ def burch_cold_water(external_factors: ExternalFactors) -> pd.DataFrame:
     
     """
     # Convert external temperature to Fahrenheit
-    external_temperature_F = convert_serie_C_to_F(external_factors.data[EXTERNAL_TEMPERATURE_NAME])
+    external_temperature_F = convert_serie_C_to_F(external_factors.temperature)
 
     # Get the day of the year with the coldest average daily temperature
     coldest_dayofyear = get_coldest_dayofyear(external_factors)

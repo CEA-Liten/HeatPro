@@ -28,11 +28,11 @@ def kasuda_soil_temperature(external_factor: ExternalFactors, d: float, alpha: f
     where :math:`\Delta_{month}T^{(\text{External})}` is the average monthly amplitude over the years.
     """
     # Create an empty DataFrame with the same index as external_factor
-    df = pd.DataFrame(index=external_factor.data.index, columns=[SOIL_TEMPERATURE_NAME])
+    df = pd.DataFrame(index=external_factor.temperature.index, columns=[SOIL_TEMPERATURE_NAME])
 
     # Calculate average external temperature, average monthly amplitude, and coldest day of the year
-    average_external_temperature = external_factor.data.external_temperature.mean()
-    average_monthly_amplitude = 0.5 * external_factor.data.external_temperature.resample('MS').mean().resample('YS').apply(lambda x: x.max() - x.min()).mean()
+    average_external_temperature = external_factor.temperature.mean()
+    average_monthly_amplitude = 0.5 * external_factor.temperature.resample('MS').mean().resample('YS').apply(lambda x: x.max() - x.min()).mean()
     coldest_dayofyear = get_coldest_dayofyear(external_factor)
 
     # Calculate Kasuda soil temperature using the specified formula

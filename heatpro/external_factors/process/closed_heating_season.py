@@ -1,8 +1,8 @@
 import pandas as pd
 
-from ..external_factors import ExternalFactors, HEATING_SEASON_NAME
+from ..external_factors import ExternalFactors
 
-CLOSED_HEATING_SEASON_NAME = f"closed_{HEATING_SEASON_NAME}"
+CLOSED_HEATING_SEASON_NAME = "closed_heating_season"
 
 def closed_heating_season(external_factor: ExternalFactors) -> pd.DataFrame:
     """Return a DataFrame with the same index than external_factor.data
@@ -15,5 +15,5 @@ def closed_heating_season(external_factor: ExternalFactors) -> pd.DataFrame:
     Returns:
         pd.DataFrame: DataFrame indicating the complete non-heating month
     """
-    return pd.DataFrame(external_factor.data.groupby(external_factor.data.index.month)[HEATING_SEASON_NAME].transform('any'),
-                      index=external_factor.data.index).rename({HEATING_SEASON_NAME:CLOSED_HEATING_SEASON_NAME},axis=1)
+    return pd.DataFrame(external_factor.heating_season.groupby(external_factor.heating_season.index.month).transform('any'),
+                      index=external_factor.heating_season.index).rename({"heating_season":CLOSED_HEATING_SEASON_NAME},axis=1)

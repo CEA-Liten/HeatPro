@@ -1,63 +1,49 @@
-from matplotlib.axes import Axes
+from dataclasses import dataclass
 import pandas as pd
+import plotly.graph_objects as go
 
-from ..check import check_datetime_index
-
-EXTERNAL_TEMPERATURE_NAME = 'external_temperature'
-HEATING_SEASON_NAME = 'heating_season'
-REQUIRED_FEATURES = [
-                        EXTERNAL_TEMPERATURE_NAME,
-                        HEATING_SEASON_NAME,
-                    ]
-
+@dataclass
 class ExternalFactors:
-    def __init__(self, data_external_factors: pd.DataFrame) -> None:
-        """Initialize an instance of ExternalFactors with external factors data.
+    temperature: pd.Series
+    heating_season: pd.Series
 
-        Parameters:
-            data_external_factors (pd.DataFrame): External factors data.
+    def __post_init__(self):
+        if not isinstance(self.temperature.index, pd.DatetimeIndex):
+            raise ValueError("temperature index must be a DatetimeIndex")
 
-        Raises:
-            ValueError: If the required features are missing in the provided data.
-            ValueError: If the data index is not in datetime format.
-        """
-        if not self.check_required_features(data_external_factors):
-            raise ValueError(f"Missing required features, data_external_factors must contain columns: {', '.join(REQUIRED_FEATURES)}\n(to developer: required features set in REQUIRED_FEATURES)")
+        if not isinstance(self.heating_season.index, pd.DatetimeIndex):
+            raise ValueError("heating_season index must be a DatetimeIndex")
 
-        if not check_datetime_index(data_external_factors):
-            raise ValueError("data_external_factors index should be in datetime format")
+        if not self.temperature.index.equals(self.heating_season.index):
+            raise ValueError("temperature and heating_season must have same index")
 
-        self._data = data_external_factors
-
-    def check_required_features(self, dataframe: pd.DataFrame) -> bool:
-        """Check if a DataFrame contains all the required features specified in REQUIRED_FEATURES.
-
-        Parameters:
-            dataframe (pd.DataFrame): External factors data.
+    def plot(self) -> go.Figure:
+        """Plots the external factors profile data using Plotly.
 
         Returns:
-            bool: True if all required features are present, False otherwise.
+            go.Figure: The Plotly Figure object for the plot.
         """
-        # Get the column names of the DataFrame
-        dataframe_columns = dataframe.columns.tolist()
+        fig = go.Figure()
 
-        # Check if all required features are present in the DataFrame
-        return all(feature in dataframe_columns for feature in REQUIRED_FEATURES)
+        fig.add_trace(go.Scatter(
+            x=self.temperature.index,
+            y=self.temperature,
+            mode='lines',
+            name='Outside Temperature',
+        ))
 
-    @property
-    def data(self) -> pd.DataFrame:
-        """Get the external factors data.
+        fig.add_trace(go.Scatter(
+            x=self.heating_season.index,
+            y=self.heating_season.astype(int),
+            mode='lines',
+            name='Heating Season',
+        ))
 
-        Returns:
-            pd.DataFrame: External factors data.
-        """
-        return self._data
+        fig.update_layout(
+            title='External Factors Profile',
+            xaxis_title='Time',
+            yaxis_title='Value',
+            showlegend=True
+        )
 
-    def plot(self) -> Axes:
-        """Plots the external factors profile data.
-
-        Returns:
-            Axes: The matplotlib Axes object for the plot.
-        """
-        return self._data.plot()
-    
+        return fig

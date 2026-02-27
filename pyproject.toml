@@ -11,8 +11,8 @@ requires-python = ">=3.10"
 readme = "README.md"
 license = "CECILL-B"
 dependencies = [
-    "matplotlib>=3.10.8",
     "pandas>=2.3.3",
+    "plotly>=6.5.2",
 ]
 
 [dependency-groups]

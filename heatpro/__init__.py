@@ -8,9 +8,6 @@ from .external_factors import (COLD_WATER_TEMPERATURE_NAME,
                                DEPARTURE_TEMPERATURE_NAME,
                                RETURN_TEMPERATURE_NAME,
                                SOIL_TEMPERATURE_NAME,
-                               EXTERNAL_TEMPERATURE_NAME,
-                               HEATING_SEASON_NAME,
-                               REQUIRED_FEATURES,
                                )
 
 def help_with_feature_name():
@@ -20,9 +17,6 @@ def help_with_feature_name():
     Features names :\n
     {ENERGY_FEATURE_NAME = } , used for TemporalHeatDemand, import with from heatpro.check\n
     {WEIGHT_NAME_REQUIRED = } , used to have a common name for profile weights, import with from heatpro.check\n
-    {REQUIRED_FEATURES = } , required features for ExternalFactorls, import with heatpro.external_factors \n
-    {EXTERNAL_TEMPERATURE_NAME = } , import with heatpro.external_factors \n
-    {HEATING_SEASON_NAME = } , import with heatpro.external_factors \n
     {BUILDING_FELT_TEMPERATURE_NAME = } , used to generate heating building profile, import with heatpro.demand_profile.building_heating_profile\n
     {COLD_WATER_TEMPERATURE_NAME = } , import with heatpro.external_factors \n
     {DEPARTURE_TEMPERATURE_NAME = } , import with heatpro.external_factors \n

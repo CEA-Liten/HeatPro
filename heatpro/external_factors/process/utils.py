@@ -37,7 +37,7 @@ def get_coldest_dayofyear(external_factors: ExternalFactors) -> int:
         int: Day of the year with the coldest average daily temperature.
     """
     # Resample the external temperature to daily and calculate the mean
-    df_average_daily_temperature = external_factors.data.external_temperature.resample('D').mean()
+    df_average_daily_temperature = external_factors.temperature.resample('D').mean()
     
     # Find the day of the year with the minimum average daily temperature
     coldest_dayofyear = df_average_daily_temperature.idxmin().dayofyear

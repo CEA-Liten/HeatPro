@@ -25,7 +25,7 @@ def test_convert_serie_F_to_C():
     assert result.equals(expected_result)
 
 def test_get_coldest_dayofyear():
-    external_factors = ExternalFactors(sample_data)
+    external_factors = ExternalFactors(sample_data["external_temperature"],sample_data["heating_season"])
     coldest_day_of_year = get_coldest_dayofyear(external_factors)
     
     assert coldest_day_of_year == 1  # Assuming data starts from the first day of the year

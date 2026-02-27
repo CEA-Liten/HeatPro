@@ -9,7 +9,10 @@ sample_data = pd.DataFrame({
 }, index=pd.date_range('2022-01-01', periods=5, freq='D'))
 
 def test_kasuda_soil_temperature():
-    external_factors = ExternalFactors(sample_data)
+    external_factors = ExternalFactors(
+        temperature=sample_data["external_temperature"],
+        heating_season=sample_data["heating_season"],
+    )
     d, alpha = 1.0, 0.5
     result = kasuda_soil_temperature(external_factors, d, alpha)
 
@@ -18,10 +21,3 @@ def test_kasuda_soil_temperature():
     assert result.index.equals(sample_data.index)
 
     # Add more specific assertions based on your expectations
-
-# Additional test for handling invalid input
-def test_kasuda_soil_temperature_invalid_input():
-    invalid_factors = pd.DataFrame({'temperature': [10.0, 15.0, 20.0]}, index=pd.date_range('2022-01-01', periods=3, freq='D'))
-    
-    with pytest.raises(ValueError, match="Missing required features"):
-        kasuda_soil_temperature(ExternalFactors(invalid_factors), 1.0, 0.5)

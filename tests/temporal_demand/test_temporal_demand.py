@@ -1,6 +1,6 @@
 import pandas as pd
 import pytest
-from matplotlib.axes import Axes
+import plotly.graph_objects as go
 from heatpro.temporal_demand.temporal_heat_demand import TemporalHeatDemand
 from heatpro.check import ENERGY_FEATURE_NAME
 
@@ -33,5 +33,5 @@ def test_temporal_heat_demand_plot():
     temporal_heat_demand = TemporalHeatDemand('SampleDemand', sample_data)
     plot_axes = temporal_heat_demand.plot()
 
-    assert isinstance(plot_axes, Axes)
+    assert isinstance(plot_axes, go.Figure)
     # Add more specific assertions related to the plot if needed
