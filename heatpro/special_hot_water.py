@@ -1,13 +1,13 @@
 import pandas as pd
 
-from .check import ENERGY_FEATURE_NAME, WEIGHT_NAME_REQUIRED
-from .demand_profile import day_length_proportionnal_weight
+from .check import ENERGY_FEATURE_NAME
+from .demand_profile import WEIGHT_NAME_REQUIRED
 from .external_factors import ExternalFactors, burch_cold_water, closed_heating_season, CLOSED_HEATING_SEASON_NAME
 from .temporal_demand import MonthlyHeatDemand, HourlyHeatDemand
 
 def special_hot_water(external_factors: ExternalFactors, total_heating_including_hotwater: MonthlyHeatDemand,
                       monthly_hot_water_profile: pd.DataFrame, temperature_hot_water: float,
-                      hourly_hot_water_day_profil: pd.DataFrame, name: str="hot_water"):
+                      hourly_hot_water_day_profil: pd.Series, name: str="hot_water"):
     """Calculate the hourly energy demand for hot water considering external factors and profiles.
 
     Args:
@@ -15,7 +15,7 @@ def special_hot_water(external_factors: ExternalFactors, total_heating_including
         total_heating_including_hotwater (MonthlyHeatDemand): Monthly total heat demand including hot water.
         monthly_hot_water_profile (pd.DataFrame): Monthly hot water profile (In term of quantity i.e. L).
         temperature_hot_water (float): The temperature of the hot water.
-        hourly_hot_water_day_profil (pd.DataFrame): Hourly profile for hot water demand (In term of quantity i.e. L).
+        hourly_hot_water_day_profil (pd.Series): Hourly profile for hot water demand (In term of quantity i.e. L).
         name (str, optional): Name of the demand. Defaults to "hot_water".
 
     Returns:
@@ -61,11 +61,9 @@ def special_hot_water(external_factors: ExternalFactors, total_heating_including
                                                 .groupby(hourly_hot_water_month_profile.index.date).transform('sum')/\
                                             (hourly_hot_water_month_profile['weight'] * (temperature_hot_water - induced_factors['cold_water_temperature']))[mask_daily_hot_water_energy_consumption].sum())\
                                                 .rename(ENERGY_FEATURE_NAME)
-    # TODO: Verify if sums equal 1 on each day in hourly_hot_water_day_profil
-    # Warning: simultaneity and sanitary loop are considered calculated
     
     # Calculate final hourly hot water energy consumption
-    final_hourly_hot_water_energy_consumption = pd.DataFrame((daily_hot_water_energy_consumption * hourly_hot_water_day_profil[WEIGHT_NAME_REQUIRED]).rename(ENERGY_FEATURE_NAME))
+    final_hourly_hot_water_energy_consumption = pd.DataFrame((daily_hot_water_energy_consumption * hourly_hot_water_day_profil).rename(ENERGY_FEATURE_NAME))
     
     # Return the result as HourlyHeatDemand
     return HourlyHeatDemand(name, final_hourly_hot_water_energy_consumption)

@@ -1,14 +1,14 @@
-from datetime import datetime
-
 import pandas as pd
 
 from ..check import find_duplicate_months, find_xor_months, ENERGY_FEATURE_NAME
-from ..check import check_weight_format, WEIGHT_NAME_REQUIRED
 
 from ..temporal_demand import YearlyHeatDemand, MonthlyHeatDemand, DailyHeatDemand, HourlyHeatDemand
+from ..demand_profile import WEIGHT_NAME_REQUIRED
 
-def monthly_weighted_disaggregate(yearly_demand: YearlyHeatDemand, weights: pd.DataFrame,
-                                  keep_year_data: bool = True) -> MonthlyHeatDemand:
+
+def monthly_weighted_disaggregate(
+    yearly_demand: YearlyHeatDemand, weights: pd.DataFrame, keep_year_data: bool = True
+) -> MonthlyHeatDemand:
     """Disaggregate yearly heat demand into monthly values using weights.
 
     Args:
@@ -30,13 +30,12 @@ def monthly_weighted_disaggregate(yearly_demand: YearlyHeatDemand, weights: pd.D
     if not isinstance(yearly_demand, YearlyHeatDemand):
         raise ValueError("yearly_demand should be an instance of YearlyHeatDemand")
 
-    # Check the format of the weights DataFrame
-    check_weight_format(weights)
-
     # Check for duplicate months in the weights index
     duplicate_months = find_duplicate_months(weights.index)
     if not duplicate_months.empty:
-        duplicate_month_str = ', '.join([f'{month.Month}-{month.Year}' for _, month in duplicate_months.iterrows()])
+        duplicate_month_str = ", ".join(
+            [f"{month.Month}-{month.Year}" for _, month in duplicate_months.iterrows()]
+        )
         raise ValueError(f"Months {duplicate_month_str} have multiple occurrences in weights")
 
     # Check if yearly_demand and weights overlap on the same year
@@ -56,16 +55,19 @@ def monthly_weighted_disaggregate(yearly_demand: YearlyHeatDemand, weights: pd.D
 
     # Disaggregate the yearly heat demand into monthly values
     monthly_demand_df[ENERGY_FEATURE_NAME] = sum(
-        (weights.index.year == index.year) * row[ENERGY_FEATURE_NAME] *
-        weights[WEIGHT_NAME_REQUIRED]
+        (weights.index.year == index.year)
+        * row[ENERGY_FEATURE_NAME]
+        * weights[WEIGHT_NAME_REQUIRED]
         for index, row in yearly_demand.data.iterrows()
     )
 
     # Create a MonthlyHeatDemand object with the disaggregated data
     return MonthlyHeatDemand(yearly_demand.name, monthly_demand_df)
 
-def weekly_weighted_disaggregate(monthly_demand: MonthlyHeatDemand, weights: pd.DataFrame,
-                                 keep_year_data: bool = True) -> HourlyHeatDemand:
+
+def weekly_weighted_disaggregate(
+    monthly_demand: MonthlyHeatDemand, weights: pd.Series, keep_year_data: bool = True
+) -> HourlyHeatDemand:
     """Disaggregate monthly heat demand into hourly values using weights.
 
     Args:
@@ -86,9 +88,6 @@ def weekly_weighted_disaggregate(monthly_demand: MonthlyHeatDemand, weights: pd.
     if not isinstance(monthly_demand, MonthlyHeatDemand):
         raise ValueError("monthly_demand should be an instance of MonthlyHeatDemand")
 
-    # Check the format of the weights DataFrame
-    check_weight_format(weights)
-
     # Check if weights and monthly_demand match the same months
     xor_months = find_xor_months(monthly_demand.data, weights)
     if not xor_months.empty:
@@ -96,40 +95,42 @@ def weekly_weighted_disaggregate(monthly_demand: MonthlyHeatDemand, weights: pd.
         raise ValueError(diff_str)
 
     # Initialize the DataFrame for hourly demand
-    hourly_demand_df = weights.copy()
+    hourly_demand_df = weights.copy().to_frame()
 
     # Include yearly data in the output if keep_year_data is True
     if keep_year_data:
         for feature in monthly_demand.data.columns:
-            if not feature.startswith('yearly_'):
-                hourly_demand_df[f'monthly_{feature}'] = sum(
-                    (weights.index.year == index.year) *
-                    (weights.index.month == index.month) *
-                    row[feature]
+            if not feature.startswith("yearly_"):
+                hourly_demand_df[f"monthly_{feature}"] = sum(
+                    (weights.index.year == index.year)
+                    * (weights.index.month == index.month)
+                    * row[feature]
                     for index, row in monthly_demand.data.iterrows()
                 )
             else:
                 hourly_demand_df[feature] = sum(
-                    (weights.index.year == index.year) *
-                    (weights.index.month == index.month) *
-                    row[feature]
+                    (weights.index.year == index.year)
+                    * (weights.index.month == index.month)
+                    * row[feature]
                     for index, row in monthly_demand.data.iterrows()
                 )
 
     # Disaggregate the monthly heat demand into hourly values
     hourly_demand_df[ENERGY_FEATURE_NAME] = sum(
-        (weights.index.year == index.year) *
-        (weights.index.month == index.month) *
-        row[ENERGY_FEATURE_NAME] *
-        weights[WEIGHT_NAME_REQUIRED]
+        (weights.index.year == index.year)
+        * (weights.index.month == index.month)
+        * row[ENERGY_FEATURE_NAME]
+        * weights
         for index, row in monthly_demand.data.iterrows()
     )
 
     # Create an HourlyHeatDemand object with the disaggregated data
     return HourlyHeatDemand(monthly_demand.name, hourly_demand_df)
- 
-def daily_weighted_dissagregate(monthly_demand: MonthlyHeatDemand, weights: pd.DataFrame,
-                                keep_month_data: bool = True) -> DailyHeatDemand:
+
+
+def daily_weighted_dissagregate(
+    monthly_demand: MonthlyHeatDemand, weights: pd.DataFrame, keep_month_data: bool = True
+) -> DailyHeatDemand:
     """Disaggregate monthly heat demand into daily values using weights.
 
     Args:
@@ -150,9 +151,6 @@ def daily_weighted_dissagregate(monthly_demand: MonthlyHeatDemand, weights: pd.D
     if not isinstance(monthly_demand, MonthlyHeatDemand):
         raise ValueError("monthly_demand should be an instance of MonthlyHeatDemand")
 
-    # Check the format of the weights DataFrame
-    check_weight_format(weights)
-
     # Check if weights and monthly_demand match the same months
     xor_months = find_xor_months(monthly_demand.data, weights)
     if not xor_months.empty:
@@ -165,35 +163,37 @@ def daily_weighted_dissagregate(monthly_demand: MonthlyHeatDemand, weights: pd.D
     # Include monthly data in the output if keep_month_data is True
     if keep_month_data:
         for feature in monthly_demand.data.columns:
-            if not feature.startswith('yearly_'):
-                daily_demand_df[f'monthly_{feature}'] = sum(
-                    (weights.index.year == index.year) *
-                    (weights.index.month == index.month) *
-                    row[feature]
+            if not feature.startswith("yearly_"):
+                daily_demand_df[f"monthly_{feature}"] = sum(
+                    (weights.index.year == index.year)
+                    * (weights.index.month == index.month)
+                    * row[feature]
                     for index, row in monthly_demand.data.iterrows()
                 )
             else:
                 daily_demand_df[feature] = sum(
-                    (weights.index.year == index.year) *
-                    (weights.index.month == index.month) *
-                    row[feature]
+                    (weights.index.year == index.year)
+                    * (weights.index.month == index.month)
+                    * row[feature]
                     for index, row in monthly_demand.data.iterrows()
                 )
 
     # Disaggregate the monthly heat demand into daily values
     daily_demand_df[ENERGY_FEATURE_NAME] = sum(
-        (weights.index.year == index.year) *
-        (weights.index.month == index.month) *
-        row[ENERGY_FEATURE_NAME] *
-        weights[WEIGHT_NAME_REQUIRED]
+        (weights.index.year == index.year)
+        * (weights.index.month == index.month)
+        * row[ENERGY_FEATURE_NAME]
+        * weights[WEIGHT_NAME_REQUIRED]
         for index, row in monthly_demand.data.iterrows()
     )
 
     # Create a DailyHeatDemand object with the disaggregated data
     return DailyHeatDemand(monthly_demand.name, daily_demand_df)
 
-def hourly_weighted_dissagregate(daily_demand: DailyHeatDemand, weights: pd.DataFrame,
-                                keep_month_data: bool = True) -> HourlyHeatDemand:
+
+def hourly_weighted_dissagregate(
+    daily_demand: DailyHeatDemand, weights: pd.DataFrame, keep_month_data: bool = True
+) -> HourlyHeatDemand:
     """Disaggregate daily heat demand into hourly values using weights.
 
     Args:
@@ -214,9 +214,6 @@ def hourly_weighted_dissagregate(daily_demand: DailyHeatDemand, weights: pd.Data
     if not isinstance(daily_demand, DailyHeatDemand):
         raise ValueError("daily_demand should be an instance of DailyHeatDemand")
 
-    # Check the format of the weights DataFrame
-    check_weight_format(weights)
-
     # Check if weights and daily_demand match the same months
     xor_months = find_xor_months(daily_demand.data, weights)
     if not xor_months.empty:
@@ -229,41 +226,29 @@ def hourly_weighted_dissagregate(daily_demand: DailyHeatDemand, weights: pd.Data
     # Include monthly data in the output if keep_month_data is True
     if keep_month_data:
         for feature in daily_demand.data.columns:
-            if not (feature.startswith('yearly_') or feature.startswith('monthly_')):
-                hourly_demand_df[f'daily_{feature}'] = sum(
-                    (weights.index.year == index.year) *
-                    (weights.index.month == index.month) *
-                    row[feature]
+            if not (feature.startswith("yearly_") or feature.startswith("monthly_")):
+                hourly_demand_df[f"daily_{feature}"] = sum(
+                    (weights.index.year == index.year)
+                    * (weights.index.month == index.month)
+                    * row[feature]
                     for index, row in daily_demand.data.iterrows()
                 )
             else:
                 hourly_demand_df[feature] = sum(
-                    (weights.index.year == index.year) *
-                    (weights.index.month == index.month) *
-                    row[feature]
+                    (weights.index.year == index.year)
+                    * (weights.index.month == index.month)
+                    * row[feature]
                     for index, row in daily_demand.data.iterrows()
                 )
 
     # Disaggregate the daily heat demand into hourly values
     hourly_demand_df[ENERGY_FEATURE_NAME] = sum(
-        (weights.index.year == index.year) *
-        (weights.index.month == index.month) *
-        row[ENERGY_FEATURE_NAME] *
-        weights[WEIGHT_NAME_REQUIRED]
+        (weights.index.year == index.year)
+        * (weights.index.month == index.month)
+        * row[ENERGY_FEATURE_NAME]
+        * weights
         for index, row in daily_demand.data.iterrows()
     )
 
     # Create an HourlyHeatDemand object with the disaggregated data
     return HourlyHeatDemand(daily_demand.name, hourly_demand_df)
-
-    
-    
-    
-    
-    
-
-
-
-
- 
-    

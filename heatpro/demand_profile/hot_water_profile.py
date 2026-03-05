@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 
 from ..external_factors.process.temperature_cold_water import COLD_WATER_TEMPERATURE_NAME
-from ..check import WEIGHT_NAME_REQUIRED, check_weight_format
+from .building_heating_profile import WEIGHT_NAME_REQUIRED
 from ..check import find_xor_months
 
 def basic_hot_water_monthly_profile(cold_water_temperature: pd.DataFrame,T_prod: float,
@@ -54,17 +54,17 @@ def basic_hot_water_monthly_profile(cold_water_temperature: pd.DataFrame,T_prod:
                                                     
     return monthly_hot_water_profil
 
-def basic_hot_water_hourly_profile(raw_hourly_hotwater_profile: pd.DataFrame, simultaneity: float,
-                                   sanitary_loop_coef: float) -> pd.DataFrame:
+def basic_hot_water_hourly_profile(raw_hourly_hotwater_profile: pd.Series, simultaneity: float,
+                                   sanitary_loop_coef: float) -> pd.Series:
     r"""Create an hourly heating building profile adjusted to simultaneity and sanitary loop coef. With sum over a day equals to 1.
     
     Args:
-        raw_hourly_hotwater_profile (pd.DataFrame): hourly profile sum of heating for hot water production
+        raw_hourly_hotwater_profile (pd.Series): hourly profile sum of heating for hot water production
         simultaneity (float): coef between 0 and 1, 1 if consumption is simultaneous (leading to peak) and 0 if no simultaneity (leading to flat consumption)
         sanitary_loop_coef (float): share of heat used to keep sanitary loop hot.
 
     Returns:
-        pd.DataFrame: DataFrame hourly weighted correct format
+        pd.Series: Series hourly weighted correct format
         
     **Overview**
     
@@ -87,18 +87,18 @@ def basic_hot_water_hourly_profile(raw_hourly_hotwater_profile: pd.DataFrame, si
     :math:`P_{t}^{\text{(Hot water,raw)}}` : Raw hourly profile heat consumption (:math:`\int_{day} P_{t}^{\text{(Hot water,raw)}} = 1`)
     
     """
-    ajusted_hourly_hotwater_profile = pd.DataFrame(
+    ajusted_hourly_hotwater_profile = pd.Series(
                                                     np.minimum(
-                                                        raw_hourly_hotwater_profile[WEIGHT_NAME_REQUIRED],
-                                                        simultaneity * raw_hourly_hotwater_profile.groupby(raw_hourly_hotwater_profile.index.day)[WEIGHT_NAME_REQUIRED].transform('max')
+                                                        raw_hourly_hotwater_profile,
+                                                        simultaneity * raw_hourly_hotwater_profile.resample("D").transform('max')
                                                     ),
                                                     index = raw_hourly_hotwater_profile.index,
-                                                    columns = [WEIGHT_NAME_REQUIRED],
+                                                    name = WEIGHT_NAME_REQUIRED,
                                                     )
     
-    ajusted_hourly_hotwater_profile[WEIGHT_NAME_REQUIRED] = ajusted_hourly_hotwater_profile[WEIGHT_NAME_REQUIRED] + 1/24 - ajusted_hourly_hotwater_profile.groupby(ajusted_hourly_hotwater_profile.index.day)[WEIGHT_NAME_REQUIRED].transform('mean')
+    ajusted_hourly_hotwater_profile = ajusted_hourly_hotwater_profile + 1/24 - ajusted_hourly_hotwater_profile.resample("D").transform('mean')
     
-    ajusted_hourly_hotwater_profile[WEIGHT_NAME_REQUIRED] = sanitary_loop_coef/24 + (1-sanitary_loop_coef)*ajusted_hourly_hotwater_profile[WEIGHT_NAME_REQUIRED]
+    ajusted_hourly_hotwater_profile = sanitary_loop_coef/24 + (1-sanitary_loop_coef)*ajusted_hourly_hotwater_profile
     
     return ajusted_hourly_hotwater_profile
     
