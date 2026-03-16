@@ -1,14 +1,20 @@
-import warnings
-
 import pandas as pd
 
 from .check import ENERGY_FEATURE_NAME
 from .temporal_demand import HourlyHeatDemand
-from .external_factors import ExternalFactors, SUPPLY_TEMPERATURE_NAME, RETURN_TEMPERATURE_NAME
+from .external_factors import ExternalFactors, RETURN_TEMPERATURE_NAME
+from .external_factors.induced_factors import InducedFactors
+
 
 class DistrictHeatingLoad:
-    def __init__(self, demands: list[HourlyHeatDemand], external_factors: ExternalFactors,
-                 district_network_temperature: pd.DataFrame, delta_temperature: float, cp: float) -> None:
+    def __init__(
+        self,
+        demands: list[HourlyHeatDemand],
+        external_factors: ExternalFactors,
+        district_network_temperature: InducedFactors,
+        delta_temperature: float,
+        cp: float,
+    ) -> None:
         """
         Initialize an instance of DistrictHeatingLoad.
 
@@ -30,17 +36,24 @@ class DistrictHeatingLoad:
         self.cp = cp
 
         # Check required columns in district_network_temperature
-        if not {SUPPLY_TEMPERATURE_NAME, RETURN_TEMPERATURE_NAME}.issubset(set(district_network_temperature.columns)):
-            raise ValueError(f"district_network_temperature should have columns : {' ,'.join({SUPPLY_TEMPERATURE_NAME, RETURN_TEMPERATURE_NAME})}")
         self.district_network_temperature = district_network_temperature
 
         # Check matching indices between external_factors and district_network_temperature
-        if not external_factors.temperature.index.equals(district_network_temperature.index):
-            raise ValueError("Index between external_factors and district_network_temperature are not matching")
+        if not external_factors.temperature.index.equals(
+            district_network_temperature.supply_temperature.index
+        ):
+            raise ValueError(
+                "Index between external_factors and district_network_temperature are not matching"
+            )
 
         # Check matching indices between HourlyHeatDemand instances and district_network_temperature
-        if not all(demand.data.index.equals(district_network_temperature.index) for demand in demands):
-            raise ValueError("Index between HourlyHeatDemand and district_network_factors are not matching")
+        if not all(
+            demand.data.index.equals(district_network_temperature.supply_temperature.index)
+            for demand in demands
+        ):
+            raise ValueError(
+                "Index between HourlyHeatDemand and district_network_factors are not matching"
+            )
 
     def fit(self):
         """
@@ -51,23 +64,62 @@ class DistrictHeatingLoad:
         Returns:
             None
         """
-        total_demand = pd.concat([demand[ENERGY_FEATURE_NAME] for demand in self.demands.values()], axis=1).sum(axis=1)
-        flow_rate = total_demand / (self.cp * (self.district_network_temperature[SUPPLY_TEMPERATURE_NAME] - self.district_network_temperature[RETURN_TEMPERATURE_NAME]))
+        total_demand = pd.concat(
+            [demand[ENERGY_FEATURE_NAME] for demand in self.demands.values()], axis=1
+        ).sum(axis=1)
+        flow_rate = total_demand / (
+            self.cp
+            * (
+                self.district_network_temperature.supply_temperature
+                - self.district_network_temperature.return_temperature
+            )
+        )
 
-        min_flow_rate = (total_demand / (self.cp * (self.district_network_temperature[SUPPLY_TEMPERATURE_NAME] - (self.district_network_temperature[RETURN_TEMPERATURE_NAME] + self.delta_temperature)))).min()
-        max_flow_rate = (total_demand / (self.cp * (self.district_network_temperature[SUPPLY_TEMPERATURE_NAME] - (self.district_network_temperature[RETURN_TEMPERATURE_NAME] - self.delta_temperature)))).max()
+        min_flow_rate = (
+            total_demand
+            / (
+                self.cp
+                * (
+                    self.district_network_temperature.supply_temperature
+                    - (
+                        self.district_network_temperature.return_temperature
+                        + self.delta_temperature
+                    )
+                )
+            )
+        ).min()
+        max_flow_rate = (
+            total_demand
+            / (
+                self.cp
+                * (
+                    self.district_network_temperature.supply_temperature
+                    - (
+                        self.district_network_temperature.return_temperature
+                        - self.delta_temperature
+                    )
+                )
+            )
+        ).max()
 
         corrected_flow_rate = flow_rate.clip(min_flow_rate, max_flow_rate)
 
-        self.district_network_temperature[RETURN_TEMPERATURE_NAME] = self.district_network_temperature[SUPPLY_TEMPERATURE_NAME] - \
-                                                                     total_demand / self.cp / corrected_flow_rate
+        iterated_return_temperature = (
+            self.district_network_temperature.supply_temperature
+            - total_demand / self.cp / corrected_flow_rate
+        ).rename(RETURN_TEMPERATURE_NAME)
 
         self.data = pd.concat(
-            [self.external_factors.temperature, self.external_factors.heating_season, self.district_network_temperature] +
-            [demand.rename(lambda x: f"{name}_{x}", axis=1) for name, demand in self.demands.items()],
-            axis=1
+            [
+                self.external_factors.temperature,
+                self.external_factors.heating_season,
+                self.district_network_temperature.supply_temperature,
+                iterated_return_temperature,
+                self.district_network_temperature.soil_temperature,
+            ]
+            + [
+                demand.rename(lambda x: f"{name}_{x}", axis=1)
+                for name, demand in self.demands.items()
+            ],
+            axis=1,
         )
-        
-        
-        
-            
