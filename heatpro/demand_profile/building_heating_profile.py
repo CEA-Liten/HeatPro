@@ -60,7 +60,7 @@ def basic_building_heating_profile(
         _delta_felt_temperature_profile
         * hourly_weight
         / (_delta_felt_temperature_profile * hourly_weight)
-        .groupby([hourly_weight.index.year, hourly_weight.index.month])
+        .resample("MS")
         .transform("sum")
     )
 

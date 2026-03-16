@@ -48,7 +48,7 @@ def special_hot_water(external_factors: ExternalFactors, total_heating_including
     # Calculate daily hot water energy consumption
     daily_hot_water_energy_consumption = (non_heating_season_consumption *\
                                     (hourly_hot_water_month_profile[WEIGHT_NAME_REQUIRED] * (temperature_hot_water - induced_factors['cold_water_temperature']))\
-                                        .groupby(hourly_hot_water_month_profile.index.date).transform('sum')/\
+                                        .resample("d").transform('sum')/\
                                     (hourly_hot_water_month_profile[WEIGHT_NAME_REQUIRED] * (temperature_hot_water - induced_factors['cold_water_temperature']))[~induced_factors['closed_heating_season']].sum())\
                                         .rename(ENERGY_FEATURE_NAME)
                                         
@@ -58,7 +58,7 @@ def special_hot_water(external_factors: ExternalFactors, total_heating_including
         daily_hot_water_energy_consumption.loc[mask_daily_hot_water_energy_consumption] =\
             (total_heating_including_hotwater.data.loc[mask_total_heating_including_hotwater,ENERGY_FEATURE_NAME].iloc[0] *\
                                             (hourly_hot_water_month_profile['weight'] * (temperature_hot_water - induced_factors['cold_water_temperature']))\
-                                                .groupby(hourly_hot_water_month_profile.index.date).transform('sum')/\
+                                                .resample("d").transform('sum')/\
                                             (hourly_hot_water_month_profile['weight'] * (temperature_hot_water - induced_factors['cold_water_temperature']))[mask_daily_hot_water_energy_consumption].sum())\
                                                 .rename(ENERGY_FEATURE_NAME)
     
