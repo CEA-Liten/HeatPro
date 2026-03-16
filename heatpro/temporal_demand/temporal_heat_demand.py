@@ -1,6 +1,6 @@
 import pandas as pd
 
-from ..check import check_datetime_index, check_energy_feature, ENERGY_FEATURE_NAME
+from ..check import ENERGY_FEATURE_NAME
 
 pd.options.plotting.backend = 'plotly'
 
@@ -17,9 +17,9 @@ class TemporalHeatDemand:
             ValueError: If the data index is not in datetime format.
             ValueError: If the required energy feature is not present in the data.
         """
-        if not check_datetime_index(data):
+        if not isinstance(data.index,pd.DatetimeIndex):
             raise ValueError("data index should be in datetime format")
-        if not check_energy_feature(data):
+        if ENERGY_FEATURE_NAME not in data.columns:
             raise ValueError(f"data has no {ENERGY_FEATURE_NAME} (required)")
 
         self.name = name
