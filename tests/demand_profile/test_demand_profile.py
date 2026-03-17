@@ -19,7 +19,7 @@ def sample_datetime_index():
 # Test month_length_proportionnal_weight
 def test_month_length_proportionnal_weight(sample_datetime_index):
     weights = month_length_proportionnal_weight(sample_datetime_index)
-    assert WEIGHT_NAME_REQUIRED in weights.columns
+    assert WEIGHT_NAME_REQUIRED == weights.name
     assert len(weights) == len(sample_datetime_index)
 
 

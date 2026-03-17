@@ -7,13 +7,13 @@ from ..demand_profile import WEIGHT_NAME_REQUIRED
 
 
 def monthly_weighted_disaggregate(
-    yearly_demand: YearlyHeatDemand, weights: pd.DataFrame, keep_year_data: bool = True
+    yearly_demand: YearlyHeatDemand, weights: pd.Series, keep_year_data: bool = True
 ) -> MonthlyHeatDemand:
     """Disaggregate yearly heat demand into monthly values using weights.
 
     Args:
         yearly_demand (YearlyHeatDemand): The input yearly heat demand to be disaggregated.
-        weights (pd.DataFrame): DataFrame containing weights for each month.
+        weights (pd.Series): Series containing weights for each month.
         keep_year_data (bool, optional): If True, include yearly data in the output.
             Defaults to True.
 
@@ -43,7 +43,7 @@ def monthly_weighted_disaggregate(
         raise ValueError("yearly_demand and weights do not overlap on the same year")
 
     # Initialize the DataFrame for monthly demand
-    monthly_demand_df = weights.copy()
+    monthly_demand_df = weights.to_frame().copy()
 
     # Include yearly data in the output if keep_year_data is True
     if keep_year_data:
@@ -55,9 +55,7 @@ def monthly_weighted_disaggregate(
 
     # Disaggregate the yearly heat demand into monthly values
     monthly_demand_df[ENERGY_FEATURE_NAME] = sum(
-        (weights.index.year == index.year)
-        * row[ENERGY_FEATURE_NAME]
-        * weights[WEIGHT_NAME_REQUIRED]
+        (weights.index.year == index.year) * row[ENERGY_FEATURE_NAME] * weights
         for index, row in yearly_demand.data.iterrows()
     )
 

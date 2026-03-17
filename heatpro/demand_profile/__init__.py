@@ -3,8 +3,9 @@ import pandas as pd
 
 from .building_heating_profile import WEIGHT_NAME_REQUIRED
 
-def month_length_proportionnal_weight(dates: pd.DatetimeIndex) -> pd.DataFrame:
-    """Create a Dataframe attributing a weight to each datetime of the index
+
+def month_length_proportionnal_weight(dates: pd.DatetimeIndex) -> pd.Series:
+    """Create a Series attributing a weight to each datetime of the index
     the weight depends only of month and year of the datetime.
     The weight attributed to each datetime equals month length over year length
 
@@ -12,10 +13,10 @@ def month_length_proportionnal_weight(dates: pd.DatetimeIndex) -> pd.DataFrame:
         dates (pd.DatetimeIndex): DatetimeIndex (a month can appear multiple times)
 
     Returns:
-        pd.DataFrame: DataFrame with correct format to be used as weight
+        pd.Series: Series with correct format to be used as weight
     """
-    return pd.DataFrame(
-        dates.daysinmonth / (365 + dates.is_leap_year), index=dates, columns=[WEIGHT_NAME_REQUIRED]
+    return pd.Series(
+        dates.daysinmonth / (365 + dates.is_leap_year), index=dates, name=WEIGHT_NAME_REQUIRED
     )
 
 
