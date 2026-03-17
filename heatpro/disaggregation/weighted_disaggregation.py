@@ -2,23 +2,22 @@ import pandas as pd
 
 from ..check import find_duplicate_months, find_xor_months, ENERGY_FEATURE_NAME
 
-from ..temporal_demand import YearlyHeatDemand, MonthlyHeatDemand, DailyHeatDemand, HourlyHeatDemand
+from ..temporal_demand import MonthlyHeatDemand, DailyHeatDemand, HourlyHeatDemand
 from ..demand_profile import WEIGHT_NAME_REQUIRED
 
 
 def monthly_weighted_disaggregate(
-    yearly_demand: YearlyHeatDemand, weights: pd.Series, keep_year_data: bool = True
+    yearly_demand: pd.Series, weights: pd.Series, keep_year_data: bool = True
 ) -> MonthlyHeatDemand:
     """Disaggregate yearly heat demand into monthly values using weights.
 
     Args:
-        yearly_demand (YearlyHeatDemand): The input yearly heat demand to be disaggregated.
+        yearly_demand (pd.Series): The input yearly heat demand to be disaggregated.
         weights (pd.Series): Series containing weights for each month.
         keep_year_data (bool, optional): If True, include yearly data in the output.
             Defaults to True.
 
     Raises:
-        ValueError: If yearly_demand is not an instance of YearlyHeatDemand.
         ValueError: If the weight format is not valid.
         ValueError: If there are duplicate months in the weights index.
         ValueError: If yearly_demand and weights do not overlap on the same year.
@@ -26,10 +25,6 @@ def monthly_weighted_disaggregate(
     Returns:
         MonthlyHeatDemand: The disaggregated monthly heat demand.
     """
-    # Check if yearly_demand is an instance of YearlyHeatDemand
-    if not isinstance(yearly_demand, YearlyHeatDemand):
-        raise ValueError("yearly_demand should be an instance of YearlyHeatDemand")
-
     # Check for duplicate months in the weights index
     duplicate_months = find_duplicate_months(weights.index)
     if not duplicate_months.empty:
@@ -39,7 +34,7 @@ def monthly_weighted_disaggregate(
         raise ValueError(f"Months {duplicate_month_str} have multiple occurrences in weights")
 
     # Check if yearly_demand and weights overlap on the same year
-    if not yearly_demand.data.index.year.equals(weights.index.year.unique()):
+    if not yearly_demand.index.year.equals(weights.index.year.unique()):
         raise ValueError("yearly_demand and weights do not overlap on the same year")
 
     # Initialize the DataFrame for monthly demand
@@ -47,16 +42,13 @@ def monthly_weighted_disaggregate(
 
     # Include yearly data in the output if keep_year_data is True
     if keep_year_data:
-        for feature in yearly_demand.data.columns:
-            monthly_demand_df[f"yearly_{feature}"] = sum(
-                (weights.index.year == index.year) * row[feature]
-                for index, row in yearly_demand.data.iterrows()
-            )
+        monthly_demand_df[f"yearly_{yearly_demand.name}"] = yearly_demand.reindex(
+            monthly_demand_df.index
+        ).ffill()
 
     # Disaggregate the yearly heat demand into monthly values
-    monthly_demand_df[ENERGY_FEATURE_NAME] = sum(
-        (weights.index.year == index.year) * row[ENERGY_FEATURE_NAME] * weights
-        for index, row in yearly_demand.data.iterrows()
+    monthly_demand_df[ENERGY_FEATURE_NAME] = (
+        yearly_demand.reindex(monthly_demand_df.index).ffill() * weights
     )
 
     # Create a MonthlyHeatDemand object with the disaggregated data

@@ -4,7 +4,7 @@ import pandas as pd
 import pytest
 
 
-from heatpro.temporal_demand import HourlyHeatDemand, MonthlyHeatDemand, YearlyHeatDemand
+from heatpro.temporal_demand import HourlyHeatDemand, MonthlyHeatDemand
 from heatpro.demand_profile import apply_weekly_hourly_pattern, month_length_proportionnal_weight, day_length_proportionnal_weight 
 from heatpro.demand_profile.building_heating_profile import basic_building_heating_profile, BUILDING_FELT_TEMPERATURE_NAME
 from heatpro.demand_profile.hot_water_profile import basic_hot_water_hourly_profile
@@ -174,10 +174,7 @@ def hourly_residential_load(monthly_building_load: MonthlyHeatDemand, hourly_hot
 @pytest.fixture
 def hourly_industry_load(monthly_building_load,setup_data):
     parameters, external_factors = setup_data
-    yearly_industry_load = YearlyHeatDemand(
-                                                "industry",
-                                                monthly_building_load.data.resample('YS').sum()*parameters["Part_Indu"]["fixed_perc"]
-                                            )
+    yearly_industry_load = (monthly_building_load.data[ENERGY_FEATURE_NAME].resample('YS').sum()*parameters["Part_Indu"]["fixed_perc"]).rename("industry")
 
     monthly_industry_load = monthly_weighted_disaggregate(
                                             yearly_demand=yearly_industry_load,
@@ -199,15 +196,12 @@ def hourly_industry_load(monthly_building_load,setup_data):
 @pytest.fixture
 def hourly_heat_loss_load(monthly_building_load,induced_factors,setup_data):
     parameters = setup_data[0]
-    yearly_heat_loss_load = YearlyHeatDemand(
-                                                'heat_loss',
-                                                monthly_building_load.data.resample('YE').sum()*parameters["Heat_Loss"]["fixed_perc"]
-                                            )
+    yearly_heat_loss_load = (monthly_building_load.data[ENERGY_FEATURE_NAME].resample('YE').sum()*parameters["Heat_Loss"]["fixed_perc"]).rename("heat_loss")
 
     return HourlyHeatDemand(
-                                            'heat_loss',
-                                            (Y_to_H_thermal_loss_profile(induced_factors) * yearly_heat_loss_load.data[ENERGY_FEATURE_NAME].iloc[0]).rename(columns={'weight':ENERGY_FEATURE_NAME})
-                                        )
+                                'heat_loss',
+                                (Y_to_H_thermal_loss_profile(induced_factors) * yearly_heat_loss_load.iloc[0]).rename(columns={'weight':ENERGY_FEATURE_NAME})
+                            )
     
 
 
