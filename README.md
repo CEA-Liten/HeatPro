@@ -20,7 +20,7 @@ More recently, it was used in a collaboration between RTE and CEA with the aim o
     ├── CONTRIBUTING.rst            <- Guidelines for contributing to the project.
     ├── HISTORY.rst                 <- A file documenting the project's version history and changelog.
     ├── README.md                   <- The main documentation file providing an overview and usage instructions for the project.
-    ├── poetry.lock                 <- Dependency lock file which ensures consistent and repeatable installations of project dependencies.
+    ├── uv.lock                     <- Dependency lock file which ensures consistent and repeatable installations of project dependencies.
     ├── pyproject.toml              <- Configuration file used to specify project metadata, dependencies, build requirements, and other settings.
     ├── requirements_dev.txt        <- A file listing development dependencies for the project.
     ├── .gitlab                     <- Directory containing GitLab-specific files.

@@ -34,13 +34,13 @@ You can either clone the public repository:
 
     $ git clone git://github.com/CEA-Liten/heatpro
 
-Once you have a copy of the source, you can install it with `poetry`_:
+Once you have a copy of the source, you can install it with `uv`_:
 
 .. code-block:: console
 
-    $ poetry install <path_to_repository>
+    $ uv pip install install <path_to_repository>
 
 
 .. _Github repo: https://github.com/CEA-Liten/heatpro
-.. _poetry: https://python-poetry.org/
+.. _uv: https://docs.astral.sh/uv/
 

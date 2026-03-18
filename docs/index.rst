@@ -19,7 +19,7 @@ Welcome to HeatPro's documentation!
 
 .. toctree::
    :maxdepth: 1
-   :caption: Guiude:
+   :caption: Guide:
    
    modules/simple_usage/simple_usage
    modules/detecting_heating_season/detecting_heating_season

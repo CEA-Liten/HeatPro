@@ -19,10 +19,3 @@ Check data format
    :members:
    :undoc-members:
    :show-inheritance:
-
-Check weight format
--------------------
-.. automodule:: heatpro.check.check_weight_format
-   :members:
-   :undoc-members:
-   :show-inheritance:

@@ -39,7 +39,7 @@ Cold Water Temperature
 Departure Temperature
 ---------------------
 
-.. automodule:: heatpro.external_factors.process.temperature_departure
+.. automodule:: heatpro.external_factors.process.temperature_supply
    :members:
    :undoc-members:
    :show-inheritance:

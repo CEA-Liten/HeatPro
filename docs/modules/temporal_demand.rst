@@ -12,29 +12,6 @@ Temporal Demand
    :undoc-members:
    :show-inheritance:
 
-Yearly
-------
-
-.. automodule:: heatpro.temporal_demand.yearly_heat_demand
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Monthly
--------
-
-.. automodule:: heatpro.temporal_demand.monthly_heat_demand
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Daily
------
-
-.. automodule:: heatpro.temporal_demand.daily_heat_demand
-   :members:
-   :undoc-members:
-   :show-inheritance:
 
 Hourly
 ------
