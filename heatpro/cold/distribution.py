@@ -17,10 +17,16 @@ def year_to_hour_outdoor_temperarure_distribution(
         felt_temperature.index, method="ffill"
     )
     return (
-        yearly_power_cold_demand_reindex
-        * ((felt_temperature - set_temperature).clip(0) * weigths)
-        / ((felt_temperature - set_temperature).clip(0) * weigths).resample("YS").transform("mean")
-    ).rename(yearly_power_cold_demand_reindex.name)
+        (
+            yearly_power_cold_demand_reindex
+            * ((felt_temperature - set_temperature).clip(0) * weigths)
+            / ((felt_temperature - set_temperature).clip(0) * weigths)
+            .resample("YS")
+            .transform("mean")
+        )
+        .fillna(0.0)
+        .rename(yearly_power_cold_demand_reindex.name)
+    )
 
 
 def month_to_hour_outdoor_temperarure_distribution(
@@ -37,7 +43,13 @@ def month_to_hour_outdoor_temperarure_distribution(
         felt_temperature.index, method="ffill"
     )
     return (
-        monthly_power_cold_demand_reindex
-        * ((felt_temperature - set_temperature).clip(0) * weigths)
-        / ((felt_temperature - set_temperature).clip(0) * weigths).resample("MS").transform("mean")
-    ).rename(monthly_power_cold_demand_reindex.name)
+        (
+            monthly_power_cold_demand_reindex
+            * ((felt_temperature - set_temperature).clip(0) * weigths)
+            / ((felt_temperature - set_temperature).clip(0) * weigths)
+            .resample("MS")
+            .transform("mean")
+        )
+        .fillna(0.0)
+        .rename(monthly_power_cold_demand_reindex.name)
+    )
