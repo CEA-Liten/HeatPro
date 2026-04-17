@@ -1,0 +1,114 @@
+{
+  "metadata": {
+    "description": "Besoins de climatisation par type de bâtiment et zone climatique (en kWh/m²/an)",
+    "source": "Données utilisateur (format table converti en JSON)",
+    "date": {
+      "generation": "2026-04-14T17:30:32+02:00",
+      "timezone": "Europe/Paris",
+      "season": "Printemps"
+    },
+    "unit": "kWh/m²"
+  },
+  "data": {
+    "zones_climatiques": {
+      "H1a": {
+        "Bureaux": 29,
+        "Café": 32,
+        "Commerces": 32,
+        "EHPAD": 77,
+        "Écoles": 29,
+        "Hôtel": 35,
+        "Résidentiel": 5,
+        "Santé": 77,
+        "Sport": 18
+      },
+      "H1b": {
+        "Bureaux": 29,
+        "Café": 32,
+        "Commerces": 32,
+        "EHPAD": 77,
+        "Écoles": 29,
+        "Hôtel": 35,
+        "Résidentiel": 5,
+        "Santé": 77,
+        "Sport": 18
+      },
+      "H1c": {
+        "Bureaux": 29,
+        "Café": 32,
+        "Commerces": 32,
+        "EHPAD": 77,
+        "Écoles": 29,
+        "Hôtel": 35,
+        "Résidentiel": 5,
+        "Santé": 77,
+        "Sport": 18
+      },
+      "H2a": {
+        "Bureaux": 7,
+        "Café": 8,
+        "Commerces": 8,
+        "EHPAD": 24,
+        "Écoles": 7,
+        "Hôtel": 9,
+        "Résidentiel": 2,
+        "Santé": 24,
+        "Sport": 5
+      },
+      "H2b": {
+        "Bureaux": 29,
+        "Café": 32,
+        "Commerces": 32,
+        "EHPAD": 77,
+        "Écoles": 29,
+        "Hôtel": 35,
+        "Résidentiel": 5,
+        "Santé": 77,
+        "Sport": 18
+      },
+      "H2c": {
+        "Bureaux": 40,
+        "Café": 44,
+        "Commerces": 44,
+        "EHPAD": 100,
+        "Écoles": 40,
+        "Hôtel": 48,
+        "Résidentiel": 17,
+        "Santé": 100,
+        "Sport": 25
+      },
+      "H2d": {
+        "Bureaux": 40,
+        "Café": 44,
+        "Commerces": 44,
+        "EHPAD": 100,
+        "Écoles": 40,
+        "Hôtel": 48,
+        "Résidentiel": 43,
+        "Santé": 100,
+        "Sport": 25
+      },
+      "H3": {
+        "Bureaux": 38,
+        "Café": 74,
+        "Commerces": 74,
+        "EHPAD": 152,
+        "Écoles": 68,
+        "Hôtel": 82,
+        "Résidentiel": 56,
+        "Santé": 152,
+        "Sport": 42
+      }
+    },
+    "types_batiments": [
+      "Bureaux", "Café", "Commerces", "EHPAD", "Écoles",
+      "Hôtel", "Résidentiel", "Santé", "Sport"
+    ]
+  },
+  "notes": [
+    "Les valeurs sont exprimées en kWh par m² et par an.",
+    "Les zones climatiques suivent la réglementation thermique française (ex: RT2020).",
+    "Pour le type 'Écoles', les valeurs incluent les crèches et établissements scolaires.",
+    "Données à utiliser pour des estimations préliminaires - consulter un expert pour des projets précis."
+  ]
+}

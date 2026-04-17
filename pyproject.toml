@@ -38,6 +38,9 @@ notebook = [
 include-package-data = true
 package-dir = {"" = "."}
 
+[tool.setuptools.package-data]
+heatpro = ["./cold/needs_by_building_type_and_climatic_zone.json"]
+
 [tool.setuptools.packages.find]
 where = ["."]
 
