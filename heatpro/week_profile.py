@@ -5,7 +5,7 @@ import pandas as pd
 
 def step_night_reduction_week_profile(
     low: float, high_weekend: float, high_weekstart: float = 1.0
-) -> Callable[[int, int], int]:
+) -> Callable[[int, int], float]:
     def week_profile(day: int, hour: int) -> float:
         if day in [5, 6]:  # On Weekend
             if 8 <= hour <= 18:
@@ -19,7 +19,7 @@ def step_night_reduction_week_profile(
 
 def smooth_step_night_reduction_week_profile(
     low: float, high_weekend: float, high_weekstart: float = 1.0
-) -> Callable[[int, int], int]:
+) -> Callable[[int, int], float]:
     def week_profile(day: int, hour: int) -> float:
         if day in [5, 6]:  # On Weekend
             if 10 <= hour <= 17:
@@ -40,7 +40,7 @@ def smooth_step_night_reduction_week_profile(
 
 
 def apply_week_profile(
-    datetime_index: pd.DatetimeIndex, week_profile: Callable[[int, int], int]
+    datetime_index: pd.DatetimeIndex, week_profile: Callable[[int, int], float]
 ) -> pd.Series:
     return (
         pd.DataFrame(
