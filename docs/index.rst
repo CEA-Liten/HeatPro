@@ -29,12 +29,17 @@ Welcome to HeatPro's documentation!
    :maxdepth: 1
    :caption: Documentation:
 
+   modules/building_type
    modules/check
+   modules/climatic_zone/climatic_zone
+   modules/cold
    modules/demand_profile
    modules/disaggregation
    modules/external_factors
+   modules/felt_temperature
    modules/temporal_demand
    modules/special_hot_water/special_hot_water
+   modules/week_profile
 
 Indices and tables
 ==================
