@@ -24,6 +24,7 @@ Welcome to HeatPro's documentation!
    modules/simple_usage/simple_usage
    modules/detecting_heating_season/detecting_heating_season
    modules/usage/advanced_usage
+   modules/simple_usage/simple_cold_demand
    
 .. toctree::
    :maxdepth: 1
