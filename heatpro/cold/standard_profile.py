@@ -10,7 +10,7 @@ from ..week_profile import smooth_step_night_reduction_week_profile
 @dataclass
 class WeekProfile:
     description: str
-    function: Callable[[int, int], int]
+    function: Callable[[int, int], float]
 
     @property
     def week_series_example(self):
