@@ -4,6 +4,8 @@ from heatpro.cold.standard_profile import (
     WeekProfile,
     WORKING_DAY_PROFILE,
     FULL_WEEK_PROFILE,
+    STEP_WORKING_DAY_PROFILE,
+    STEP_FULL_WEEK_PROFILE,
     StandardProfile,
 )
 
@@ -35,8 +37,8 @@ def test_week_profile_week_series_example():
 
 def test_standard_profile_values():
     # Test the values of the StandardProfile enum
-    assert StandardProfile.WORKING_DAY.value == WORKING_DAY_PROFILE
-    assert StandardProfile.FULL_WEEK.value == FULL_WEEK_PROFILE
+    assert StandardProfile.STEP_WORKING_DAY.value == STEP_WORKING_DAY_PROFILE
+    assert StandardProfile.STEP_FULL_WEEK.value == STEP_FULL_WEEK_PROFILE
 
 
 def test_standard_profile_iteration():
@@ -48,8 +50,8 @@ def test_standard_profile_iteration():
 
 def test_week_profile_function_output():
     # Test the output of the function property of the WeekProfile class
-    working_day_function = WORKING_DAY_PROFILE.function
-    full_week_function = FULL_WEEK_PROFILE.function
+    working_day_function = STEP_WORKING_DAY_PROFILE.function
+    full_week_function = STEP_FULL_WEEK_PROFILE.function
 
     # Test with different day of the week and hour
     test_cases = [
