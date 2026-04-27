@@ -1,6 +1,6 @@
 [project]
 name = "heatpro"
-version = "0.2.0"
+version = "0.2.1"
 description = "Generate heat demand load profile for distict heating"
 authors = [
     { name = "Robinson Beaucour", email = "robinson.beaucour@cea.fr" },
@@ -39,7 +39,11 @@ include-package-data = true
 package-dir = {"" = "."}
 
 [tool.setuptools.package-data]
-heatpro = ["./cold/needs_by_building_type_and_climatic_zone.json"]
+heatpro = [
+    "./cold/needs_by_building_type_and_climatic_zone.json",
+    "./cold/profile_full_week.csv",
+    "./cold/profile_working_day.csv",
+]
 
 [tool.setuptools.packages.find]
 where = ["."]
