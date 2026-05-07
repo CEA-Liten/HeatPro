@@ -16,6 +16,11 @@ dependencies = [
 ]
 
 [dependency-groups]
+cli = [
+    "click>=8.3.3",
+    "plotly>=6.5.2",
+    "rich>=15.0.0",
+]
 dev = [
     "nbmake>=1.5.5",
     "pytest>=9.0.2",
@@ -53,3 +58,6 @@ package = true
 
 [tool.ruff]
 line-length = 100
+
+[project.scripts]
+heatpro = "heatpro.cli:cli"
