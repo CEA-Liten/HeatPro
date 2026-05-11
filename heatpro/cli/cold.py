@@ -74,7 +74,6 @@ class ColdConfig:
 
 
 def cold_cli(weather: pd.Series, year_energy_reference: float, config: ColdConfig) -> pd.DataFrame:
-    weather = weather.loc[:"2022"]
     logging.debug(f"weather series description:\n{weather.describe()}")
     logging.debug(
         f"weather series index:\n - start : {weather.index.min()}\n - end : {weather.index.max()}"
@@ -171,6 +170,7 @@ def cold_cli(weather: pd.Series, year_energy_reference: float, config: ColdConfi
         ),
         axis=1,
     )
+    result["total_consumption_kW"] = result.loc[:, result.columns != weather.name].sum(axis=1)
     result.index = weather.index.astype("int64") // 10**9  # 10**9 convert nanoseconde to second
 
     return result

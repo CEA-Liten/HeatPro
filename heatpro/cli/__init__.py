@@ -2,6 +2,7 @@ import logging
 from pathlib import Path
 
 import click
+import plotly.graph_objects as go
 from rich.logging import RichHandler
 
 from .cold import cold_cli, import_weather, ColdConfig, Repartition
@@ -65,7 +66,10 @@ def validate_float_between_0_and_1(ctx, param, value):
     default=1 / 2,
     help="Share of cold energy within consumption associated to low activity on weekend profile consummed in a temperature sensitive manner",
 )
+@click.option("-start", "--date-start", default=None, help="date start")
+@click.option("-end", "--date-end", default=None, help="date end")
 @click.option("-v", "--verbose", is_flag=True, help="Enable debug logging")
+@click.option("-s", "--show", is_flag=True, help="Show graphs of the result")
 def cold(
     weather_csv,
     output_csv,
@@ -75,14 +79,18 @@ def cold(
     full_week_share,
     full_week_temperature_sensitivity,
     week_end_temperature_sensitivity,
+    date_start,
+    date_end,
     verbose,
+    show,
 ):
     logging.basicConfig(
         level=logging.DEBUG if verbose else logging.INFO,
         format="%(message)s",
         handlers=[RichHandler(rich_tracebacks=True)],
     )
-    weather = import_weather(Path(weather_csv))
+    weather = import_weather(Path(weather_csv)).loc[date_start:date_end]
+    logging.debug(weather.index.max())
     cold_config = ColdConfig(
         set_temperature,
         loss,
@@ -109,6 +117,40 @@ def cold(
 
     result = cold_cli(weather, year_energy_reference, cold_config)
     result.to_csv(Path(output_csv), sep=";", float_format="%.2f")
+
+    if show:
+        daily_temperature = weather.resample("d").mean()
+        go.Figure(
+            [
+                go.Scattergl(
+                    x=weather.index,
+                    y=result["total_consumption_kW"],
+                    name="Total cold consumption",
+                    yaxis="y1",
+                ),
+                go.Scattergl(
+                    x=daily_temperature.index,
+                    y=daily_temperature,
+                    name="Daily outdoor temperature",
+                    yaxis="y2",
+                    marker_color="#1f77b4",
+                    marker_opacity=0.5,
+                    line_dash="dash",
+                ),
+            ],
+        ).update_layout(
+            hovermode="x unified",
+            yaxis=dict(
+                title_text="Power (<b>kW</b>)",
+            ),
+            yaxis2=dict(
+                title_text="Temperature (<b>°C</b>)",
+                anchor="x",
+                overlaying="y",
+                side="right",
+                range=[-5, 40],
+            ),
+        ).show()
 
 
 if __name__ == "__main__":
