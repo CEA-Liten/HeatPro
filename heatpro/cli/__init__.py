@@ -5,6 +5,7 @@ import click
 from rich.logging import RichHandler
 
 from .cold import cold_cli, import_weather, ColdConfig
+from .helpers import ReferenceCold
 from .. import SET_TEMPERATURE_COLD
 
 CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])
@@ -19,7 +20,7 @@ def cli():
 @cli.command()
 @click.argument("weather_csv", type=click.Path(exists=True))
 @click.argument("output_csv", type=click.Path())
-@click.argument("year_energy_reference", type=click.FLOAT)
+@click.argument("year_energy_reference")
 @click.option(
     "--set_temperature",
     type=click.FLOAT,
@@ -35,6 +36,19 @@ def cold(weather_csv, output_csv, year_energy_reference, set_temperature, verbos
     )
     weather = import_weather(Path(weather_csv))
     cold_config = ColdConfig(set_temperature=set_temperature)
+    try:
+        year_energy_reference = float(year_energy_reference)
+    except ValueError:
+        match year_energy_reference:
+            case ReferenceCold.H1.name:
+                year_energy_reference = ReferenceCold.H1.value
+            case ReferenceCold.H2.name:
+                year_energy_reference = ReferenceCold.H2.value
+            case ReferenceCold.H3.name:
+                year_energy_reference = ReferenceCold.H3.value
+            case _:
+                logging.error(f"year_energy_reference must be numeric or one of ReferenceCold names: H1, H2, H3. You gave {year_energy_reference=}")
+                exit()
 
     logging.debug(f"Cold consummption configuration: {cold_config}")
 
