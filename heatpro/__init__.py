@@ -2,6 +2,7 @@ import importlib.metadata
 
 __version__ = importlib.metadata.version("heatpro")
 
+from .cold import COLD_OPERATING_MONTHS
 from .check import ENERGY_FEATURE_NAME
 from .demand_profile.building_heating_profile import BUILDING_FELT_TEMPERATURE_NAME
 from .external_factors import (
@@ -11,6 +12,9 @@ from .external_factors import (
     SOIL_TEMPERATURE_NAME,
 )
 
+__all__ = [
+    "COLD_OPERATING_MONTHS",
+]
 
 def help_with_feature_name():
     message = f"""
