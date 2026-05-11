@@ -4,8 +4,6 @@ import math
 from pathlib import Path
 
 import pandas as pd
-import plotly.graph_objects as go
-from rich.console import Console
 
 from .. import COLD_OPERATING_MONTHS, SET_TEMPERATURE_COLD
 from ..cold.distribution import (
