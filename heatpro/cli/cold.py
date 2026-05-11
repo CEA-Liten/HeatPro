@@ -1,12 +1,13 @@
+from dataclasses import dataclass, field
 import logging
+import math
 from pathlib import Path
 
 import pandas as pd
 import plotly.graph_objects as go
 from rich.console import Console
-from rich.table import Table
 
-from .. import COLD_OPERATING_MONTHS
+from .. import COLD_OPERATING_MONTHS, SET_TEMPERATURE_COLD
 from ..cold.distribution import (
     year_to_hour_outdoor_temperarure_distribution,
 )
@@ -50,40 +51,70 @@ def calculate_year_average_power(
     ).rename("year_average_power_kW")
 
 
-def cold_cli(weather: pd.Series, year_energy_reference: float, set_temperature: float) -> None:
+@dataclass
+class Repartition:
+    full_week: float = 0.5
+    week_start: float = 0.5
+
+
+@dataclass
+class ColdConfig:
+    set_temperature: float = SET_TEMPERATURE_COLD
+    loss: float = 0.2
+    profile: Repartition = field(default_factory=Repartition)
+    temperature_sensitivity: Repartition = field(default_factory=Repartition)
+
+    def __post_init__(self):
+        if not math.isclose(self.profile.full_week + self.profile.week_start, 1.0):
+            raise ValueError("The sum of profile values must equal 1.0")
+        if not (0 <= self.temperature_sensitivity.full_week <= 1):
+            raise ValueError("temperature_sensitivity.full_week must be between 0 and 1")
+        if not (0 <= self.temperature_sensitivity.week_start <= 1):
+            raise ValueError("temperature_sensitivity.week_start must be between 0 and 1")
+
+
+def cold_cli(weather: pd.Series, year_energy_reference: float, config: ColdConfig) -> None:
     console = Console()
 
-    weather = weather.loc[:"2002"]
+    weather = weather.loc[:"2022"]
     logging.debug(f"weather series description:\n{weather.describe()}")
     logging.debug(
         f"weather series index:\n - start : {weather.index.min()}\n - end : {weather.index.max()}"
     )
 
     year_average_power = calculate_year_average_power(
-        weather, year_energy_reference, set_temperature
+        weather, year_energy_reference, config.set_temperature
     )
     loss_year_average_power = (
-        (year_average_power * 0.02)
+        (year_average_power * config.loss)
         .reindex(weather.index, method="ffill")
         .rename("loss_year_average_power")
     )
     working_day_baseload_year_average_power = (
-        (year_average_power / 4)
+        (
+            year_average_power
+            * config.profile.week_start
+            * (1 - config.temperature_sensitivity.week_start)
+        )
         .reindex(weather.index, method="ffill")
         .rename("working_day_baseload_year_average_power")
     )
     full_week_baseload_year_average_power = (
-        (year_average_power / 4)
+        (
+            year_average_power
+            * config.profile.full_week
+            * (1 - config.temperature_sensitivity.full_week)
+        )
         .reindex(weather.index, method="ffill")
         .rename("full_week_baseload_year_average_power")
     )
     working_day_temperature_sensitive_year_average_power = (
-        (year_average_power / 4)
+        (year_average_power * config.profile.week_start * config.temperature_sensitivity.week_start)
         .reindex(weather.index, method="ffill")
         .rename("working_day_temperature_sensitive_year_average_power")
     )
     full_week_temperature_sensitive_year_average_power = (
-        (year_average_power / 4)
+        (year_average_power * config.profile.full_week * config.temperature_sensitivity.full_week)
         .reindex(weather.index, method="ffill")
         .rename("full_week_temperature_sensitive_year_average_power")
     )
