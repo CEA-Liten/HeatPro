@@ -2,10 +2,17 @@ import logging
 from pathlib import Path
 
 import pandas as pd
+import plotly.graph_objects as go
 from rich.console import Console
 from rich.table import Table
 
 from .. import COLD_OPERATING_MONTHS
+from ..cold.distribution import (
+    year_to_hour_outdoor_temperarure_distribution,
+)
+from ..cold.standard_profile import StandardProfile
+from ..felt_temperature import calculate_felt_temperature
+from ..week_profile import apply_week_profile
 
 
 def import_weather(weather_csv: Path) -> pd.Series:
@@ -24,7 +31,7 @@ def import_weather(weather_csv: Path) -> pd.Series:
 def cold_cli(weather: pd.Series, year_energy_reference: float, set_temperature: float) -> None:
     console = Console()
 
-    weather = weather.loc[:"2022"]
+    weather = weather.loc[:"2012"]
 
     reference_delta_temperature: float = (
         (weather.loc[weather.index.month.isin(COLD_OPERATING_MONTHS)] - set_temperature)
@@ -34,7 +41,7 @@ def cold_cli(weather: pd.Series, year_energy_reference: float, set_temperature: 
         .mean()
     )
     logging.debug(f"{reference_delta_temperature=}")
-    year_average_power = (
+    year_average_power: pd.Series = (
         (weather.loc[weather.index.month.isin(COLD_OPERATING_MONTHS)] - set_temperature)
         .clip(0)
         .resample("YS")
@@ -43,23 +50,86 @@ def cold_cli(weather: pd.Series, year_energy_reference: float, set_temperature: 
         * year_energy_reference
         / weather.resample("YS").count()
     ).rename("year_average_power_kW")
+    loss_year_average_power = (
+        (year_average_power * 0.02)
+        .reindex(weather.index, method="ffill")
+        .rename("loss_year_average_power")
+    )
+    working_day_baseload_year_average_power = (
+        (year_average_power / 4)
+        .reindex(weather.index, method="ffill")
+        .rename("working_day_baseload_year_average_power")
+    )
+    full_week_baseload_year_average_power = (
+        (year_average_power / 4)
+        .reindex(weather.index, method="ffill")
+        .rename("full_week_baseload_year_average_power")
+    )
+    working_day_temperature_sensitive_year_average_power = (
+        (year_average_power / 4)
+        .reindex(weather.index, method="ffill")
+        .rename("working_day_temperature_sensitive_year_average_power")
+    )
+    full_week_temperature_sensitive_year_average_power = (
+        (year_average_power / 4)
+        .reindex(weather.index, method="ffill")
+        .rename("full_week_temperature_sensitive_year_average_power")
+    )
 
-    table = Table(show_header=True, header_style="bold magenta")
+    felt_temperature = calculate_felt_temperature(weather)
 
-    table.add_column(weather.index.name)
-    table.add_column(weather.name)
+    operating_season = pd.Series(
+        weather.index.month.isin(COLD_OPERATING_MONTHS).astype(int),
+        index=weather.index,
+        name="operating_season",
+    )
 
-    for index, value in weather.sample(5).items():
-        table.add_row(index.strftime("%Y-%m-%d %H:%M"), str(value))
+    full_week_profile_weigths = apply_week_profile(
+        weather.index,
+        lambda day, hour: StandardProfile.FULL_WEEK.value.function(day, hour),
+    )
+    working_day_profile_weigths = apply_week_profile(
+        weather.index,
+        lambda day, hour: StandardProfile.WORKING_DAY.value.function(day, hour),
+    )
 
-    year_power_table = Table(show_header=True, header_style="bold magenta")
+    full_week_baseload_year_average_power_series = (
+        full_week_baseload_year_average_power
+        * full_week_profile_weigths
+        / full_week_profile_weigths.mean()
+    ).rename(full_week_baseload_year_average_power.name)
+    working_day_baseload_year_average_power_series = (
+        working_day_baseload_year_average_power
+        * working_day_profile_weigths
+        / working_day_profile_weigths.mean()
+    ).rename(working_day_baseload_year_average_power.name)
 
-    year_power_table.add_column(year_average_power.index.name)
-    year_power_table.add_column(year_average_power.name)
+    full_week_temperature_sensitive_year_average_power_series = (
+        year_to_hour_outdoor_temperarure_distribution(
+            full_week_temperature_sensitive_year_average_power,
+            felt_temperature,
+            full_week_profile_weigths * operating_season,
+        )
+    )
+    working_day_temperature_sensitive_year_average_power_series = (
+        year_to_hour_outdoor_temperarure_distribution(
+            working_day_temperature_sensitive_year_average_power,
+            felt_temperature,
+            working_day_profile_weigths * operating_season,
+        )
+    )
 
-    for index, value in year_average_power.head(5).items():
-        year_power_table.add_row(index.strftime("%Y-%m-%d %H:%M"), str(value))
+    result = pd.concat(
+        (
+            weather,
+            loss_year_average_power,
+            working_day_baseload_year_average_power_series,
+            full_week_baseload_year_average_power_series,
+            working_day_temperature_sensitive_year_average_power_series,
+            full_week_temperature_sensitive_year_average_power_series,
+        ),
+        axis=1,
+    )
+    result.index = weather.index.astype("int64") // 10**9  # 10**9 convert nanoseconde to second
 
-    console.print(f"{year_energy_reference=}")
-    console.print(table)
-    console.print(year_power_table)
+    result.to_csv("./results.csv", sep=";", float_format="%.2f")
