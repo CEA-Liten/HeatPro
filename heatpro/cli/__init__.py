@@ -18,6 +18,7 @@ def cli():
 
 @cli.command()
 @click.argument("weather_csv", type=click.Path(exists=True))
+@click.argument("output_csv", type=click.Path())
 @click.argument("year_energy_reference", type=click.FLOAT)
 @click.option(
     "--set_temperature",
@@ -26,7 +27,7 @@ def cli():
     help="Default set temperature",
 )
 @click.option("-v", "--verbose", is_flag=True, help="Enable debug logging")
-def cold(weather_csv, year_energy_reference, set_temperature, verbose):
+def cold(weather_csv, output_csv, year_energy_reference, set_temperature, verbose):
     logging.basicConfig(
         level=logging.DEBUG if verbose else logging.INFO,
         format="%(message)s",
@@ -37,7 +38,8 @@ def cold(weather_csv, year_energy_reference, set_temperature, verbose):
 
     logging.debug(f"Cold consummption configuration: {cold_config}")
 
-    cold_cli(weather, year_energy_reference, cold_config)
+    result = cold_cli(weather, year_energy_reference, cold_config)
+    result.to_csv(Path(output_csv), sep=";", float_format="%.2f")
 
 
 if __name__ == "__main__":

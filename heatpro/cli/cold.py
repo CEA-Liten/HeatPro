@@ -73,9 +73,7 @@ class ColdConfig:
             raise ValueError("temperature_sensitivity.week_start must be between 0 and 1")
 
 
-def cold_cli(weather: pd.Series, year_energy_reference: float, config: ColdConfig) -> None:
-    console = Console()
-
+def cold_cli(weather: pd.Series, year_energy_reference: float, config: ColdConfig) -> pd.DataFrame:
     weather = weather.loc[:"2022"]
     logging.debug(f"weather series description:\n{weather.describe()}")
     logging.debug(
@@ -175,4 +173,5 @@ def cold_cli(weather: pd.Series, year_energy_reference: float, config: ColdConfi
     )
     result.index = weather.index.astype("int64") // 10**9  # 10**9 convert nanoseconde to second
 
-    result.to_csv("./results.csv", sep=";", float_format="%.2f")
+    return result
+    
