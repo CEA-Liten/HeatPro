@@ -28,11 +28,9 @@ def import_weather(weather_csv: Path) -> pd.Series:
     return weather
 
 
-def cold_cli(weather: pd.Series, year_energy_reference: float, set_temperature: float) -> None:
-    console = Console()
-
-    weather = weather.loc[:"2012"]
-
+def calculate_year_average_power(
+    weather: pd.Series, year_energy_reference: float, set_temperature: float
+) -> pd.Series:
     reference_delta_temperature: float = (
         (weather.loc[weather.index.month.isin(COLD_OPERATING_MONTHS)] - set_temperature)
         .clip(0)
@@ -41,7 +39,7 @@ def cold_cli(weather: pd.Series, year_energy_reference: float, set_temperature: 
         .mean()
     )
     logging.debug(f"{reference_delta_temperature=}")
-    year_average_power: pd.Series = (
+    return (
         (weather.loc[weather.index.month.isin(COLD_OPERATING_MONTHS)] - set_temperature)
         .clip(0)
         .resample("YS")
@@ -50,6 +48,20 @@ def cold_cli(weather: pd.Series, year_energy_reference: float, set_temperature: 
         * year_energy_reference
         / weather.resample("YS").count()
     ).rename("year_average_power_kW")
+
+
+def cold_cli(weather: pd.Series, year_energy_reference: float, set_temperature: float) -> None:
+    console = Console()
+
+    weather = weather.loc[:"2002"]
+    logging.debug(f"weather series description:\n{weather.describe()}")
+    logging.debug(
+        f"weather series index:\n - start : {weather.index.min()}\n - end : {weather.index.max()}"
+    )
+
+    year_average_power = calculate_year_average_power(
+        weather, year_energy_reference, set_temperature
+    )
     loss_year_average_power = (
         (year_average_power * 0.02)
         .reindex(weather.index, method="ffill")
