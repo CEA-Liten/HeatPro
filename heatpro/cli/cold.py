@@ -8,8 +8,7 @@ from rich.table import Table
 from .. import COLD_OPERATING_MONTHS
 
 
-def cold_cli(weather_csv: Path, year_energy_reference: float, set_temperature: float) -> None:
-    console = Console()
+def import_weather(weather_csv: Path) -> pd.Series:
     weather = pd.read_csv(
         weather_csv,
         sep=";",
@@ -19,6 +18,12 @@ def cold_cli(weather_csv: Path, year_energy_reference: float, set_temperature: f
         decimal=",",
     )["temperature"]
     weather.index = pd.to_datetime(weather.index, unit="s")
+    return weather
+
+
+def cold_cli(weather: pd.Series, year_energy_reference: float, set_temperature: float) -> None:
+    console = Console()
+
     weather = weather.loc[:"2022"]
 
     reference_delta_temperature: float = (

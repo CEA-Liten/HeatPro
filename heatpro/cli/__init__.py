@@ -4,7 +4,7 @@ from pathlib import Path
 import click
 from rich.logging import RichHandler
 
-from .cold import cold_cli
+from .cold import cold_cli, import_weather
 
 CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])
 
@@ -26,8 +26,9 @@ def cold(weather_csv, year_energy_reference, set_temperature, verbose):
         format="%(message)s",
         handlers=[RichHandler(rich_tracebacks=True)],
     )
+    weather = import_weather(Path(weather_csv))
 
-    cold_cli(Path(weather_csv), year_energy_reference, set_temperature)
+    cold_cli(weather, year_energy_reference, set_temperature)
 
 
 if __name__ == "__main__":
