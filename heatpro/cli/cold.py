@@ -174,4 +174,3 @@ def cold_cli(weather: pd.Series, year_energy_reference: float, config: ColdConfi
     result.index = weather.index.astype("int64") // 10**9  # 10**9 convert nanoseconde to second
 
     return result
-    

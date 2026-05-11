@@ -4,7 +4,7 @@ from pathlib import Path
 import click
 from rich.logging import RichHandler
 
-from .cold import cold_cli, import_weather, ColdConfig
+from .cold import cold_cli, import_weather, ColdConfig, Repartition
 from .helpers import ReferenceCold
 from .. import SET_TEMPERATURE_COLD
 
@@ -17,25 +17,78 @@ def cli():
     pass
 
 
+def validate_float_between_0_and_1(ctx, param, value):
+    if value is None:
+        return value
+    if not (0 <= value <= 1):
+        raise click.BadParameter("Value must be between 0 and 1")
+    return value
+
+
 @cli.command()
 @click.argument("weather_csv", type=click.Path(exists=True))
 @click.argument("output_csv", type=click.Path())
 @click.argument("year_energy_reference")
 @click.option(
-    "--set_temperature",
+    "--set-temperature",
     type=click.FLOAT,
     default=SET_TEMPERATURE_COLD,
     help="Default set temperature",
 )
+@click.option(
+    "--loss",
+    type=click.FLOAT,
+    default=0.02,
+    help="Cold energy loss",
+)
+@click.option(
+    "-fws",
+    "--full-week-share",
+    type=click.FLOAT,
+    callback=validate_float_between_0_and_1,
+    default=1 / 2,
+    help="Share of cold energy consummed following a full week activity profile",
+)
+@click.option(
+    "-fwts",
+    "--full-week-temperature-sensitivity",
+    type=click.FLOAT,
+    callback=validate_float_between_0_and_1,
+    default=1 / 2,
+    help="Share of cold energy within consumption associated to full week profile consummed in a temperature sensitive manner",
+)
+@click.option(
+    "-wets",
+    "--week-end-temperature-sensitivity",
+    type=click.FLOAT,
+    callback=validate_float_between_0_and_1,
+    default=1 / 2,
+    help="Share of cold energy within consumption associated to low activity on weekend profile consummed in a temperature sensitive manner",
+)
 @click.option("-v", "--verbose", is_flag=True, help="Enable debug logging")
-def cold(weather_csv, output_csv, year_energy_reference, set_temperature, verbose):
+def cold(
+    weather_csv,
+    output_csv,
+    year_energy_reference,
+    loss,
+    set_temperature,
+    full_week_share,
+    full_week_temperature_sensitivity,
+    week_end_temperature_sensitivity,
+    verbose,
+):
     logging.basicConfig(
         level=logging.DEBUG if verbose else logging.INFO,
         format="%(message)s",
         handlers=[RichHandler(rich_tracebacks=True)],
     )
     weather = import_weather(Path(weather_csv))
-    cold_config = ColdConfig(set_temperature=set_temperature)
+    cold_config = ColdConfig(
+        set_temperature,
+        loss,
+        Repartition(full_week_share, 1 - full_week_share),
+        Repartition(full_week_temperature_sensitivity, week_end_temperature_sensitivity),
+    )
     try:
         year_energy_reference = float(year_energy_reference)
     except ValueError:
@@ -47,7 +100,9 @@ def cold(weather_csv, output_csv, year_energy_reference, set_temperature, verbos
             case ReferenceCold.H3.name:
                 year_energy_reference = ReferenceCold.H3.value
             case _:
-                logging.error(f"year_energy_reference must be numeric or one of ReferenceCold names: H1, H2, H3. You gave {year_energy_reference=}")
+                logging.error(
+                    f"year_energy_reference must be numeric or one of ReferenceCold names: H1, H2, H3. You gave {year_energy_reference=}"
+                )
                 exit()
 
     logging.debug(f"Cold consummption configuration: {cold_config}")
