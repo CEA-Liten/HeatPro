@@ -2,7 +2,7 @@ import logging
 from pathlib import Path
 
 import click
-import plotly.graph_objects as go
+from rich.console import Console
 from rich.logging import RichHandler
 
 from .cold import cold_cli, import_weather, ColdConfig, Repartition
@@ -89,7 +89,9 @@ def cold(
         format="%(message)s",
         handlers=[RichHandler(rich_tracebacks=True)],
     )
-    weather = import_weather(Path(weather_csv)).loc[date_start:date_end]
+    console = Console()
+    with console.status("[bold green]Importing weather csv data...", spinner="bouncingBall"):
+        weather = import_weather(Path(weather_csv)).loc[date_start:date_end]
     logging.debug(weather.index.max())
     cold_config = ColdConfig(
         set_temperature,
@@ -115,8 +117,11 @@ def cold(
 
     logging.debug(f"Cold consummption configuration: {cold_config}")
 
-    result = cold_cli(weather, year_energy_reference, cold_config)
-    result.to_csv(Path(output_csv), sep=";", float_format="%.2f")
+    with console.status("[bold red]Calculating cold demand...", spinner="bouncingBall"):
+        result = cold_cli(weather, year_energy_reference, cold_config)
+
+    with console.status("[bold magenta]Exporting results...", spinner="bouncingBall"):
+        result.to_csv(Path(output_csv), sep=";", float_format="%.2f")
 
     if show:
         daily_temperature = weather.resample("d").mean()
