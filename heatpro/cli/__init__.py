@@ -7,6 +7,7 @@ from rich.logging import RichHandler
 
 from .cold import cold_cli, import_weather, ColdConfig, Repartition
 from .helpers import ReferenceCold
+from .plotting import cold_results
 from .. import SET_TEMPERATURE_COLD
 
 CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])
@@ -123,39 +124,8 @@ def cold(
     with console.status("[bold magenta]Exporting results...", spinner="bouncingBall"):
         result.to_csv(Path(output_csv), sep=";", float_format="%.2f")
 
-    if show:
-        daily_temperature = weather.resample("d").mean()
-        go.Figure(
-            [
-                go.Scattergl(
-                    x=weather.index,
-                    y=result["total_consumption_kW"],
-                    name="Total cold consumption",
-                    yaxis="y1",
-                ),
-                go.Scattergl(
-                    x=daily_temperature.index,
-                    y=daily_temperature,
-                    name="Daily outdoor temperature",
-                    yaxis="y2",
-                    marker_color="#1f77b4",
-                    marker_opacity=0.5,
-                    line_dash="dash",
-                ),
-            ],
-        ).update_layout(
-            hovermode="x unified",
-            yaxis=dict(
-                title_text="Power (<b>kW</b>)",
-            ),
-            yaxis2=dict(
-                title_text="Temperature (<b>°C</b>)",
-                anchor="x",
-                overlaying="y",
-                side="right",
-                range=[-5, 40],
-            ),
-        ).show()
+        if show:
+            cold_results(weather, result).show()
 
 
 if __name__ == "__main__":
