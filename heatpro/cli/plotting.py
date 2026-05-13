@@ -3,6 +3,21 @@ import plotly.graph_objects as go
 
 
 def cold_results(weather: pd.Series, result: pd.DataFrame) -> go.Figure:
+    """Create a Plotly figure showing cold consumption and outdoor temperature.
+
+    This function generates an interactive Plotly figure that displays the total
+    cold consumption and daily outdoor temperature over time. The figure uses two
+    y-axes to show both metrics on the same plot.
+
+    Args:
+        weather (pd.Series): A pandas Series containing temperature data indexed by timestamp.
+        result (pd.DataFrame): A pandas DataFrame containing cold consumption data with a
+            'total_consumption_kW' column.
+
+    Returns:
+        go.Figure: A Plotly Figure object containing the visualization of cold consumption
+            and outdoor temperature.
+    """
     daily_temperature = weather.resample("d").mean()
     return go.Figure(
         [

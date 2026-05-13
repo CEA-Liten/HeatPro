@@ -33,6 +33,7 @@ Welcome to HeatPro's documentation!
    modules/building_type
    modules/check
    modules/climatic_zone/climatic_zone
+   modules/cli
    modules/cold
    modules/demand_profile
    modules/disaggregation
