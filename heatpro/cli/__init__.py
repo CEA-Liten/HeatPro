@@ -5,7 +5,7 @@ import click
 from rich.console import Console
 from rich.logging import RichHandler
 
-from .cold import cold_cli, import_weather, ColdConfig, Repartition
+from .cold import cold_pipeline, import_weather, ColdConfig, Repartition
 from .helpers import ReferenceCold
 from .plotting import cold_results
 from .. import SET_TEMPERATURE_COLD
@@ -20,6 +20,21 @@ def cli():
 
 
 def validate_float_between_0_and_1(ctx, param, value):
+    """_summary_
+
+    Args:
+        ctx (_type_): _description_
+        param (_type_): _description_
+        value (_type_): _description_
+
+    Raises:
+        click.BadParameter: _description_
+
+    Returns:
+        _type_: _description_
+    
+    :meta private:
+    """
     if value is None:
         return value
     if not (0 <= value <= 1):
@@ -27,7 +42,7 @@ def validate_float_between_0_and_1(ctx, param, value):
     return value
 
 
-@cli.command()
+@cli.command("cold")
 @click.argument("weather_csv", type=click.Path(exists=True))
 @click.argument("output_csv", type=click.Path())
 @click.argument("year_energy_reference")
@@ -71,7 +86,7 @@ def validate_float_between_0_and_1(ctx, param, value):
 @click.option("-end", "--date-end", default=None, help="date end")
 @click.option("-v", "--verbose", is_flag=True, help="Enable debug logging")
 @click.option("-s", "--show", is_flag=True, help="Show graphs of the result")
-def cold(
+def cold_cli(
     weather_csv,
     output_csv,
     year_energy_reference,
@@ -119,7 +134,7 @@ def cold(
     logging.debug(f"Cold consummption configuration: {cold_config}")
 
     with console.status("[bold red]Calculating cold demand...", spinner="bouncingBall"):
-        result = cold_cli(weather, year_energy_reference, cold_config)
+        result = cold_pipeline(weather, year_energy_reference, cold_config)
 
     with console.status("[bold magenta]Exporting results...", spinner="bouncingBall"):
         result.to_csv(Path(output_csv), sep=";", float_format="%.2f")

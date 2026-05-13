@@ -167,7 +167,7 @@ class ColdConfig:
         if not (0 <= self.temperature_sensitivity.week_start <= 1):
             raise ValueError("temperature_sensitivity.week_start must be between 0 and 1")
 
-def cold_cli(weather: pd.Series, year_energy_reference: float, config: ColdConfig) -> pd.DataFrame:
+def cold_pipeline(weather: pd.Series, year_energy_reference: float, config: ColdConfig) -> pd.DataFrame:
     """Calculate cold-related energy consumption based on weather data and configuration.
 
     Args:
