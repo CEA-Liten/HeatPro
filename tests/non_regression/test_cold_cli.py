@@ -1,13 +1,13 @@
 import pytest
 import pandas as pd
 from pathlib import Path
-from click.testing import CliRunner
-from heatpro.cli import cli
-from heatpro.cli.helpers import ReferenceCold
 
 
 @pytest.mark.cli
 def test_cold_command_1e8_year_energy_reference():
+    from heatpro.cli import cli
+    from click.testing import CliRunner
+
     # Define the input and output file paths
     weather_csv = "./tests/non_regression/data/weather_for_cold_cli.csv"
     output_csv = "./tests/non_regression/data/output.csv"
@@ -40,6 +40,10 @@ def test_cold_command_1e8_year_energy_reference():
 
 @pytest.mark.cli
 def test_cold_command_H1_year_energy_reference():
+    from heatpro.cli import cli
+    from heatpro.cli.helpers import ReferenceCold
+    from click.testing import CliRunner
+
     # Define the input and output file paths
     weather_csv = "./tests/non_regression/data/weather_for_cold_cli.csv"
     output_csv = "./tests/non_regression/data/output.csv"
