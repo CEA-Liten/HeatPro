@@ -6,6 +6,7 @@ from heatpro.cli import cli
 from heatpro.cli.helpers import ReferenceCold
 
 
+@pytest.mark.cli
 def test_cold_command_1e8_year_energy_reference():
     # Define the input and output file paths
     weather_csv = "./tests/non_regression/data/weather_for_cold_cli.csv"
@@ -37,6 +38,7 @@ def test_cold_command_1e8_year_energy_reference():
     Path(output_csv).unlink()
 
 
+@pytest.mark.cli
 def test_cold_command_H1_year_energy_reference():
     # Define the input and output file paths
     weather_csv = "./tests/non_regression/data/weather_for_cold_cli.csv"

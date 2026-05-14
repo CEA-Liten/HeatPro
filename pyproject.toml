@@ -61,3 +61,8 @@ line-length = 100
 
 [project.scripts]
 heatpro = "heatpro.cli:cli"
+
+[tool.pytest.ini_options]
+markers = [
+    "cli: mark a test as a CLI test",
+]

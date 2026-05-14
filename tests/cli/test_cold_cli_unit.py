@@ -3,6 +3,7 @@ import pandas as pd
 from heatpro.cli.cold import calculate_year_average_power
 
 
+@pytest.mark.cli
 def test_calculate_year_average_power():
     # Create a sample weather data series
     dates = pd.date_range(start="2021-01-01", end="2024", freq="h", inclusive="left")
