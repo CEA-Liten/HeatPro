@@ -279,6 +279,6 @@ def cold_pipeline(weather: pd.Series, year_energy_reference: float, config: Cold
         axis=1,
     )
     result["total_consumption_kW"] = result.loc[:, result.columns != weather.name].sum(axis=1)
-    result.index = weather.index.astype("int64") // 10**9  # 10**9 convert nanoseconde to second
+    result.index = weather.index.astype("datetime64[s]").astype("int64")
 
     return result
