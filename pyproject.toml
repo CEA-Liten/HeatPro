@@ -1,6 +1,6 @@
 [project]
 name = "heatpro"
-version = "0.3.1"
+version = "0.3.2"
 description = "Generate heat demand load profile for distict heating"
 authors = [
     { name = "Robinson Beaucour", email = "robinson.beaucour@cea.fr" },

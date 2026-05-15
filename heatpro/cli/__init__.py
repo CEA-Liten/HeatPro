@@ -8,12 +8,13 @@ from rich.logging import RichHandler
 from .cold import cold_pipeline, import_weather, ColdConfig, Repartition
 from .helpers import ReferenceCold
 from .plotting import cold_results
-from .. import SET_TEMPERATURE_COLD
+from .. import SET_TEMPERATURE_COLD, __version__
 
 CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])
 
 
 @click.group(context_settings=CONTEXT_SETTINGS)
+@click.version_option(__version__)
 def cli():
     """HeatPro"""
     pass
@@ -32,7 +33,7 @@ def validate_float_between_0_and_1(ctx, param, value):
 
     Returns:
         _type_: _description_
-    
+
     :meta private:
     """
     if value is None:
