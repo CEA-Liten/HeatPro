@@ -25,11 +25,12 @@ from ..cold.standard_profile import StandardProfile
 from ..felt_temperature import calculate_felt_temperature
 from ..week_profile import apply_week_profile
 
+
 def import_weather(weather_csv: Path) -> pd.Series:
     """Import weather data from a CSV file.
-    
+
     CSV should look like this (more columns are allow but will be ignored):
-    
+
     ::
 
         "timestamp_utc_num";"temperature";
@@ -57,45 +58,46 @@ def import_weather(weather_csv: Path) -> pd.Series:
     weather.index = pd.to_datetime(weather.index, unit="s")
     return weather
 
+
 def calculate_year_average_power(
     weather: pd.Series, year_energy_reference: float, set_temperature: float
 ) -> pd.Series:
     r"""Calculate the year average power based on weather data and a year energy reference.
-    
+
     Year energy reference will be the average year consumption over the all weather period
     given (it can be multiple years).
-    
+
     Mathematically, we define :math:`\mathcal{T}` datetime index from ``weather.index``,
-    :math:`T_{ext}^t` outdoor temperature from ``weather``, 
+    :math:`T_{ext}^t` outdoor temperature from ``weather``,
     :math:`E_{ref}` year energy reference from ``year_energy_reference``,
     :math:`T_{set}` cooling set temperature in buildings from ``set_temperature``,
-    
+
     We defined for a year math:`y \in \mathcal{T}` the average delta temperature during summer:
-    
+
     .. math::
-    
+
         \Delta^{(y)} = \frac{1}{|\text{summer of }y|}\sum_{t\in \text{summer of }y} ( T_{ext}^{(t)}-T_{set} ) _+
-    
+
     The higher this value, the higher will be the cold energy demand.
-    
+
     We calculate the average over ther year of the average delta temperature during summer:
-    
+
     .. math::
-    
+
         \Delta_{ref} = \frac{1}{\#\text{years in }\mathcal{T}}\sum_{y\in\mathcal{T}} \Delta^{(y)}
-    
+
     We can now estimate annual energy demand :math:`E^{(y)}` for each year :math:`y` using cross product:
-    
+
     .. math::
-    
+
         E^{(y)} = \frac{E_{ref}}{\Delta_{ref}} \cdot \Delta^{(y)}
-    
+
     On average yearly demand will be :math:`E_{ref}`.
-    
+
     Eventually, average yearly power is calculated and return:
-    
+
     .. math::
-    
+
         P^{(y)} = \frac{E^{(y)}}{|y|}
 
     Args:
@@ -127,6 +129,7 @@ def calculate_year_average_power(
         / weather.resample("YS").count()
     ).rename("year_average_power_kW")
 
+
 @dataclass
 class Repartition:
     """Class representing the repartition of values.
@@ -135,8 +138,10 @@ class Repartition:
         full_week (float): Value for full week. Defaults to 0.5.
         week_start (float): Value for week start. Defaults to 0.5.
     """
+
     full_week: float = 0.5
     week_start: float = 0.5
+
 
 @dataclass
 class ColdConfig:
@@ -153,6 +158,7 @@ class ColdConfig:
         ValueError: If the sum of profile values is not 1.0.
         ValueError: If temperature_sensitivity values are not between 0 and 1.
     """
+
     set_temperature: float = SET_TEMPERATURE_COLD
     loss: float = 0.2
     profile: Repartition = field(default_factory=Repartition)
@@ -167,7 +173,10 @@ class ColdConfig:
         if not (0 <= self.temperature_sensitivity.week_start <= 1):
             raise ValueError("temperature_sensitivity.week_start must be between 0 and 1")
 
-def cold_pipeline(weather: pd.Series, year_energy_reference: float, config: ColdConfig) -> pd.DataFrame:
+
+def cold_pipeline(
+    weather: pd.Series, year_energy_reference: float, config: ColdConfig
+) -> pd.DataFrame:
     """Calculate cold-related energy consumption based on weather data and configuration.
 
     Args:
