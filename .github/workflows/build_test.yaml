@@ -19,7 +19,7 @@ jobs:
         run: uv run  --group dev pytest -m "not cli"
       
       - name: Run CLI tests
-        run: uv run  --group dev --group cli pytest -m cli
+        run: uv run  --group dev --extra cli pytest -m cli
 
       - name: Test notebooks
         run: uv run --group dev --group notebook pytest --nbmake ./notebooks/
