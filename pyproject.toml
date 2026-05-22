@@ -1,6 +1,6 @@
 [project]
 name = "heatpro"
-version = "0.3.2"
+version = "0.3.3"
 description = "Generate heat demand load profile for distict heating"
 authors = [
     { name = "Robinson Beaucour", email = "robinson.beaucour@cea.fr" },
@@ -15,12 +15,15 @@ dependencies = [
     "plotly>=6.5.2",
 ]
 
-[dependency-groups]
+# Extras (installable via pip, e.g., pip install heatpro[cli])
+[project.optional-dependencies]
 cli = [
     "click>=8.3.3",
-    "plotly>=6.5.2",
     "rich>=15.0.0",
 ]
+
+# Poetry dependency groups (non-extra)
+[dependency-groups]
 dev = [
     "nbmake>=1.5.5",
     "pytest>=9.0.2",
@@ -36,7 +39,6 @@ notebook = [
     "ipykernel>=7.2.0",
     "nbconvert>=7.17.0",
     "nbformat>=5.10.4",
-    "plotly>=6.5.2",
 ]
 
 [tool.setuptools]
