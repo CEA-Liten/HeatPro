@@ -90,7 +90,6 @@ Cold
     :members:
     :undoc-members:
     :show-inheritance:
-    :no-index:
 
 .. _helpers-section:
 
@@ -100,7 +99,6 @@ Helpers
     :members:
     :undoc-members:
     :show-inheritance:
-    :no-index:
 
 Plotting
 --------
