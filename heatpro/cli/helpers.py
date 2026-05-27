@@ -12,7 +12,7 @@ class ReferenceCold(Enum):
 
     - H1: Strasbourg (43,920,000 kWh) - Typical temperatures: 7-14°C
     - H2: Bordeaux (60,480,000 kWh) - Typical temperatures: 7-14°C
-    - H3: Montpellier (80,640,000 kWh) - Typical temperatures: 7-14°C
+    - H3: Montpellier (102,240,000 kWh) - Typical temperatures: 7-14°C
 
     These climate zones represent different levels of cold energy demand based on
     geographical location and climate characteristics in France.
@@ -28,4 +28,4 @@ class ReferenceCold(Enum):
 
     H1 = 43_920_000
     H2 = 60_480_000
-    H3 = 80_640_000
+    H3 = 102_240_000
