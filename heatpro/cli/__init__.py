@@ -65,7 +65,7 @@ def validate_float_between_0_and_1(ctx, param, value):
     type=click.FLOAT,
     callback=validate_float_between_0_and_1,
     default=1 / 2,
-    help="Share of cold energy consummed following a full week activity profile",
+    help="Share of cold energy consumed following a full week activity profile",
 )
 @click.option(
     "-fwts",
@@ -73,7 +73,7 @@ def validate_float_between_0_and_1(ctx, param, value):
     type=click.FLOAT,
     callback=validate_float_between_0_and_1,
     default=1 / 2,
-    help="Share of cold energy within consumption associated to full week profile consummed in a temperature sensitive manner",
+    help="Share of cold energy within consumption associated to full week profile consumed in a temperature sensitive manner",
 )
 @click.option(
     "-wdts",
@@ -81,7 +81,7 @@ def validate_float_between_0_and_1(ctx, param, value):
     type=click.FLOAT,
     callback=validate_float_between_0_and_1,
     default=1 / 2,
-    help="Share of cold energy within consumption associated to low activity on weekend profile consummed in a temperature sensitive manner",
+    help="Share of cold energy within consumption associated to low activity on weekend profile consumed in a temperature sensitive manner",
 )
 @click.option("-start", "--date-start", default=None, help="date start")
 @click.option("-end", "--date-end", default=None, help="date end")
