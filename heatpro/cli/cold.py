@@ -136,11 +136,11 @@ class Repartition:
 
     Attributes:
         full_week (float): Value for full week. Defaults to 0.5.
-        week_start (float): Value for week start. Defaults to 0.5.
+        working_day (float): Value for working fay. Defaults to 0.5.
     """
 
     full_week: float = 0.5
-    week_start: float = 0.5
+    working_day: float = 0.5
 
 
 @dataclass
@@ -166,12 +166,12 @@ class ColdConfig:
 
     def __post_init__(self):
         """Post-initialization method to validate configuration."""
-        if not math.isclose(self.profile.full_week + self.profile.week_start, 1.0):
+        if not math.isclose(self.profile.full_week + self.profile.working_day, 1.0):
             raise ValueError("The sum of profile values must equal 1.0")
         if not (0 <= self.temperature_sensitivity.full_week <= 1):
             raise ValueError("temperature_sensitivity.full_week must be between 0 and 1")
-        if not (0 <= self.temperature_sensitivity.week_start <= 1):
-            raise ValueError("temperature_sensitivity.week_start must be between 0 and 1")
+        if not (0 <= self.temperature_sensitivity.working_day <= 1):
+            raise ValueError("temperature_sensitivity.working_day must be between 0 and 1")
 
 
 def cold_pipeline(
@@ -207,8 +207,8 @@ def cold_pipeline(
     working_day_baseload_year_average_power = (
         (
             year_average_power
-            * config.profile.week_start
-            * (1 - config.temperature_sensitivity.week_start)
+            * config.profile.working_day
+            * (1 - config.temperature_sensitivity.working_day)
         )
         .reindex(weather.index, method="ffill")
         .rename("working_day_baseload_year_average_power")
@@ -223,7 +223,7 @@ def cold_pipeline(
         .rename("full_week_baseload_year_average_power")
     )
     working_day_temperature_sensitive_year_average_power = (
-        (year_average_power * config.profile.week_start * config.temperature_sensitivity.week_start)
+        (year_average_power * config.profile.working_day * config.temperature_sensitivity.working_day)
         .reindex(weather.index, method="ffill")
         .rename("working_day_temperature_sensitive_year_average_power")
     )

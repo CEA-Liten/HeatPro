@@ -76,8 +76,8 @@ def validate_float_between_0_and_1(ctx, param, value):
     help="Share of cold energy within consumption associated to full week profile consummed in a temperature sensitive manner",
 )
 @click.option(
-    "-wets",
-    "--week-end-temperature-sensitivity",
+    "-wdts",
+    "--working-day-temperature-sensitivity",
     type=click.FLOAT,
     callback=validate_float_between_0_and_1,
     default=1 / 2,
@@ -95,7 +95,7 @@ def cold_cli(
     set_temperature,
     full_week_share,
     full_week_temperature_sensitivity,
-    week_end_temperature_sensitivity,
+    working_day_temperature_sensitivity,
     date_start,
     date_end,
     verbose,
@@ -114,7 +114,7 @@ def cold_cli(
         set_temperature,
         loss,
         Repartition(full_week_share, 1 - full_week_share),
-        Repartition(full_week_temperature_sensitivity, week_end_temperature_sensitivity),
+        Repartition(full_week_temperature_sensitivity, working_day_temperature_sensitivity),
     )
     try:
         year_energy_reference = float(year_energy_reference)
