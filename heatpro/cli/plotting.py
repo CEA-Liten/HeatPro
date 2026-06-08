@@ -18,7 +18,7 @@ def cold_results(weather: pd.Series, result: pd.DataFrame) -> go.Figure:
         go.Figure: A Plotly Figure object containing the visualization of cold consumption
             and outdoor temperature.
     """
-    daily_temperature = weather.resample("d").mean()
+    daily_temperature = weather.resample("D").mean()
     return go.Figure(
         [
             go.Scattergl(

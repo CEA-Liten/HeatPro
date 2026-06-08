@@ -74,7 +74,7 @@ def special_hot_water(
             hourly_hot_water_month_profile[WEIGHT_NAME_REQUIRED]
             * (temperature_hot_water - induced_factors["cold_water_temperature"])
         )
-        .resample("d")
+        .resample("D")
         .transform("sum")
         / (
             hourly_hot_water_month_profile[WEIGHT_NAME_REQUIRED]
@@ -97,7 +97,7 @@ def special_hot_water(
                 hourly_hot_water_month_profile["weight"]
                 * (temperature_hot_water - induced_factors["cold_water_temperature"])
             )
-            .resample("d")
+            .resample("D")
             .transform("sum")
             / (
                 hourly_hot_water_month_profile["weight"]
