@@ -138,7 +138,7 @@ def cold_cli(
         result = cold_pipeline(weather, year_energy_reference, cold_config)
 
     with console.status("[bold magenta]Exporting results...", spinner="bouncingBall"):
-        result.to_csv(Path(output_csv), sep=";", float_format="%.2f")
+        result.to_csv(Path(output_csv), sep=";", decimal=",", float_format="%.2f")
 
         if show:
             cold_results(weather, result).show()

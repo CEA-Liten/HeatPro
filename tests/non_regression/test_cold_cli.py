@@ -23,8 +23,8 @@ def test_cold_command_1e8_year_energy_reference():
     assert result.exit_code == 0
 
     # Read the output and reference files
-    output_df = pd.read_csv(output_csv, sep=";", index_col=0)
-    output_to_imitate_df = pd.read_csv(output_to_imitate_csv, sep=";", index_col=0)
+    output_df = pd.read_csv(output_csv, sep=";", decimal=",", index_col=0)
+    output_to_imitate_df = pd.read_csv(output_to_imitate_csv, sep=";", decimal=",", index_col=0)
 
     # Compare the dataframes
     pd.testing.assert_frame_equal(output_df, output_to_imitate_df, rtol=1e-2, atol=1e-2)
@@ -59,8 +59,8 @@ def test_cold_command_H1_year_energy_reference():
     assert result.exit_code == 0
 
     # Read the output and reference files
-    output_df = pd.read_csv(output_csv, sep=";", index_col=0)
-    output_to_imitate_df = pd.read_csv(output_to_imitate_csv, sep=";", index_col=0)
+    output_df = pd.read_csv(output_csv, sep=";", decimal=",", index_col=0)
+    output_to_imitate_df = pd.read_csv(output_to_imitate_csv, sep=";", decimal=",", index_col=0)
 
     # Compare the dataframes
     pd.testing.assert_frame_equal(output_df, output_to_imitate_df, rtol=1e-2, atol=1e-2)
