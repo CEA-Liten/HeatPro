@@ -1,4 +1,4 @@
-timestamp_utc_num;temperature;loss_year_average_power;working_day_baseload_year_average_power;full_week_baseload_year_average_power;working_day_temperature_sensitive_year_average_power;full_week_temperature_sensitive_year_average_power;total_consumption_kW
+timestamp_utc_num;temperature;loss_year_average_power;working_day_baseload_year_average_power;full_week_baseload_year_average_power;working_day_temperature_sensitive_year_average_power;full_week_temperature_sensitive_year_average_power;total_consumption_power
 1577836800;15,17;188,47;811,76;644,09;0,00;0,00;1644,33
 1577840400;15,17;188,47;811,76;644,09;0,00;0,00;1644,33
 1577844000;15,17;188,47;753,78;598,08;0,00;0,00;1540,34

@@ -287,7 +287,7 @@ def cold_pipeline(
         ),
         axis=1,
     )
-    result["total_consumption_kW"] = result.loc[:, result.columns != weather.name].sum(axis=1)
+    result["total_consumption_power"] = result.loc[:, result.columns != weather.name].sum(axis=1)
     result.index = weather.index.astype("datetime64[s]").astype("int64")
 
     return result

@@ -30,7 +30,7 @@ def test_cold_command_1e8_year_energy_reference():
     pd.testing.assert_frame_equal(output_df, output_to_imitate_df, rtol=1e-2, atol=1e-2)
 
     output_df.index = pd.to_datetime(output_df.index, unit="s")
-    assert output_df["total_consumption_kW"].resample("YS").sum().mean() == pytest.approx(
+    assert output_df["total_consumption_power"].resample("YS").sum().mean() == pytest.approx(
         1e8 * (1 + default_loss), rel=1e-4
     )
 
@@ -66,7 +66,7 @@ def test_cold_command_H1_year_energy_reference():
     pd.testing.assert_frame_equal(output_df, output_to_imitate_df, rtol=1e-2, atol=1e-2)
 
     output_df.index = pd.to_datetime(output_df.index, unit="s")
-    assert output_df["total_consumption_kW"].resample("YS").sum().mean() == pytest.approx(
+    assert output_df["total_consumption_power"].resample("YS").sum().mean() == pytest.approx(
         ReferenceCold.H1.value * (1 + default_loss), rel=1e-4
     )
 
