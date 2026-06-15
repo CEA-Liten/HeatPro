@@ -12,7 +12,7 @@ def cold_results(weather: pd.Series, result: pd.DataFrame) -> go.Figure:
     Args:
         weather (pd.Series): A pandas Series containing temperature data indexed by timestamp.
         result (pd.DataFrame): A pandas DataFrame containing cold consumption data with a
-            'total_consumption_kW' column.
+            'total_consumption_power' column.
 
     Returns:
         go.Figure: A Plotly Figure object containing the visualization of cold consumption
@@ -23,7 +23,7 @@ def cold_results(weather: pd.Series, result: pd.DataFrame) -> go.Figure:
         [
             go.Scattergl(
                 x=weather.index,
-                y=result["total_consumption_kW"],
+                y=result["total_consumption_power"],
                 name="Total cold consumption",
                 yaxis="y1",
             ),

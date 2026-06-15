@@ -199,11 +199,6 @@ def cold_pipeline(
     year_average_power = calculate_year_average_power(
         weather, year_energy_reference, config.set_temperature
     )
-    loss_year_average_power = (
-        (year_average_power * config.loss)
-        .reindex(weather.index, method="ffill")
-        .rename("loss_year_average_power")
-    )
     working_day_baseload_year_average_power = (
         (
             year_average_power
@@ -223,7 +218,11 @@ def cold_pipeline(
         .rename("full_week_baseload_year_average_power")
     )
     working_day_temperature_sensitive_year_average_power = (
-        (year_average_power * config.profile.working_day * config.temperature_sensitivity.working_day)
+        (
+            year_average_power
+            * config.profile.working_day
+            * config.temperature_sensitivity.working_day
+        )
         .reindex(weather.index, method="ffill")
         .rename("working_day_temperature_sensitive_year_average_power")
     )
@@ -279,7 +278,6 @@ def cold_pipeline(
     result = pd.concat(
         (
             weather,
-            loss_year_average_power,
             working_day_baseload_year_average_power_series,
             full_week_baseload_year_average_power_series,
             working_day_temperature_sensitive_year_average_power_series,
@@ -288,6 +286,24 @@ def cold_pipeline(
         axis=1,
     )
     result["total_consumption_power"] = result.loc[:, result.columns != weather.name].sum(axis=1)
+
+    loss_year_average_power = (
+        (year_average_power * config.loss)
+        .reindex(weather.index, method="ffill")
+        .rename("loss_year_average_power")
+    )
+    loss_power = (
+        (
+            loss_year_average_power
+            * (result["total_consumption_power"] > 0).astype(int)
+            / (result["total_consumption_power"] > 0).astype(int).resample("YS").transform("mean")
+        )
+        .fillna(0)
+        .rename("loss_power")
+    )
+    result.insert(1, loss_power.name, loss_power)
+    result["total_consumption_power"] += loss_power
+
     result.index = weather.index.astype("datetime64[s]").astype("int64")
 
     return result
