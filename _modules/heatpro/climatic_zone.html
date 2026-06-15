@@ -1,0 +1,160 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>heatpro.climatic_zone &mdash; HeatPro 0.3.5 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=ba50482b"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            HeatPro
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">About HeatPro:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../README.html">Make documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../authors.html">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../history.html">History</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Guide:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/simple_usage/simple_usage.html">Simple usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/detecting_heating_season/detecting_heating_season.html">Detecting Heating Season</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/usage/advanced_usage.html">Advanced usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/simple_usage/simple_cold_demand.html">Simple Cold Demand Usage</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/building_type.html">Building Type</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/check.html">Check</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/climatic_zone/climatic_zone.html">Climatic Zone</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/cli.html">Command Line Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/cold.html">Cold</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/demand_profile.html">Demand Profile</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/disaggregation.html">Disaggregation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/external_factors.html">External Factors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/felt_temperature.html">Felt Temperature</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/temporal_demand.html">Temporal Demand</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/special_hot_water/special_hot_water.html">Special Hot Water</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/week_profile.html">Standard Week Profile</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">HeatPro</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">heatpro.climatic_zone</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for heatpro.climatic_zone</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Module for defining climatic zones.&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span>
+
+
+<div class="viewcode-block" id="ClimaticZone">
+<a class="viewcode-back" href="../../modules/climatic_zone/climatic_zone.html#heatpro.climatic_zone.ClimaticZone">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ClimaticZone</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enumeration of different climatic zones.</span>
+
+<span class="sd">    This enum defines various climatic zones based on the French climate classification system.</span>
+<span class="sd">    Each zone represents a specific climate type that can be used in energy management systems.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        H1A: Represents a cold climate zone (H1a).</span>
+<span class="sd">        H1B: Represents a cold climate zone (H1b).</span>
+<span class="sd">        H1C: Represents a cold climate zone (H1c).</span>
+<span class="sd">        H2A: Represents a temperate climate zone (H2a).</span>
+<span class="sd">        H2B: Represents a temperate climate zone (H2b).</span>
+<span class="sd">        H2C: Represents a temperate climate zone (H2c).</span>
+<span class="sd">        H2D: Represents a temperate climate zone (H2d).</span>
+<span class="sd">        H3: Represents a hot climate zone (H3).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">H1A</span> <span class="o">=</span> <span class="s2">&quot;H1a&quot;</span>
+    <span class="n">H1B</span> <span class="o">=</span> <span class="s2">&quot;H1b&quot;</span>
+    <span class="n">H1C</span> <span class="o">=</span> <span class="s2">&quot;H1c&quot;</span>
+    <span class="n">H2A</span> <span class="o">=</span> <span class="s2">&quot;H2a&quot;</span>
+    <span class="n">H2B</span> <span class="o">=</span> <span class="s2">&quot;H2b&quot;</span>
+    <span class="n">H2C</span> <span class="o">=</span> <span class="s2">&quot;H2c&quot;</span>
+    <span class="n">H2D</span> <span class="o">=</span> <span class="s2">&quot;H2d&quot;</span>
+    <span class="n">H3</span> <span class="o">=</span> <span class="s2">&quot;H3&quot;</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, HeatPro.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,375 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cold &mdash; HeatPro 0.3.5 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=ba50482b"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Demand Profile" href="demand_profile.html" />
+    <link rel="prev" title="Command Line Interface" href="cli.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            HeatPro
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">About HeatPro:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../README.html">Make documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../authors.html">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../history.html">History</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Guide:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="simple_usage/simple_usage.html">Simple usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="detecting_heating_season/detecting_heating_season.html">Detecting Heating Season</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage/advanced_usage.html">Advanced usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simple_usage/simple_cold_demand.html">Simple Cold Demand Usage</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Documentation:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="building_type.html">Building Type</a></li>
+<li class="toctree-l1"><a class="reference internal" href="check.html">Check</a></li>
+<li class="toctree-l1"><a class="reference internal" href="climatic_zone/climatic_zone.html">Climatic Zone</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command Line Interface</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Cold</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-heatpro.cold.distribution">Demand Hourly distribution</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#heatpro.cold.distribution.month_to_hour_outdoor_temperarure_distribution"><code class="docutils literal notranslate"><span class="pre">month_to_hour_outdoor_temperarure_distribution()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#heatpro.cold.distribution.year_to_hour_outdoor_temperarure_distribution"><code class="docutils literal notranslate"><span class="pre">year_to_hour_outdoor_temperarure_distribution()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-heatpro.cold.needs">Needs Calculation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#heatpro.cold.needs.calculate_year_cold_needs"><code class="docutils literal notranslate"><span class="pre">calculate_year_cold_needs()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-heatpro.cold.standard_profile">Standard Weekly Profile</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#heatpro.cold.standard_profile.StandardProfile"><code class="docutils literal notranslate"><span class="pre">StandardProfile</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#heatpro.cold.standard_profile.StandardProfile.STEP_WORKING_DAY"><code class="docutils literal notranslate"><span class="pre">StandardProfile.STEP_WORKING_DAY</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#heatpro.cold.standard_profile.StandardProfile.STEP_FULL_WEEK"><code class="docutils literal notranslate"><span class="pre">StandardProfile.STEP_FULL_WEEK</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#heatpro.cold.standard_profile.StandardProfile.FULL_WEEK"><code class="docutils literal notranslate"><span class="pre">StandardProfile.FULL_WEEK</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id0"><code class="docutils literal notranslate"><span class="pre">StandardProfile.STEP_FULL_WEEK</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id2"><code class="docutils literal notranslate"><span class="pre">StandardProfile.STEP_WORKING_DAY</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#heatpro.cold.standard_profile.StandardProfile.WORKING_DAY"><code class="docutils literal notranslate"><span class="pre">StandardProfile.WORKING_DAY</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#heatpro.cold.standard_profile.WeekProfile"><code class="docutils literal notranslate"><span class="pre">WeekProfile</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#heatpro.cold.standard_profile.WeekProfile.description"><code class="docutils literal notranslate"><span class="pre">WeekProfile.description</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#heatpro.cold.standard_profile.WeekProfile.function"><code class="docutils literal notranslate"><span class="pre">WeekProfile.function</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id3"><code class="docutils literal notranslate"><span class="pre">WeekProfile.description</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id4"><code class="docutils literal notranslate"><span class="pre">WeekProfile.function</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#heatpro.cold.standard_profile.WeekProfile.week_series_example"><code class="docutils literal notranslate"><span class="pre">WeekProfile.week_series_example</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="demand_profile.html">Demand Profile</a></li>
+<li class="toctree-l1"><a class="reference internal" href="disaggregation.html">Disaggregation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="external_factors.html">External Factors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="felt_temperature.html">Felt Temperature</a></li>
+<li class="toctree-l1"><a class="reference internal" href="temporal_demand.html">Temporal Demand</a></li>
+<li class="toctree-l1"><a class="reference internal" href="special_hot_water/special_hot_water.html">Special Hot Water</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week_profile.html">Standard Week Profile</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">HeatPro</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Cold</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/modules/cold.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="cold">
+<span id="id1"></span><h1><a class="toc-backref" href="#id5" role="doc-backlink">Cold</a><a class="headerlink" href="#cold" title="Link to this heading"></a></h1>
+<nav class="contents" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#cold" id="id5">Cold</a></p>
+<ul>
+<li><p><a class="reference internal" href="#module-heatpro.cold.distribution" id="id6">Demand Hourly distribution</a></p></li>
+<li><p><a class="reference internal" href="#module-heatpro.cold.needs" id="id7">Needs Calculation</a></p></li>
+<li><p><a class="reference internal" href="#module-heatpro.cold.standard_profile" id="id8">Standard Weekly Profile</a></p></li>
+</ul>
+</li>
+</ul>
+</nav>
+<section id="module-heatpro.cold.distribution">
+<span id="demand-hourly-distribution"></span><h2><a class="toc-backref" href="#id6" role="doc-backlink">Demand Hourly distribution</a><a class="headerlink" href="#module-heatpro.cold.distribution" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="heatpro.cold.distribution.month_to_hour_outdoor_temperarure_distribution">
+<span class="sig-prename descclassname"><span class="pre">heatpro.cold.distribution.</span></span><span class="sig-name descname"><span class="pre">month_to_hour_outdoor_temperarure_distribution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">monthly_power_cold_demand</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">felt_temperature</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weigths</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">set_temperature</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">22</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Series</span></span></span><a class="reference internal" href="../_modules/heatpro/cold/distribution.html#month_to_hour_outdoor_temperarure_distribution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#heatpro.cold.distribution.month_to_hour_outdoor_temperarure_distribution" title="Link to this definition"></a></dt>
+<dd><p>Disaggregate monthly cold demand to hourly values based on outdoor temperature.</p>
+<p>This function takes monthly cold demand data and distributes it hourly based on outdoor
+temperature, considering a set temperature threshold. It accounts for temperature
+differences above the set threshold and applies optional weights.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>monthly_power_cold_demand</strong> (<em>pd.Series</em>) – Monthly cold demand values with datetime index.</p></li>
+<li><p><strong>felt_temperature</strong> (<em>pd.Series</em>) – Outdoor temperature values with datetime index.</p></li>
+<li><p><strong>weigths</strong> (<em>pd.Series</em><em>, </em><em>optional</em>) – Optional weights for temperature adjustment.
+Defaults to None (equal weights).</p></li>
+<li><p><strong>set_temperature</strong> (<em>float</em><em>, </em><em>optional</em>) – Temperature threshold below which no cold demand
+is considered. Defaults to SET_TEMPERATURE_COLD (22°C).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If weights and felt_temperature have different indices.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Hourly disaggregated cold demand with datetime index.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>pd.Series</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="heatpro.cold.distribution.year_to_hour_outdoor_temperarure_distribution">
+<span class="sig-prename descclassname"><span class="pre">heatpro.cold.distribution.</span></span><span class="sig-name descname"><span class="pre">year_to_hour_outdoor_temperarure_distribution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">yearly_power_cold_demand</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">felt_temperature</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weigths</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">set_temperature</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">22</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Series</span></span></span><a class="reference internal" href="../_modules/heatpro/cold/distribution.html#year_to_hour_outdoor_temperarure_distribution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#heatpro.cold.distribution.year_to_hour_outdoor_temperarure_distribution" title="Link to this definition"></a></dt>
+<dd><p>Disaggregate yearly cold demand to hourly values based on outdoor temperature.</p>
+<p>This function takes yearly cold demand data and distributes it hourly based on outdoor
+temperature, considering a set temperature threshold. It accounts for temperature
+differences above the set threshold and applies optional weights.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>yearly_power_cold_demand</strong> (<em>pd.Series</em>) – Yearly cold demand values with datetime index.</p></li>
+<li><p><strong>felt_temperature</strong> (<em>pd.Series</em>) – Outdoor temperature values with datetime index.</p></li>
+<li><p><strong>weigths</strong> (<em>pd.Series</em><em>, </em><em>optional</em>) – Optional weights for temperature adjustment.
+Defaults to None (equal weights).</p></li>
+<li><p><strong>set_temperature</strong> (<em>float</em><em>, </em><em>optional</em>) – Temperature threshold below which no cold demand
+is considered. Defaults to SET_TEMPERATURE_COLD (22°C).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If weights and felt_temperature have different indices.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Hourly disaggregated cold demand with datetime index.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>pd.Series</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-heatpro.cold.needs">
+<span id="needs-calculation"></span><h2><a class="toc-backref" href="#id7" role="doc-backlink">Needs Calculation</a><a class="headerlink" href="#module-heatpro.cold.needs" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="heatpro.cold.needs.calculate_year_cold_needs">
+<span class="sig-prename descclassname"><span class="pre">heatpro.cold.needs.</span></span><span class="sig-name descname"><span class="pre">calculate_year_cold_needs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">building_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="building_type.html#heatpro.building_type.BuildingType" title="heatpro.building_type.BuildingType"><span class="pre">BuildingType</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">climatic_zone</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="climatic_zone/climatic_zone.html#heatpro.climatic_zone.ClimaticZone" title="heatpro.climatic_zone.ClimaticZone"><span class="pre">ClimaticZone</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">surface</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/heatpro/cold/needs.html#calculate_year_cold_needs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#heatpro.cold.needs.calculate_year_cold_needs" title="Link to this definition"></a></dt>
+<dd><p>Calculate the annual cold needs for a building based on its type, climatic zone, and surface area.</p>
+<p>This function calculates the annual cold needs by multiplying the specific cold needs
+for the given building type and climatic zone by the building’s surface area.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>building_type</strong> (<a class="reference internal" href="building_type.html#heatpro.building_type.BuildingType" title="heatpro.building_type.BuildingType"><em>BuildingType</em></a>) – The type of building (e.g., residential, commercial).</p></li>
+<li><p><strong>climatic_zone</strong> (<a class="reference internal" href="climatic_zone/climatic_zone.html#heatpro.climatic_zone.ClimaticZone" title="heatpro.climatic_zone.ClimaticZone"><em>ClimaticZone</em></a>) – The climatic zone where the building is located.</p></li>
+<li><p><strong>surface</strong> (<em>float</em>) – The surface area of the building in square meters.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The annual cold needs in kilowatt-hours (kWh) for the building.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-heatpro.cold.standard_profile">
+<span id="standard-weekly-profile"></span><h2><a class="toc-backref" href="#id8" role="doc-backlink">Standard Weekly Profile</a><a class="headerlink" href="#module-heatpro.cold.standard_profile" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="heatpro.cold.standard_profile.StandardProfile">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">heatpro.cold.standard_profile.</span></span><span class="sig-name descname"><span class="pre">StandardProfile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/heatpro/cold/standard_profile.html#StandardProfile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#heatpro.cold.standard_profile.StandardProfile" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<p>An enumeration of standard weekly consumption profiles.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="heatpro.cold.standard_profile.StandardProfile.STEP_WORKING_DAY">
+<span class="sig-name descname"><span class="pre">STEP_WORKING_DAY</span></span><a class="headerlink" href="#heatpro.cold.standard_profile.StandardProfile.STEP_WORKING_DAY" title="Link to this definition"></a></dt>
+<dd><p>Profile with step consumption only on working days.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#heatpro.cold.standard_profile.WeekProfile" title="heatpro.cold.standard_profile.WeekProfile">WeekProfile</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="heatpro.cold.standard_profile.StandardProfile.STEP_FULL_WEEK">
+<span class="sig-name descname"><span class="pre">STEP_FULL_WEEK</span></span><a class="headerlink" href="#heatpro.cold.standard_profile.StandardProfile.STEP_FULL_WEEK" title="Link to this definition"></a></dt>
+<dd><p>Profile with step consumption all week long.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#heatpro.cold.standard_profile.WeekProfile" title="heatpro.cold.standard_profile.WeekProfile">WeekProfile</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="heatpro.cold.standard_profile.StandardProfile.FULL_WEEK">
+<span class="sig-name descname"><span class="pre">FULL_WEEK</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">WeekProfile(description='Weekly</span> <span class="pre">consumption</span> <span class="pre">profile</span> <span class="pre">with</span> <span class="pre">consumption</span> <span class="pre">during</span> <span class="pre">working</span> <span class="pre">hours\nall</span> <span class="pre">week</span> <span class="pre">long.\n\n</span>&#160;&#160;&#160; <span class="pre">This</span> <span class="pre">profile</span> <span class="pre">is</span> <span class="pre">well</span> <span class="pre">adapted</span> <span class="pre">for</span> <span class="pre">buildings</span> <span class="pre">in</span> <span class="pre">operation</span> <span class="pre">all</span> <span class="pre">week</span> <span class="pre">long\n</span>&#160;&#160;&#160; <span class="pre">such</span> <span class="pre">as</span> <span class="pre">EPHAD,</span> <span class="pre">hospitals,</span> <span class="pre">shops,</span> <span class="pre">and</span> <span class="pre">hotels.\n</span>&#160;&#160;&#160; <span class="pre">Source:</span> <span class="pre">https://www.npro.energy/main/en/load-profiles/shopping-center',</span> <span class="pre">function=&lt;function</span> <span class="pre">&lt;lambda&gt;&gt;)</span></span><a class="headerlink" href="#heatpro.cold.standard_profile.StandardProfile.FULL_WEEK" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">STEP_FULL_WEEK</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">WeekProfile(description='Weekly</span> <span class="pre">consumption</span> <span class="pre">profile</span> <span class="pre">with</span> <span class="pre">step</span> <span class="pre">consumption</span> <span class="pre">during</span> <span class="pre">working</span> <span class="pre">hours\nall</span> <span class="pre">week</span> <span class="pre">long.\n\n</span>&#160;&#160;&#160; <span class="pre">This</span> <span class="pre">profile</span> <span class="pre">is</span> <span class="pre">adapted</span> <span class="pre">for</span> <span class="pre">buildings</span> <span class="pre">in</span> <span class="pre">operation</span> <span class="pre">all</span> <span class="pre">week</span> <span class="pre">long\n</span>&#160;&#160;&#160; <span class="pre">such</span> <span class="pre">as</span> <span class="pre">EPHAD,</span> <span class="pre">hospitals,</span> <span class="pre">shops,</span> <span class="pre">and</span> <span class="pre">hotels.',</span> <span class="pre">function=&lt;function</span> <span class="pre">smooth_step_night_reduction_week_profile.&lt;locals&gt;.week_profile&gt;)</span></span><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id2">
+<span class="sig-name descname"><span class="pre">STEP_WORKING_DAY</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">WeekProfile(description='Weekly</span> <span class="pre">consumption</span> <span class="pre">profile</span> <span class="pre">with</span> <span class="pre">consumption</span> <span class="pre">during</span> <span class="pre">working</span> <span class="pre">hours\nonly</span> <span class="pre">on</span> <span class="pre">working</span> <span class="pre">days.\n\n</span>&#160;&#160;&#160; <span class="pre">This</span> <span class="pre">profile</span> <span class="pre">is</span> <span class="pre">adapted</span> <span class="pre">for</span> <span class="pre">tertiary</span> <span class="pre">buildings</span> <span class="pre">without</span> <span class="pre">weekend</span> <span class="pre">activities\n</span>&#160;&#160;&#160; <span class="pre">such</span> <span class="pre">as</span> <span class="pre">schools,</span> <span class="pre">offices,</span> <span class="pre">and</span> <span class="pre">administrations.',</span> <span class="pre">function=&lt;function</span> <span class="pre">smooth_step_night_reduction_week_profile.&lt;locals&gt;.week_profile&gt;)</span></span><a class="headerlink" href="#id2" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="heatpro.cold.standard_profile.StandardProfile.WORKING_DAY">
+<span class="sig-name descname"><span class="pre">WORKING_DAY</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">WeekProfile(description='Weekly</span> <span class="pre">consumption</span> <span class="pre">profile</span> <span class="pre">with</span> <span class="pre">consumption</span> <span class="pre">during</span> <span class="pre">working</span> <span class="pre">hours\nonly</span> <span class="pre">on</span> <span class="pre">working</span> <span class="pre">days.\n\n</span>&#160;&#160;&#160; <span class="pre">This</span> <span class="pre">profile</span> <span class="pre">is</span> <span class="pre">well</span> <span class="pre">adapted</span> <span class="pre">for</span> <span class="pre">tertiary</span> <span class="pre">buildings</span> <span class="pre">without</span> <span class="pre">weekend</span> <span class="pre">activities\n</span>&#160;&#160;&#160; <span class="pre">such</span> <span class="pre">as</span> <span class="pre">schools,</span> <span class="pre">offices,</span> <span class="pre">and</span> <span class="pre">administrations.\n</span>&#160;&#160;&#160; <span class="pre">Source:</span> <span class="pre">https://www.npro.energy/main/en/load-profiles/office',</span> <span class="pre">function=&lt;function</span> <span class="pre">&lt;lambda&gt;&gt;)</span></span><a class="headerlink" href="#heatpro.cold.standard_profile.StandardProfile.WORKING_DAY" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="heatpro.cold.standard_profile.WeekProfile">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">heatpro.cold.standard_profile.</span></span><span class="sig-name descname"><span class="pre">WeekProfile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">function</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/heatpro/cold/standard_profile.html#WeekProfile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#heatpro.cold.standard_profile.WeekProfile" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A class representing a weekly consumption profile.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="heatpro.cold.standard_profile.WeekProfile.description">
+<span class="sig-name descname"><span class="pre">description</span></span><a class="headerlink" href="#heatpro.cold.standard_profile.WeekProfile.description" title="Link to this definition"></a></dt>
+<dd><p>A description of the profile.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="heatpro.cold.standard_profile.WeekProfile.function">
+<span class="sig-name descname"><span class="pre">function</span></span><a class="headerlink" href="#heatpro.cold.standard_profile.WeekProfile.function" title="Link to this definition"></a></dt>
+<dd><p>A function that calculates the profile value
+for a given day of the week and hour of the day.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Callable[[int, int], float]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id3">
+<span class="sig-name descname"><span class="pre">description</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#id3" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id4">
+<span class="sig-name descname"><span class="pre">function</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#id4" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="heatpro.cold.standard_profile.WeekProfile.week_series_example">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">week_series_example</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Series</span></span><a class="headerlink" href="#heatpro.cold.standard_profile.WeekProfile.week_series_example" title="Link to this definition"></a></dt>
+<dd><p>Returns an example series of the weekly profile.</p>
+<p>This property generates a pandas Series representing the weekly profile
+for one week starting from Monday (2025-01-06).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A series with datetime index and profile values.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>pd.Series</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="cli.html" class="btn btn-neutral float-left" title="Command Line Interface" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="demand_profile.html" class="btn btn-neutral float-right" title="Demand Profile" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, HeatPro.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,451 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>heatpro.cli.cold &mdash; HeatPro 0.3.5 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=ba50482b"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            HeatPro
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">About HeatPro:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../README.html">Make documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../authors.html">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../history.html">History</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Guide:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/simple_usage/simple_usage.html">Simple usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/detecting_heating_season/detecting_heating_season.html">Detecting Heating Season</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/usage/advanced_usage.html">Advanced usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/simple_usage/simple_cold_demand.html">Simple Cold Demand Usage</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/building_type.html">Building Type</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/check.html">Check</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/climatic_zone/climatic_zone.html">Climatic Zone</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/cli.html">Command Line Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/cold.html">Cold</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/demand_profile.html">Demand Profile</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/disaggregation.html">Disaggregation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/external_factors.html">External Factors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/felt_temperature.html">Felt Temperature</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/temporal_demand.html">Temporal Demand</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/special_hot_water/special_hot_water.html">Special Hot Water</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/week_profile.html">Standard Week Profile</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">HeatPro</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">heatpro.cli.cold</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for heatpro.cli.cold</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Cold module for calculating cold-related energy consumption.</span>
+
+<span class="sd">This module provides functionality to calculate cold-related energy consumption</span>
+<span class="sd">based on weather data and configuration parameters. It includes functions for</span>
+<span class="sd">importing weather data, calculating year average power, and applying cold</span>
+<span class="sd">configuration to generate consumption data.</span>
+
+<span class="sd">The module uses pandas for data manipulation and analysis, and includes</span>
+<span class="sd">functions for calculating felt temperature and applying week profiles to the data.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">..</span><span class="w"> </span><span class="kn">import</span> <span class="n">COLD_OPERATING_MONTHS</span><span class="p">,</span> <span class="n">SET_TEMPERATURE_COLD</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..cold.distribution</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">year_to_hour_outdoor_temperarure_distribution</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">..cold.standard_profile</span><span class="w"> </span><span class="kn">import</span> <span class="n">StandardProfile</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..felt_temperature</span><span class="w"> </span><span class="kn">import</span> <span class="n">calculate_felt_temperature</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..week_profile</span><span class="w"> </span><span class="kn">import</span> <span class="n">apply_week_profile</span>
+
+
+<div class="viewcode-block" id="import_weather">
+<a class="viewcode-back" href="../../../modules/cli.html#heatpro.cli.cold.import_weather">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">import_weather</span><span class="p">(</span><span class="n">weather_csv</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Import weather data from a CSV file.</span>
+
+<span class="sd">    CSV should look like this (more columns are allow but will be ignored):</span>
+
+<span class="sd">    ::</span>
+
+<span class="sd">        &quot;timestamp_utc_num&quot;;&quot;temperature&quot;;</span>
+<span class="sd">        978307200;5,1</span>
+<span class="sd">        978310800;5,1</span>
+<span class="sd">        978314400;5</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        weather_csv (Path): Path to the CSV file containing weather data.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        pd.Series: A pandas Series containing temperature (°C) at hourly frequency data indexed by timestamp.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; weather_data = import_weather(Path(&quot;./data/weather_data.csv&quot;))</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">weather</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
+        <span class="n">weather_csv</span><span class="p">,</span>
+        <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;;&quot;</span><span class="p">,</span>
+        <span class="n">index_col</span><span class="o">=</span><span class="s2">&quot;timestamp_utc_num&quot;</span><span class="p">,</span>
+        <span class="n">usecols</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;timestamp_utc_num&quot;</span><span class="p">,</span> <span class="s2">&quot;temperature&quot;</span><span class="p">],</span>
+        <span class="n">dtype</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;temperature&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">},</span>
+        <span class="n">decimal</span><span class="o">=</span><span class="s2">&quot;,&quot;</span><span class="p">,</span>
+    <span class="p">)[</span><span class="s2">&quot;temperature&quot;</span><span class="p">]</span>
+    <span class="n">weather</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">weather</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s2">&quot;s&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">weather</span></div>
+
+
+
+<div class="viewcode-block" id="calculate_year_average_power">
+<a class="viewcode-back" href="../../../modules/cli.html#heatpro.cli.cold.calculate_year_average_power">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_year_average_power</span><span class="p">(</span>
+    <span class="n">weather</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">,</span> <span class="n">year_energy_reference</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">set_temperature</span><span class="p">:</span> <span class="nb">float</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Calculate the year average power based on weather data and a year energy reference.</span>
+
+<span class="sd">    Year energy reference will be the average year consumption over the all weather period</span>
+<span class="sd">    given (it can be multiple years).</span>
+
+<span class="sd">    Mathematically, we define :math:`\mathcal{T}` datetime index from ``weather.index``,</span>
+<span class="sd">    :math:`T_{ext}^t` outdoor temperature from ``weather``,</span>
+<span class="sd">    :math:`E_{ref}` year energy reference from ``year_energy_reference``,</span>
+<span class="sd">    :math:`T_{set}` cooling set temperature in buildings from ``set_temperature``,</span>
+
+<span class="sd">    We defined for a year math:`y \in \mathcal{T}` the average delta temperature during summer:</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \Delta^{(y)} = \frac{1}{|\text{summer of }y|}\sum_{t\in \text{summer of }y} ( T_{ext}^{(t)}-T_{set} ) _+</span>
+
+<span class="sd">    The higher this value, the higher will be the cold energy demand.</span>
+
+<span class="sd">    We calculate the average over ther year of the average delta temperature during summer:</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \Delta_{ref} = \frac{1}{\#\text{years in }\mathcal{T}}\sum_{y\in\mathcal{T}} \Delta^{(y)}</span>
+
+<span class="sd">    We can now estimate annual energy demand :math:`E^{(y)}` for each year :math:`y` using cross product:</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        E^{(y)} = \frac{E_{ref}}{\Delta_{ref}} \cdot \Delta^{(y)}</span>
+
+<span class="sd">    On average yearly demand will be :math:`E_{ref}`.</span>
+
+<span class="sd">    Eventually, average yearly power is calculated and return:</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        P^{(y)} = \frac{E^{(y)}}{|y|}</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        weather (pd.Series): A pandas Series containing temperature data.</span>
+<span class="sd">        year_energy_reference (float): Reference energy value for the year.</span>
+<span class="sd">        set_temperature (float): Set temperature for cold calculation.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        pd.Series: A pandas Series containing the calculated year average power.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; year_avg_power = calculate_year_average_power(weather_data, 1000.0, 18.0)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">reference_delta_temperature</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">(</span><span class="n">weather</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">weather</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">month</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">COLD_OPERATING_MONTHS</span><span class="p">)]</span> <span class="o">-</span> <span class="n">set_temperature</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="s2">&quot;YS&quot;</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+        <span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+    <span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">reference_delta_temperature</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="p">(</span><span class="n">weather</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">weather</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">month</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">COLD_OPERATING_MONTHS</span><span class="p">)]</span> <span class="o">-</span> <span class="n">set_temperature</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="s2">&quot;YS&quot;</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+        <span class="o">/</span> <span class="n">reference_delta_temperature</span>
+        <span class="o">*</span> <span class="n">year_energy_reference</span>
+        <span class="o">/</span> <span class="n">weather</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="s2">&quot;YS&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s2">&quot;year_average_power_kW&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="Repartition">
+<a class="viewcode-back" href="../../../modules/cli.html#heatpro.cli.cold.Repartition">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Repartition</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class representing the repartition of values.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        full_week (float): Value for full week. Defaults to 0.5.</span>
+<span class="sd">        working_day (float): Value for working fay. Defaults to 0.5.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">full_week</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span>
+    <span class="n">working_day</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span></div>
+
+
+
+<div class="viewcode-block" id="ColdConfig">
+<a class="viewcode-back" href="../../../modules/cli.html#heatpro.cli.cold.ColdConfig">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ColdConfig</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Configuration class for cold calculations.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        set_temperature (float): Set temperature for cold calculation.</span>
+<span class="sd">        loss (float): Loss factor. Defaults to 0.2.</span>
+<span class="sd">        profile (Repartition): Repartition profile. Defaults to Repartition().</span>
+<span class="sd">        temperature_sensitivity (Repartition): Temperature sensitivity profile.</span>
+<span class="sd">            Defaults to Repartition().</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If the sum of profile values is not 1.0.</span>
+<span class="sd">        ValueError: If temperature_sensitivity values are not between 0 and 1.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">set_temperature</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">SET_TEMPERATURE_COLD</span>
+    <span class="n">loss</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.2</span>
+    <span class="n">profile</span><span class="p">:</span> <span class="n">Repartition</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">Repartition</span><span class="p">)</span>
+    <span class="n">temperature_sensitivity</span><span class="p">:</span> <span class="n">Repartition</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">Repartition</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Post-initialization method to validate configuration.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">math</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">profile</span><span class="o">.</span><span class="n">full_week</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">profile</span><span class="o">.</span><span class="n">working_day</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The sum of profile values must equal 1.0&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">temperature_sensitivity</span><span class="o">.</span><span class="n">full_week</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;temperature_sensitivity.full_week must be between 0 and 1&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">temperature_sensitivity</span><span class="o">.</span><span class="n">working_day</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;temperature_sensitivity.working_day must be between 0 and 1&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="cold_pipeline">
+<a class="viewcode-back" href="../../../modules/cli.html#heatpro.cli.cold.cold_pipeline">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">cold_pipeline</span><span class="p">(</span>
+    <span class="n">weather</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">,</span> <span class="n">year_energy_reference</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">ColdConfig</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate cold-related energy consumption based on weather data and configuration.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        weather (pd.Series): A pandas Series containing temperature data.</span>
+<span class="sd">        year_energy_reference (float): Reference energy value for the year.</span>
+<span class="sd">        config (ColdConfig): Configuration object for cold calculations.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        pd.DataFrame: A pandas DataFrame containing the calculated cold-related consumption.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; config = ColdConfig(set_temperature=18.0)</span>
+<span class="sd">        &gt;&gt;&gt; consumption_data = cold_cli(weather_data, 1000.0, config)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;weather series description:</span><span class="se">\n</span><span class="si">{</span><span class="n">weather</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;weather series index:</span><span class="se">\n</span><span class="s2"> - start : </span><span class="si">{</span><span class="n">weather</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">}</span><span class="se">\n</span><span class="s2"> - end : </span><span class="si">{</span><span class="n">weather</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="p">)</span>
+
+    <span class="n">year_average_power</span> <span class="o">=</span> <span class="n">calculate_year_average_power</span><span class="p">(</span>
+        <span class="n">weather</span><span class="p">,</span> <span class="n">year_energy_reference</span><span class="p">,</span> <span class="n">config</span><span class="o">.</span><span class="n">set_temperature</span>
+    <span class="p">)</span>
+    <span class="n">working_day_baseload_year_average_power</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">(</span>
+            <span class="n">year_average_power</span>
+            <span class="o">*</span> <span class="n">config</span><span class="o">.</span><span class="n">profile</span><span class="o">.</span><span class="n">working_day</span>
+            <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">config</span><span class="o">.</span><span class="n">temperature_sensitivity</span><span class="o">.</span><span class="n">working_day</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="n">weather</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;ffill&quot;</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s2">&quot;working_day_baseload_year_average_power&quot;</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">full_week_baseload_year_average_power</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">(</span>
+            <span class="n">year_average_power</span>
+            <span class="o">*</span> <span class="n">config</span><span class="o">.</span><span class="n">profile</span><span class="o">.</span><span class="n">full_week</span>
+            <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">config</span><span class="o">.</span><span class="n">temperature_sensitivity</span><span class="o">.</span><span class="n">full_week</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="n">weather</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;ffill&quot;</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s2">&quot;full_week_baseload_year_average_power&quot;</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">working_day_temperature_sensitive_year_average_power</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">(</span>
+            <span class="n">year_average_power</span>
+            <span class="o">*</span> <span class="n">config</span><span class="o">.</span><span class="n">profile</span><span class="o">.</span><span class="n">working_day</span>
+            <span class="o">*</span> <span class="n">config</span><span class="o">.</span><span class="n">temperature_sensitivity</span><span class="o">.</span><span class="n">working_day</span>
+        <span class="p">)</span>
+        <span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="n">weather</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;ffill&quot;</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s2">&quot;working_day_temperature_sensitive_year_average_power&quot;</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">full_week_temperature_sensitive_year_average_power</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">(</span><span class="n">year_average_power</span> <span class="o">*</span> <span class="n">config</span><span class="o">.</span><span class="n">profile</span><span class="o">.</span><span class="n">full_week</span> <span class="o">*</span> <span class="n">config</span><span class="o">.</span><span class="n">temperature_sensitivity</span><span class="o">.</span><span class="n">full_week</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="n">weather</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;ffill&quot;</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s2">&quot;full_week_temperature_sensitive_year_average_power&quot;</span><span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="n">felt_temperature</span> <span class="o">=</span> <span class="n">calculate_felt_temperature</span><span class="p">(</span><span class="n">weather</span><span class="p">)</span>
+
+    <span class="n">operating_season</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span>
+        <span class="n">weather</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">month</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">COLD_OPERATING_MONTHS</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">),</span>
+        <span class="n">index</span><span class="o">=</span><span class="n">weather</span><span class="o">.</span><span class="n">index</span><span class="p">,</span>
+        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;operating_season&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">full_week_profile_weigths</span> <span class="o">=</span> <span class="n">apply_week_profile</span><span class="p">(</span>
+        <span class="n">weather</span><span class="o">.</span><span class="n">index</span><span class="p">,</span>
+        <span class="k">lambda</span> <span class="n">day</span><span class="p">,</span> <span class="n">hour</span><span class="p">:</span> <span class="n">StandardProfile</span><span class="o">.</span><span class="n">FULL_WEEK</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">function</span><span class="p">(</span><span class="n">day</span><span class="p">,</span> <span class="n">hour</span><span class="p">),</span>
+    <span class="p">)</span>
+    <span class="n">working_day_profile_weigths</span> <span class="o">=</span> <span class="n">apply_week_profile</span><span class="p">(</span>
+        <span class="n">weather</span><span class="o">.</span><span class="n">index</span><span class="p">,</span>
+        <span class="k">lambda</span> <span class="n">day</span><span class="p">,</span> <span class="n">hour</span><span class="p">:</span> <span class="n">StandardProfile</span><span class="o">.</span><span class="n">WORKING_DAY</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">function</span><span class="p">(</span><span class="n">day</span><span class="p">,</span> <span class="n">hour</span><span class="p">),</span>
+    <span class="p">)</span>
+
+    <span class="n">full_week_baseload_year_average_power_series</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">full_week_baseload_year_average_power</span>
+        <span class="o">*</span> <span class="n">full_week_profile_weigths</span>
+        <span class="o">/</span> <span class="n">full_week_profile_weigths</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">full_week_baseload_year_average_power</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+    <span class="n">working_day_baseload_year_average_power_series</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">working_day_baseload_year_average_power</span>
+        <span class="o">*</span> <span class="n">working_day_profile_weigths</span>
+        <span class="o">/</span> <span class="n">working_day_profile_weigths</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">working_day_baseload_year_average_power</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+    <span class="n">full_week_temperature_sensitive_year_average_power_series</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">year_to_hour_outdoor_temperarure_distribution</span><span class="p">(</span>
+            <span class="n">full_week_temperature_sensitive_year_average_power</span><span class="p">,</span>
+            <span class="n">felt_temperature</span><span class="p">,</span>
+            <span class="n">full_week_profile_weigths</span> <span class="o">*</span> <span class="n">operating_season</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">working_day_temperature_sensitive_year_average_power_series</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">year_to_hour_outdoor_temperarure_distribution</span><span class="p">(</span>
+            <span class="n">working_day_temperature_sensitive_year_average_power</span><span class="p">,</span>
+            <span class="n">felt_temperature</span><span class="p">,</span>
+            <span class="n">working_day_profile_weigths</span> <span class="o">*</span> <span class="n">operating_season</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span>
+        <span class="p">(</span>
+            <span class="n">weather</span><span class="p">,</span>
+            <span class="n">working_day_baseload_year_average_power_series</span><span class="p">,</span>
+            <span class="n">full_week_baseload_year_average_power_series</span><span class="p">,</span>
+            <span class="n">working_day_temperature_sensitive_year_average_power_series</span><span class="p">,</span>
+            <span class="n">full_week_temperature_sensitive_year_average_power_series</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">result</span><span class="p">[</span><span class="s2">&quot;total_consumption_power&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">result</span><span class="o">.</span><span class="n">columns</span> <span class="o">!=</span> <span class="n">weather</span><span class="o">.</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">loss_year_average_power</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">(</span><span class="n">year_average_power</span> <span class="o">*</span> <span class="n">config</span><span class="o">.</span><span class="n">loss</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="n">weather</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;ffill&quot;</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s2">&quot;loss_year_average_power&quot;</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">loss_power</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">(</span>
+            <span class="n">loss_year_average_power</span>
+            <span class="o">*</span> <span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s2">&quot;total_consumption_power&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+            <span class="o">/</span> <span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s2">&quot;total_consumption_power&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="s2">&quot;YS&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="s2">&quot;mean&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s2">&quot;loss_power&quot;</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">loss_power</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">loss_power</span><span class="p">)</span>
+    <span class="n">result</span><span class="p">[</span><span class="s2">&quot;total_consumption_power&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">loss_power</span>
+
+    <span class="n">result</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">weather</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;datetime64[s]&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;int64&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">result</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, HeatPro.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

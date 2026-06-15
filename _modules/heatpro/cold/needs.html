@@ -1,0 +1,159 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>heatpro.cold.needs &mdash; HeatPro 0.3.5 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=ba50482b"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            HeatPro
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">About HeatPro:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../README.html">Make documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../authors.html">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../history.html">History</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Guide:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/simple_usage/simple_usage.html">Simple usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/detecting_heating_season/detecting_heating_season.html">Detecting Heating Season</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/usage/advanced_usage.html">Advanced usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/simple_usage/simple_cold_demand.html">Simple Cold Demand Usage</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/building_type.html">Building Type</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/check.html">Check</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/climatic_zone/climatic_zone.html">Climatic Zone</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/cli.html">Command Line Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/cold.html">Cold</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/demand_profile.html">Demand Profile</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/disaggregation.html">Disaggregation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/external_factors.html">External Factors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/felt_temperature.html">Felt Temperature</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/temporal_demand.html">Temporal Demand</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/special_hot_water/special_hot_water.html">Special Hot Water</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/week_profile.html">Standard Week Profile</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">HeatPro</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">heatpro.cold.needs</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for heatpro.cold.needs</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">..building_type</span><span class="w"> </span><span class="kn">import</span> <span class="n">BuildingType</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..climatic_zone</span><span class="w"> </span><span class="kn">import</span> <span class="n">ClimaticZone</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span>
+    <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">&quot;needs_by_building_type_and_climatic_zone.json&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span>
+<span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+    <span class="n">NEEDS</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="calculate_year_cold_needs">
+<a class="viewcode-back" href="../../../modules/cold.html#heatpro.cold.needs.calculate_year_cold_needs">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_year_cold_needs</span><span class="p">(</span>
+    <span class="n">building_type</span><span class="p">:</span> <span class="n">BuildingType</span><span class="p">,</span> <span class="n">climatic_zone</span><span class="p">:</span> <span class="n">ClimaticZone</span><span class="p">,</span> <span class="n">surface</span><span class="p">:</span> <span class="nb">float</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate the annual cold needs for a building based on its type, climatic zone, and surface area.</span>
+
+<span class="sd">    This function calculates the annual cold needs by multiplying the specific cold needs</span>
+<span class="sd">    for the given building type and climatic zone by the building&#39;s surface area.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        building_type (BuildingType): The type of building (e.g., residential, commercial).</span>
+<span class="sd">        climatic_zone (ClimaticZone): The climatic zone where the building is located.</span>
+<span class="sd">        surface (float): The surface area of the building in square meters.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        float: The annual cold needs in kilowatt-hours (kWh) for the building.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">NEEDS</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="s2">&quot;zones_climatiques&quot;</span><span class="p">][</span><span class="n">climatic_zone</span><span class="o">.</span><span class="n">value</span><span class="p">][</span><span class="n">building_type</span><span class="o">.</span><span class="n">value</span><span class="p">]</span> <span class="o">*</span> <span class="n">surface</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, HeatPro.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

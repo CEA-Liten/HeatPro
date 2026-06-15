@@ -1,0 +1,580 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Command Line Interface &mdash; HeatPro 0.3.5 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=ba50482b"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Cold" href="cold.html" />
+    <link rel="prev" title="Climatic Zone" href="climatic_zone/climatic_zone.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            HeatPro
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">About HeatPro:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../README.html">Make documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../authors.html">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../history.html">History</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Guide:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="simple_usage/simple_usage.html">Simple usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="detecting_heating_season/detecting_heating_season.html">Detecting Heating Season</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage/advanced_usage.html">Advanced usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simple_usage/simple_cold_demand.html">Simple Cold Demand Usage</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Documentation:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="building_type.html">Building Type</a></li>
+<li class="toctree-l1"><a class="reference internal" href="check.html">Check</a></li>
+<li class="toctree-l1"><a class="reference internal" href="climatic_zone/climatic_zone.html">Climatic Zone</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Command Line Interface</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#how-to-use">How to use:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-heatpro.cli.cold">Cold</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#heatpro.cli.cold.ColdConfig"><code class="docutils literal notranslate"><span class="pre">ColdConfig</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#heatpro.cli.cold.ColdConfig.set_temperature"><code class="docutils literal notranslate"><span class="pre">ColdConfig.set_temperature</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#heatpro.cli.cold.ColdConfig.loss"><code class="docutils literal notranslate"><span class="pre">ColdConfig.loss</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#heatpro.cli.cold.ColdConfig.profile"><code class="docutils literal notranslate"><span class="pre">ColdConfig.profile</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#heatpro.cli.cold.ColdConfig.temperature_sensitivity"><code class="docutils literal notranslate"><span class="pre">ColdConfig.temperature_sensitivity</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id0"><code class="docutils literal notranslate"><span class="pre">ColdConfig.loss</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id1"><code class="docutils literal notranslate"><span class="pre">ColdConfig.profile</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id2"><code class="docutils literal notranslate"><span class="pre">ColdConfig.set_temperature</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id3"><code class="docutils literal notranslate"><span class="pre">ColdConfig.temperature_sensitivity</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#heatpro.cli.cold.Repartition"><code class="docutils literal notranslate"><span class="pre">Repartition</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#heatpro.cli.cold.Repartition.full_week"><code class="docutils literal notranslate"><span class="pre">Repartition.full_week</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#heatpro.cli.cold.Repartition.working_day"><code class="docutils literal notranslate"><span class="pre">Repartition.working_day</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id4"><code class="docutils literal notranslate"><span class="pre">Repartition.full_week</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id5"><code class="docutils literal notranslate"><span class="pre">Repartition.working_day</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#heatpro.cli.cold.calculate_year_average_power"><code class="docutils literal notranslate"><span class="pre">calculate_year_average_power()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#heatpro.cli.cold.cold_pipeline"><code class="docutils literal notranslate"><span class="pre">cold_pipeline()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#heatpro.cli.cold.import_weather"><code class="docutils literal notranslate"><span class="pre">import_weather()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-heatpro.cli.helpers">Helpers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#heatpro.cli.helpers.ReferenceCold"><code class="docutils literal notranslate"><span class="pre">ReferenceCold</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#heatpro.cli.helpers.ReferenceCold.H1"><code class="docutils literal notranslate"><span class="pre">ReferenceCold.H1</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#heatpro.cli.helpers.ReferenceCold.H2"><code class="docutils literal notranslate"><span class="pre">ReferenceCold.H2</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#heatpro.cli.helpers.ReferenceCold.H3"><code class="docutils literal notranslate"><span class="pre">ReferenceCold.H3</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id6"><code class="docutils literal notranslate"><span class="pre">ReferenceCold.H1</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id7"><code class="docutils literal notranslate"><span class="pre">ReferenceCold.H2</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id8"><code class="docutils literal notranslate"><span class="pre">ReferenceCold.H3</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-heatpro.cli.plotting">Plotting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#heatpro.cli.plotting.cold_results"><code class="docutils literal notranslate"><span class="pre">cold_results()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cold.html">Cold</a></li>
+<li class="toctree-l1"><a class="reference internal" href="demand_profile.html">Demand Profile</a></li>
+<li class="toctree-l1"><a class="reference internal" href="disaggregation.html">Disaggregation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="external_factors.html">External Factors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="felt_temperature.html">Felt Temperature</a></li>
+<li class="toctree-l1"><a class="reference internal" href="temporal_demand.html">Temporal Demand</a></li>
+<li class="toctree-l1"><a class="reference internal" href="special_hot_water/special_hot_water.html">Special Hot Water</a></li>
+<li class="toctree-l1"><a class="reference internal" href="week_profile.html">Standard Week Profile</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">HeatPro</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Command Line Interface</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/modules/cli.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="command-line-interface">
+<span id="cli"></span><h1><a class="toc-backref" href="#id9" role="doc-backlink">Command Line Interface</a><a class="headerlink" href="#command-line-interface" title="Link to this heading"></a></h1>
+<nav class="contents" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#command-line-interface" id="id9">Command Line Interface</a></p>
+<ul>
+<li><p><a class="reference internal" href="#how-to-use" id="id10">How to use:</a></p></li>
+<li><p><a class="reference internal" href="#module-heatpro.cli.cold" id="id11">Cold</a></p></li>
+<li><p><a class="reference internal" href="#module-heatpro.cli.helpers" id="id12">Helpers</a></p></li>
+<li><p><a class="reference internal" href="#module-heatpro.cli.plotting" id="id13">Plotting</a></p></li>
+</ul>
+</li>
+</ul>
+</nav>
+<section id="how-to-use">
+<h2><a class="toc-backref" href="#id10" role="doc-backlink">How to use:</a><a class="headerlink" href="#how-to-use" title="Link to this heading"></a></h2>
+<p>To use the command line interface, you need to install <code class="docutils literal notranslate"><span class="pre">heatpro</span></code> with <code class="docutils literal notranslate"><span class="pre">cli</span></code> option:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">heatpro</span><span class="p">[</span><span class="n">cli</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>You can get help on how to use cli by using:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">heatpro</span> <span class="n">cold</span> <span class="o">-</span><span class="n">h</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Usage</span><span class="p">:</span> <span class="n">heatpro</span> <span class="n">cold</span> <span class="p">[</span><span class="n">OPTIONS</span><span class="p">]</span> <span class="n">WEATHER_CSV</span> <span class="n">OUTPUT_CSV</span> <span class="n">YEAR_ENERGY_REFERENCE</span>
+
+<span class="n">Options</span><span class="p">:</span>
+<span class="o">--</span><span class="nb">set</span><span class="o">-</span><span class="n">temperature</span> <span class="n">FLOAT</span>         <span class="n">Default</span> <span class="nb">set</span> <span class="n">temperature</span>
+<span class="o">--</span><span class="n">loss</span> <span class="n">FLOAT</span>                    <span class="n">Cold</span> <span class="n">energy</span> <span class="n">loss</span>
+<span class="o">-</span><span class="n">fws</span><span class="p">,</span> <span class="o">--</span><span class="n">full</span><span class="o">-</span><span class="n">week</span><span class="o">-</span><span class="n">share</span> <span class="n">FLOAT</span>   <span class="n">Share</span> <span class="n">of</span> <span class="n">cold</span> <span class="n">energy</span> <span class="n">consummed</span> <span class="n">following</span> <span class="n">a</span>
+                                <span class="n">full</span> <span class="n">week</span> <span class="n">activity</span> <span class="n">profile</span>
+<span class="o">-</span><span class="n">fwts</span><span class="p">,</span> <span class="o">--</span><span class="n">full</span><span class="o">-</span><span class="n">week</span><span class="o">-</span><span class="n">temperature</span><span class="o">-</span><span class="n">sensitivity</span> <span class="n">FLOAT</span>
+                                <span class="n">Share</span> <span class="n">of</span> <span class="n">cold</span> <span class="n">energy</span> <span class="n">within</span> <span class="n">consumption</span>
+                                <span class="n">associated</span> <span class="n">to</span> <span class="n">full</span> <span class="n">week</span> <span class="n">profile</span> <span class="n">consummed</span> <span class="ow">in</span>
+                                <span class="n">a</span> <span class="n">temperature</span> <span class="n">sensitive</span> <span class="n">manner</span>
+<span class="o">-</span><span class="n">wets</span><span class="p">,</span> <span class="o">--</span><span class="n">week</span><span class="o">-</span><span class="n">end</span><span class="o">-</span><span class="n">temperature</span><span class="o">-</span><span class="n">sensitivity</span> <span class="n">FLOAT</span>
+                                <span class="n">Share</span> <span class="n">of</span> <span class="n">cold</span> <span class="n">energy</span> <span class="n">within</span> <span class="n">consumption</span>
+                                <span class="n">associated</span> <span class="n">to</span> <span class="n">low</span> <span class="n">activity</span> <span class="n">on</span> <span class="n">weekend</span>
+                                <span class="n">profile</span> <span class="n">consummed</span> <span class="ow">in</span> <span class="n">a</span> <span class="n">temperature</span> <span class="n">sensitive</span>
+                                <span class="n">manner</span>
+<span class="o">-</span><span class="n">start</span><span class="p">,</span> <span class="o">--</span><span class="n">date</span><span class="o">-</span><span class="n">start</span> <span class="n">TEXT</span>       <span class="n">date</span> <span class="n">start</span>
+<span class="o">-</span><span class="n">end</span><span class="p">,</span> <span class="o">--</span><span class="n">date</span><span class="o">-</span><span class="n">end</span> <span class="n">TEXT</span>           <span class="n">date</span> <span class="n">end</span>
+<span class="o">-</span><span class="n">v</span><span class="p">,</span> <span class="o">--</span><span class="n">verbose</span>                   <span class="n">Enable</span> <span class="n">debug</span> <span class="n">logging</span>
+<span class="o">-</span><span class="n">s</span><span class="p">,</span> <span class="o">--</span><span class="n">show</span>                      <span class="n">Show</span> <span class="n">graphs</span> <span class="n">of</span> <span class="n">the</span> <span class="n">result</span>
+<span class="o">-</span><span class="n">h</span><span class="p">,</span> <span class="o">--</span><span class="n">help</span>                      <span class="n">Show</span> <span class="n">this</span> <span class="n">message</span> <span class="ow">and</span> <span class="n">exit</span><span class="o">.</span>
+</pre></div>
+</div>
+<p>Base example will be:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">heatpro</span> <span class="n">cold</span> <span class="o">./</span><span class="nb">input</span><span class="o">/</span><span class="n">weather</span><span class="o">.</span><span class="n">csv</span> <span class="o">./</span><span class="n">output</span><span class="o">/</span><span class="n">results</span><span class="o">.</span><span class="n">csv</span> <span class="n">H2</span>
+</pre></div>
+</div>
+<p>where <code class="docutils literal notranslate"><span class="pre">./input/weather.csv</span></code> is a CSV file that look like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;timestamp_utc_num&quot;</span><span class="p">;</span><span class="s2">&quot;temperature&quot;</span><span class="p">;</span>
+<span class="mi">978307200</span><span class="p">;</span><span class="mi">5</span><span class="p">,</span><span class="mi">1</span>
+<span class="mi">978310800</span><span class="p">;</span><span class="mi">5</span><span class="p">,</span><span class="mi">1</span>
+<span class="mi">978314400</span><span class="p">;</span><span class="mi">5</span>
+</pre></div>
+</div>
+<p>Results will be written in <code class="docutils literal notranslate"><span class="pre">output/results.csv</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">YEAR_ENERGY_REFERENCE</span></code> can be a numeric value (energy expressed in kWh) but it can also be ‘H1’,’H2’ or ‘H3’. It will then used numeric values for <code class="xref py py-class docutils literal notranslate"><span class="pre">ReferenceCold</span></code> (see <a class="reference internal" href="#helpers-section"><span class="std std-ref">Helpers</span></a>)</p>
+</div>
+<p id="module-heatpro.cli">To filter calculation on a smaller sample, you can use <code class="docutils literal notranslate"><span class="pre">-start</span></code> and <code class="docutils literal notranslate"><span class="pre">-end</span></code> to filter on a smaller period. For instance, if my CSV weather file contains years from 2000 to 2199, using</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">heatpro</span> <span class="n">cold</span> <span class="o">./</span><span class="nb">input</span><span class="o">/</span><span class="n">weather</span><span class="o">.</span><span class="n">csv</span> <span class="o">./</span><span class="n">output</span><span class="o">/</span><span class="n">results</span><span class="o">.</span><span class="n">csv</span> <span class="n">H2</span> <span class="o">-</span><span class="n">start</span> <span class="mi">2005</span> <span class="o">-</span><span class="n">end</span> <span class="mi">2010</span>
+</pre></div>
+</div>
+<p>Will calculate demand from beginning of 2005 to ending of 2009. It is usefull to launch short testing calculation.</p>
+<p>you can use it with <code class="docutils literal notranslate"><span class="pre">-s</span></code> flag to display graphs of the calculation.</p>
+</section>
+<section id="module-heatpro.cli.cold">
+<span id="cold"></span><h2><a class="toc-backref" href="#id11" role="doc-backlink">Cold</a><a class="headerlink" href="#module-heatpro.cli.cold" title="Link to this heading"></a></h2>
+<p>Cold module for calculating cold-related energy consumption.</p>
+<p>This module provides functionality to calculate cold-related energy consumption
+based on weather data and configuration parameters. It includes functions for
+importing weather data, calculating year average power, and applying cold
+configuration to generate consumption data.</p>
+<p>The module uses pandas for data manipulation and analysis, and includes
+functions for calculating felt temperature and applying week profiles to the data.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="heatpro.cli.cold.ColdConfig">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">heatpro.cli.cold.</span></span><span class="sig-name descname"><span class="pre">ColdConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">set_temperature</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">22</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">profile</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#heatpro.cli.cold.Repartition" title="heatpro.cli.cold.Repartition"><span class="pre">Repartition</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature_sensitivity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#heatpro.cli.cold.Repartition" title="heatpro.cli.cold.Repartition"><span class="pre">Repartition</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/heatpro/cli/cold.html#ColdConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#heatpro.cli.cold.ColdConfig" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Configuration class for cold calculations.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="heatpro.cli.cold.ColdConfig.set_temperature">
+<span class="sig-name descname"><span class="pre">set_temperature</span></span><a class="headerlink" href="#heatpro.cli.cold.ColdConfig.set_temperature" title="Link to this definition"></a></dt>
+<dd><p>Set temperature for cold calculation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="heatpro.cli.cold.ColdConfig.loss">
+<span class="sig-name descname"><span class="pre">loss</span></span><a class="headerlink" href="#heatpro.cli.cold.ColdConfig.loss" title="Link to this definition"></a></dt>
+<dd><p>Loss factor. Defaults to 0.2.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="heatpro.cli.cold.ColdConfig.profile">
+<span class="sig-name descname"><span class="pre">profile</span></span><a class="headerlink" href="#heatpro.cli.cold.ColdConfig.profile" title="Link to this definition"></a></dt>
+<dd><p>Repartition profile. Defaults to Repartition().</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#heatpro.cli.cold.Repartition" title="heatpro.cli.cold.Repartition">Repartition</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="heatpro.cli.cold.ColdConfig.temperature_sensitivity">
+<span class="sig-name descname"><span class="pre">temperature_sensitivity</span></span><a class="headerlink" href="#heatpro.cli.cold.ColdConfig.temperature_sensitivity" title="Link to this definition"></a></dt>
+<dd><p>Temperature sensitivity profile.
+Defaults to Repartition().</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#heatpro.cli.cold.Repartition" title="heatpro.cli.cold.Repartition">Repartition</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ValueError</strong> – If the sum of profile values is not 1.0.</p></li>
+<li><p><strong>ValueError</strong> – If temperature_sensitivity values are not between 0 and 1.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">loss</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.2</span></span><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">profile</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#heatpro.cli.cold.Repartition" title="heatpro.cli.cold.Repartition"><span class="pre">Repartition</span></a></span><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id2">
+<span class="sig-name descname"><span class="pre">set_temperature</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">22</span></span><a class="headerlink" href="#id2" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id3">
+<span class="sig-name descname"><span class="pre">temperature_sensitivity</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#heatpro.cli.cold.Repartition" title="heatpro.cli.cold.Repartition"><span class="pre">Repartition</span></a></span><a class="headerlink" href="#id3" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="heatpro.cli.cold.Repartition">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">heatpro.cli.cold.</span></span><span class="sig-name descname"><span class="pre">Repartition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">full_week</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">working_day</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/heatpro/cli/cold.html#Repartition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#heatpro.cli.cold.Repartition" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class representing the repartition of values.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="heatpro.cli.cold.Repartition.full_week">
+<span class="sig-name descname"><span class="pre">full_week</span></span><a class="headerlink" href="#heatpro.cli.cold.Repartition.full_week" title="Link to this definition"></a></dt>
+<dd><p>Value for full week. Defaults to 0.5.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="heatpro.cli.cold.Repartition.working_day">
+<span class="sig-name descname"><span class="pre">working_day</span></span><a class="headerlink" href="#heatpro.cli.cold.Repartition.working_day" title="Link to this definition"></a></dt>
+<dd><p>Value for working fay. Defaults to 0.5.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id4">
+<span class="sig-name descname"><span class="pre">full_week</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.5</span></span><a class="headerlink" href="#id4" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id5">
+<span class="sig-name descname"><span class="pre">working_day</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.5</span></span><a class="headerlink" href="#id5" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="heatpro.cli.cold.calculate_year_average_power">
+<span class="sig-prename descclassname"><span class="pre">heatpro.cli.cold.</span></span><span class="sig-name descname"><span class="pre">calculate_year_average_power</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">weather</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">year_energy_reference</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">set_temperature</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Series</span></span></span><a class="reference internal" href="../_modules/heatpro/cli/cold.html#calculate_year_average_power"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#heatpro.cli.cold.calculate_year_average_power" title="Link to this definition"></a></dt>
+<dd><p>Calculate the year average power based on weather data and a year energy reference.</p>
+<p>Year energy reference will be the average year consumption over the all weather period
+given (it can be multiple years).</p>
+<p>Mathematically, we define <span class="math notranslate nohighlight">\(\mathcal{T}\)</span> datetime index from <code class="docutils literal notranslate"><span class="pre">weather.index</span></code>,
+<span class="math notranslate nohighlight">\(T_{ext}^t\)</span> outdoor temperature from <code class="docutils literal notranslate"><span class="pre">weather</span></code>,
+<span class="math notranslate nohighlight">\(E_{ref}\)</span> year energy reference from <code class="docutils literal notranslate"><span class="pre">year_energy_reference</span></code>,
+<span class="math notranslate nohighlight">\(T_{set}\)</span> cooling set temperature in buildings from <code class="docutils literal notranslate"><span class="pre">set_temperature</span></code>,</p>
+<p>We defined for a year math:<cite>y in mathcal{T}</cite> the average delta temperature during summer:</p>
+<div class="math notranslate nohighlight">
+\[\Delta^{(y)} = \frac{1}{|\text{summer of }y|}\sum_{t\in \text{summer of }y} ( T_{ext}^{(t)}-T_{set} ) _+\]</div>
+<p>The higher this value, the higher will be the cold energy demand.</p>
+<p>We calculate the average over ther year of the average delta temperature during summer:</p>
+<div class="math notranslate nohighlight">
+\[\Delta_{ref} = \frac{1}{\#\text{years in }\mathcal{T}}\sum_{y\in\mathcal{T}} \Delta^{(y)}\]</div>
+<p>We can now estimate annual energy demand <span class="math notranslate nohighlight">\(E^{(y)}\)</span> for each year <span class="math notranslate nohighlight">\(y\)</span> using cross product:</p>
+<div class="math notranslate nohighlight">
+\[E^{(y)} = \frac{E_{ref}}{\Delta_{ref}} \cdot \Delta^{(y)}\]</div>
+<p>On average yearly demand will be <span class="math notranslate nohighlight">\(E_{ref}\)</span>.</p>
+<p>Eventually, average yearly power is calculated and return:</p>
+<div class="math notranslate nohighlight">
+\[P^{(y)} = \frac{E^{(y)}}{|y|}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>weather</strong> (<em>pd.Series</em>) – A pandas Series containing temperature data.</p></li>
+<li><p><strong>year_energy_reference</strong> (<em>float</em>) – Reference energy value for the year.</p></li>
+<li><p><strong>set_temperature</strong> (<em>float</em>) – Set temperature for cold calculation.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A pandas Series containing the calculated year average power.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.Series</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">year_avg_power</span> <span class="o">=</span> <span class="n">calculate_year_average_power</span><span class="p">(</span><span class="n">weather_data</span><span class="p">,</span> <span class="mf">1000.0</span><span class="p">,</span> <span class="mf">18.0</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="heatpro.cli.cold.cold_pipeline">
+<span class="sig-prename descclassname"><span class="pre">heatpro.cli.cold.</span></span><span class="sig-name descname"><span class="pre">cold_pipeline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">weather</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">year_energy_reference</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#heatpro.cli.cold.ColdConfig" title="heatpro.cli.cold.ColdConfig"><span class="pre">ColdConfig</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="../_modules/heatpro/cli/cold.html#cold_pipeline"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#heatpro.cli.cold.cold_pipeline" title="Link to this definition"></a></dt>
+<dd><p>Calculate cold-related energy consumption based on weather data and configuration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>weather</strong> (<em>pd.Series</em>) – A pandas Series containing temperature data.</p></li>
+<li><p><strong>year_energy_reference</strong> (<em>float</em>) – Reference energy value for the year.</p></li>
+<li><p><strong>config</strong> (<a class="reference internal" href="#heatpro.cli.cold.ColdConfig" title="heatpro.cli.cold.ColdConfig"><em>ColdConfig</em></a>) – Configuration object for cold calculations.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A pandas DataFrame containing the calculated cold-related consumption.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">config</span> <span class="o">=</span> <span class="n">ColdConfig</span><span class="p">(</span><span class="n">set_temperature</span><span class="o">=</span><span class="mf">18.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">consumption_data</span> <span class="o">=</span> <span class="n">cold_cli</span><span class="p">(</span><span class="n">weather_data</span><span class="p">,</span> <span class="mf">1000.0</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="heatpro.cli.cold.import_weather">
+<span class="sig-prename descclassname"><span class="pre">heatpro.cli.cold.</span></span><span class="sig-name descname"><span class="pre">import_weather</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">weather_csv</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Series</span></span></span><a class="reference internal" href="../_modules/heatpro/cli/cold.html#import_weather"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#heatpro.cli.cold.import_weather" title="Link to this definition"></a></dt>
+<dd><p>Import weather data from a CSV file.</p>
+<p>CSV should look like this (more columns are allow but will be ignored):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;timestamp_utc_num&quot;</span><span class="p">;</span><span class="s2">&quot;temperature&quot;</span><span class="p">;</span>
+<span class="mi">978307200</span><span class="p">;</span><span class="mi">5</span><span class="p">,</span><span class="mi">1</span>
+<span class="mi">978310800</span><span class="p">;</span><span class="mi">5</span><span class="p">,</span><span class="mi">1</span>
+<span class="mi">978314400</span><span class="p">;</span><span class="mi">5</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>weather_csv</strong> (<em>Path</em>) – Path to the CSV file containing weather data.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A pandas Series containing temperature (°C) at hourly frequency data indexed by timestamp.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.Series</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">weather_data</span> <span class="o">=</span> <span class="n">import_weather</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="s2">&quot;./data/weather_data.csv&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+<section id="module-heatpro.cli.helpers">
+<span id="helpers"></span><span id="helpers-section"></span><h2><a class="toc-backref" href="#id12" role="doc-backlink">Helpers</a><a class="headerlink" href="#module-heatpro.cli.helpers" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="heatpro.cli.helpers.ReferenceCold">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">heatpro.cli.helpers.</span></span><span class="sig-name descname"><span class="pre">ReferenceCold</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/heatpro/cli/helpers.html#ReferenceCold"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#heatpro.cli.helpers.ReferenceCold" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<p>Yearly cold energy consumption in kWh for different French cities.</p>
+<p>The values are categorized into three climate zones, with corresponding
+example cities and typical temperature ranges during the cooling season.
+These estimates are based on a total surface area of 144 hectares of
+tertiary buildings, evenly split between offices (50%) and commercial
+spaces (50%). The cooling temperature (TNC) is set to 22°C.</p>
+<ul class="simple">
+<li><p>H1: Strasbourg (43,920,000 kWh) - Typical temperatures: 7-14°C</p></li>
+<li><p>H2: Bordeaux (60,480,000 kWh) - Typical temperatures: 7-14°C</p></li>
+<li><p>H3: Montpellier (102,240,000 kWh) - Typical temperatures: 7-14°C</p></li>
+</ul>
+<p>These climate zones represent different levels of cold energy demand based on
+geographical location and climate characteristics in France.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="heatpro.cli.helpers.ReferenceCold.H1">
+<span class="sig-name descname"><span class="pre">H1</span></span><a class="headerlink" href="#heatpro.cli.helpers.ReferenceCold.H1" title="Link to this definition"></a></dt>
+<dd><p>Yearly cold energy consumption for climate zone 1
+(example: Strasbourg, typical temperatures 7-14°C)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="heatpro.cli.helpers.ReferenceCold.H2">
+<span class="sig-name descname"><span class="pre">H2</span></span><a class="headerlink" href="#heatpro.cli.helpers.ReferenceCold.H2" title="Link to this definition"></a></dt>
+<dd><p>Yearly cold energy consumption for climate zone 2
+(example: Bordeaux, typical temperatures 7-14°C)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="heatpro.cli.helpers.ReferenceCold.H3">
+<span class="sig-name descname"><span class="pre">H3</span></span><a class="headerlink" href="#heatpro.cli.helpers.ReferenceCold.H3" title="Link to this definition"></a></dt>
+<dd><p>Yearly cold energy consumption for climate zone 3
+(example: Montpellier, typical temperatures 7-14°C)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id6">
+<span class="sig-name descname"><span class="pre">H1</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">43920000</span></span><a class="headerlink" href="#id6" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id7">
+<span class="sig-name descname"><span class="pre">H2</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">60480000</span></span><a class="headerlink" href="#id7" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id8">
+<span class="sig-name descname"><span class="pre">H3</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">102240000</span></span><a class="headerlink" href="#id8" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-heatpro.cli.plotting">
+<span id="plotting"></span><h2><a class="toc-backref" href="#id13" role="doc-backlink">Plotting</a><a class="headerlink" href="#module-heatpro.cli.plotting" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="heatpro.cli.plotting.cold_results">
+<span class="sig-prename descclassname"><span class="pre">heatpro.cli.plotting.</span></span><span class="sig-name descname"><span class="pre">cold_results</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">weather</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Figure</span></span></span><a class="reference internal" href="../_modules/heatpro/cli/plotting.html#cold_results"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#heatpro.cli.plotting.cold_results" title="Link to this definition"></a></dt>
+<dd><p>Create a Plotly figure showing cold consumption and outdoor temperature.</p>
+<p>This function generates an interactive Plotly figure that displays the total
+cold consumption and daily outdoor temperature over time. The figure uses two
+y-axes to show both metrics on the same plot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>weather</strong> (<em>pd.Series</em>) – A pandas Series containing temperature data indexed by timestamp.</p></li>
+<li><p><strong>result</strong> (<em>pd.DataFrame</em>) – A pandas DataFrame containing cold consumption data with a
+‘total_consumption_power’ column.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>A Plotly Figure object containing the visualization of cold consumption</dt><dd><p>and outdoor temperature.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>go.Figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="climatic_zone/climatic_zone.html" class="btn btn-neutral float-left" title="Climatic Zone" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="cold.html" class="btn btn-neutral float-right" title="Cold" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, HeatPro.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
